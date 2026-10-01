@@ -115,6 +115,13 @@ body {
   overflow-x: hidden;
 }
 
+/* En el celular, overflow-x del body no basta: si algo se asoma por el costado (una etiqueta
+   arrastrada, una animación de entrada) Chrome aleja el zoom de toda la página.
+   clip lo recorta sin crear un contenedor de scroll, así los sticky siguen funcionando. */
+main {
+  overflow-x: clip;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -261,9 +268,20 @@ p {
     box-shadow 0.3s var(--curva);
 }
 
-.boton:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--tinta);
+/* Solo con mouse: en el celular el hover se queda pegado después del toque */
+@media (hover: hover) {
+  .boton:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--tinta);
+  }
+}
+
+/* En pantallas táctiles, los enlaces de texto sueltos ganan área de toque sin mover el diseño */
+@media (pointer: coarse) {
+  .tactil {
+    padding-block: 10px;
+    margin-block: -10px;
+  }
 }
 
 .boton:active {
@@ -359,7 +377,8 @@ p {
 /* Etiquetas que se despegan (ver src/scripts/arrastrar.ts) */
 [data-arrastrable] {
   cursor: grab;
-  touch-action: none;
+  /* Con el dedo: deslizar en vertical sigue haciendo scroll; en horizontal, despega la etiqueta */
+  touch-action: pan-y pinch-zoom;
   user-select: none;
   -webkit-user-select: none;
 }

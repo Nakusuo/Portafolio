@@ -119,8 +119,10 @@ const usadoEn = (tecnologia: string) =>
     transition: transform 0.4s var(--curva);
   }
 
+  @media (hover: hover) {
   .sticker:hover {
-    transform: rotate(0deg) scale(1.04);
+      transform: rotate(0deg) scale(1.04);
+    }
   }
 
   .sticker :global(.logo) {
@@ -166,6 +168,18 @@ const usadoEn = (tecnologia: string) =>
 
     .lateral {
       position: static;
+    }
+  }
+
+  /* Celular: cada sticker toma su ancho y se acomodan como un collage, no en una columna eterna */
+  @media (max-width: 640px) {
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .sticker {
+      flex: 1 1 auto;
     }
   }
 </style>

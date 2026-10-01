@@ -25,7 +25,7 @@ const slug = slugDe(proyecto);
 
 <Base idioma={idioma} ruta={`/proyectos/${slug}`} titulo={titulo} descripcion={resumen} imagen={portada}>
   <article class="contenedor caso">
-    <a class="volver" href={`${rutaEn(idioma, '/')}#trabajo`}>
+    <a class="volver tactil" href={`${rutaEn(idioma, '/')}#trabajo`}>
       <Icono nombre="arrow-left" tamano={16} />
       {t.volver}
     </a>
@@ -62,7 +62,7 @@ const slug = slugDe(proyecto);
               <ul class="enlaces">
                 {demo && (
                   <li>
-                    <a href={demo} target="_blank" rel="noopener">
+                    <a class="tactil" href={demo} target="_blank" rel="noopener">
                       <Icono nombre="arrow-up-right" tamano={16} />
                       {t.verWeb}
                     </a>
@@ -70,7 +70,7 @@ const slug = slugDe(proyecto);
                 )}
                 {repos.map((r) => (
                   <li>
-                    <a href={r.url} target="_blank" rel="noopener">
+                    <a class="tactil" href={r.url} target="_blank" rel="noopener">
                       <Icono nombre="github-logo" tamano={16} />
                       {r.nombre}
                     </a>
@@ -132,9 +132,11 @@ const slug = slugDe(proyecto);
   }
 
   h1 {
-    font-size: clamp(3rem, 8vw, 6rem);
+    /* 12vw: "paltishop.store" es una sola palabra y tiene que caber en 320px */
+    font-size: clamp(2.25rem, 12vw, 6rem);
     letter-spacing: -0.04em;
     line-height: 0.95;
+    overflow-wrap: break-word;
   }
 
   .resumen {
@@ -187,6 +189,13 @@ const slug = slugDe(proyecto);
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  /* Deja sitio al área de toque ampliada de cada enlace */
+  @media (pointer: coarse) {
+    .enlaces {
+      gap: 20px;
+    }
   }
 
   .enlaces a {
@@ -291,8 +300,10 @@ const slug = slugDe(proyecto);
     transition: transform 0.5s var(--curva);
   }
 
+  @media (hover: hover) {
   .siguiente:hover :global(svg) {
-    transform: translateX(10px);
+      transform: translateX(10px);
+    }
   }
 
   @media (max-width: 860px) {
