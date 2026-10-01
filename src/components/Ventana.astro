@@ -1,0 +1,91 @@
+---
+// Ventana de navegador: barra con tres puntos y la dirección. Dentro va la captura.
+import Icono from './Icono.astro';
+
+interface Props {
+  direccion: string;
+  privado?: boolean;
+  class?: string;
+}
+
+const { direccion, privado = false, class: clase } = Astro.props;
+---
+
+<div class:list={['ventana', clase]}>
+  <div class="barra" aria-hidden="true">
+    <span class="puntos"><i></i><i></i><i></i></span>
+    <span class="direccion">
+      <Icono nombre={privado ? 'lock-simple' : 'globe-simple'} tamano={12} />
+      {direccion}
+    </span>
+  </div>
+  <div class="contenido">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .ventana {
+    overflow: hidden;
+    border: 1.5px solid var(--tinta);
+    border-radius: 6px;
+    background: var(--fondo);
+    box-shadow: 5px 5px 0 var(--tinta);
+    transform: rotate(var(--giro, 0deg));
+    transition: transform 0.6s var(--curva);
+  }
+
+  .barra {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-bottom: 1.5px solid var(--tinta);
+    background: var(--superficie);
+  }
+
+  .puntos {
+    display: flex;
+    gap: 5px;
+  }
+
+  .puntos i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--tinta);
+  }
+
+  .puntos i:nth-child(1) {
+    background: var(--vino);
+  }
+
+  .puntos i:nth-child(2) {
+    background: var(--tierra);
+  }
+
+  .puntos i:nth-child(3) {
+    background: var(--acento);
+  }
+
+  .direccion {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+    padding: 3px 10px;
+    border-radius: 3px;
+    background: var(--fondo);
+    font: 400 0.7rem/1.5 var(--mono);
+    color: var(--texto-suave);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .contenido :global(img),
+  .contenido :global(.portada) {
+    border-radius: 0;
+  }
+</style>

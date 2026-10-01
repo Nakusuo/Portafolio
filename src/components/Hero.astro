@@ -1,6 +1,7 @@
 ---
 import Icono from './Icono.astro';
-import { textos, url, type Idioma } from '../i18n/ui';
+import Ventana from './Ventana.astro';
+import { rutaEn, textos, url, type Idioma } from '../i18n/ui';
 
 interface Props {
   idioma: Idioma;
@@ -39,15 +40,17 @@ const t = textos[idioma].hero;
     </a>
   </div>
 
-  <figure class="polaroid cinta foto foto--izq" style="--giro:-6deg; --giro-cinta:4deg">
-    <img src={url('/proyectos/paltishop.webp')} alt="paltishop.store" width="1440" height="900" fetchpriority="high" />
-    <figcaption>paltishop.store</figcaption>
-  </figure>
+  <div class="foto foto--izq">
+    <Ventana direccion="paltishop.store">
+      <img src={url('/proyectos/paltishop.webp')} alt="paltishop.store" width="1440" height="900" fetchpriority="high" />
+    </Ventana>
+  </div>
 
-  <figure class="polaroid cinta foto foto--der" style="--giro:5deg; --giro-cinta:-5deg">
-    <img src={url('/proyectos/huecko.webp')} alt="Huecko" width="1440" height="900" fetchpriority="high" />
-    <figcaption>Huecko</figcaption>
-  </figure>
+  <div class="foto foto--der">
+    <Ventana direccion="huecko.vercel.app">
+      <img src={url('/proyectos/huecko.webp')} alt="Huecko" width="1440" height="900" fetchpriority="high" />
+    </Ventana>
+  </div>
 
   <nav class="rutas" aria-label={t.pregunta}>
     <p class="nota pregunta">{t.pregunta}</p>
@@ -55,7 +58,7 @@ const t = textos[idioma].hero;
       {
         t.rutas.map((r, i) => (
           <li style={`--giro:${[-1.2, 0.8, -0.6][i]}deg`}>
-            <a href={r.destino}>
+            <a href={rutaEn(idioma, r.destino)}>
               <span class="etiqueta-ruta">{r.etiqueta}</span>
               <span class="detalle">{r.detalle}</span>
               <Icono nombre="arrow-right" tamano={20} class="flecha" />
@@ -173,15 +176,23 @@ const t = textos[idioma].hero;
   .foto {
     position: absolute;
     top: 46%;
-    width: clamp(180px, 17vw, 250px);
+    width: clamp(200px, 19vw, 280px);
   }
 
   .foto--izq {
+    --giro: -5deg;
     left: calc(var(--gutter) - 8px);
   }
 
   .foto--der {
+    --giro: 4deg;
     right: calc(var(--gutter) - 8px);
+  }
+
+  /* La ventana lee --giro; al pasar el cursor se endereza */
+  .foto:hover {
+    --giro: 0deg;
+    z-index: 3;
   }
 
   .rutas {
@@ -298,7 +309,7 @@ const t = textos[idioma].hero;
 
   @media (max-width: 1100px) {
     .foto {
-      width: clamp(150px, 16vw, 200px);
+      width: clamp(170px, 17vw, 220px);
       top: auto;
       bottom: 180px;
     }
@@ -325,12 +336,12 @@ const t = textos[idioma].hero;
     }
 
     .foto--izq {
+      --giro: -2.5deg;
       margin-top: 24px;
-      transform: rotate(-3deg);
     }
 
     .foto--der {
-      transform: rotate(2.5deg);
+      --giro: 2deg;
     }
 
     .rutas {
