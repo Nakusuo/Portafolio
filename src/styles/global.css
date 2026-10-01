@@ -445,3 +445,41 @@ p {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+  Transiciones entre páginas (View Transitions entre documentos).
+  Chrome, Edge y Safari las animan; los demás navegadores navegan normal.
+  La ventana y el título de un proyecto llevan view-transition-name y "vuelan" hasta el caso.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+/* Cambio de tema como lámpara: el tema nuevo se abre en círculo desde el botón (Navegacion.astro) */
+.lampara::view-transition-old(root),
+.lampara::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.lampara * {
+  view-transition-name: none !important;
+}
+
+/* Al filtrar proyectos solo se mueven las filas; el resto de la página se queda quieto */
+.filtrando::view-transition-old(root),
+.filtrando::view-transition-new(root) {
+  animation: none;
+}
