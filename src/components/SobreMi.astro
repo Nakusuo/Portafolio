@@ -46,7 +46,7 @@ const campos: [string, string][] = es
     <figcaption>whoami.ts</figcaption>
     <pre><code><span class="clave">const</span> nakusu = {'{'}
 {campos.map(([k, v]) => (
-  <Fragment>{'  '}<span class="prop">{k}</span>: <span class="valor">{v}</span>,{'\n'}</Fragment>
+  <Fragment><span class="campo">{'  '}<span class="prop">{k}</span>: <span class="valor">{v}</span>,</span>{'\n'}</Fragment>
 ))}{'}'};</code></pre>
   </figure>
 </section>
@@ -96,6 +96,22 @@ const campos: [string, string][] = es
     font-family: var(--mono);
     font-size: clamp(0.78rem, 1.3vw, 0.9rem);
     line-height: 1.8;
+  }
+
+  /* Celular: el código se parte en líneas en vez de obligar a deslizar de lado */
+  @media (max-width: 560px) {
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    /* Sangría colgante: si un campo no cabe, la segunda línea queda debajo del valor y no en la columna 0 */
+    .campo {
+      display: inline-block;
+      width: 100%;
+      padding-left: 4ch;
+      text-indent: -4ch;
+    }
   }
 
   .clave {
