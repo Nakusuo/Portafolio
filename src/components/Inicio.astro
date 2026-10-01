@@ -1,0 +1,28 @@
+---
+// Home: escaparate corto. El detalle vive en /trabajo, /servicios, /lab y /sobre-mi.
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import Destacados from './Destacados.astro';
+import StackResumen from './StackResumen.astro';
+import Contacto from './Contacto.astro';
+import Arranque from './Arranque.astro';
+import Bitacora from './Bitacora.astro';
+import { proyectosEn } from '../lib/proyectos';
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
+---
+
+<Base idioma={idioma} imagen="proyectos/paltishop.webp" arranque>
+  <Arranque idioma={idioma} />
+  <Hero idioma={idioma} />
+  <Destacados idioma={idioma} proyectos={destacados} limite={3} />
+  <StackResumen idioma={idioma} />
+  <Bitacora idioma={idioma} />
+  <Contacto idioma={idioma} />
+</Base>

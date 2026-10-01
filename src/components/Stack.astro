@@ -1,0 +1,185 @@
+---
+import Icono from './Icono.astro';
+import Repegar from './Repegar.astro';
+import { gruposStack } from '../data/contenido';
+import { perfil } from '../data/perfil';
+import { textos, url, type Idioma } from '../i18n/ui';
+import type { Proyecto } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+}
+
+const { idioma, proyectos } = Astro.props;
+const t = textos[idioma].stack;
+
+const usadoEn = (tecnologia: string) =>
+  proyectos.filter((p) => p.data.stack.includes(tecnologia)).map((p) => p.data.titulo);
+---
+
+<section id="stack" class="seccion contenedor stack" data-grupo-arrastre>
+  <div class="lateral">
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="bajada">{t.bajada}</p>
+    <Repegar idioma={idioma} />
+    {
+      perfil.cv && (
+        <a class="boton" href={url(`/${perfil.cv}`)} download>
+          <Icono nombre="file-text" tamano={18} />
+          {t.cv}
+        </a>
+      )
+    }
+  </div>
+
+  <div class="grupos">
+    {
+      gruposStack.map((g, gi) => (
+        <div class="grupo">
+          <h3>{g.titulo[idioma]}</h3>
+          <ul>
+            {g.tecnologias.map((tec, ti) => {
+              const proyectosTec = usadoEn(tec.nombre);
+              return (
+                <li class={`sticker sticker--${gi % 4}`} data-arrastrable style={`--giro:${((ti % 3) - 1) * 1.4}deg`}>
+                  <Icono nombre={tec.icono} set="si" tamano={22} class="logo" />
+                  <span class="nombre">{tec.nombre}</span>
+                  {proyectosTec.length > 0 && (
+                    <span class="usos">
+                      <span class="solo-lectores">{t.usadoEn}: </span>
+                      {proyectosTec.join(', ')}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .stack {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: start;
+  }
+
+  .lateral {
+    position: sticky;
+    top: 110px;
+  }
+
+  .lateral .boton {
+    margin-top: 28px;
+  }
+
+  .grupos {
+    display: grid;
+    gap: 44px;
+  }
+
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--texto-suave);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+    gap: 6px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul {
+    gap: 12px 10px;
+  }
+
+  /* Cada tecnología es un sticker pegado un poco torcido */
+  .sticker {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 12px;
+    padding: 12px 14px;
+    border-radius: 3px;
+    box-shadow: var(--sombra-sticker);
+    transform: rotate(var(--giro));
+    transition: transform 0.4s var(--curva);
+  }
+
+  @media (hover: hover) {
+  .sticker:hover {
+      transform: rotate(0deg) scale(1.04);
+    }
+  }
+
+  .sticker :global(.logo) {
+    grid-row: span 2;
+  }
+
+  .sticker--0 {
+    background: var(--acento);
+    color: var(--acento-texto);
+  }
+
+  .sticker--1 {
+    background: var(--vino);
+    color: #f6ecee;
+  }
+
+  .sticker--2 {
+    background: var(--tierra);
+    color: #1c1f1c;
+  }
+
+  .sticker--3 {
+    background: var(--hueso);
+    color: #1c1f1c;
+  }
+
+  .nombre {
+    font-weight: 600;
+  }
+
+  .usos {
+    grid-column: 2;
+    font-family: var(--mano);
+    font-size: 1.05rem;
+    line-height: 1.15;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 860px) {
+    .stack {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lateral {
+      position: static;
+    }
+  }
+
+  /* Celular: cada sticker toma su ancho y se acomodan como un collage, no en una columna eterna */
+  @media (max-width: 640px) {
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .sticker {
+      flex: 1 1 auto;
+    }
+  }
+</style>

@@ -1,0 +1,504 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource-variable/caveat';
+@import '@fontsource/vt323';
+
+/*
+  Cuaderno: papel cuadriculado claro y encima cosas "pegadas" (cintas, polaroids,
+  stickers, notas a mano). Los colores de los stickers son los del README de GitHub:
+  oliva, vino, tierra y hueso. En modo oscuro el papel es oscuro y los stickers no cambian.
+  Formas: esquinas casi rectas (4px) en todo; nada de píldoras.
+*/
+:root {
+  --fondo: #f3f1ea;
+  --papel-linea: rgb(26 29 25 / 0.07);
+  --superficie: #e9e6dc;
+  --superficie-2: #dedacc;
+  --texto: #1a1d19;
+  --texto-suave: #4f534a;
+  --linea: rgb(26 29 25 / 0.16);
+  --tinta: #1c1f1c;
+  --tinta-texto: #f3f1ea;
+  --acento: #4f6136;
+  --acento-texto: #f3f5ee;
+  --vino: #8a3c48;
+  --tierra: #a9856b;
+  --hueso: #cfc8b4;
+  --oliva-claro: #8fa36b;
+  --hoja: #fbfaf6;
+  --resaltador: #d6e58a;
+  --hoja-linea: rgb(79 97 54 / 0.18);
+  --sombra: 0 10px 24px -14px rgb(42 52 30 / 0.5);
+  --sombra-sticker: 0 2px 0 rgb(26 29 25 / 0.18);
+
+  --radio: 4px;
+  --ancho: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --fuente: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --pixel: 'VT323', ui-monospace, monospace;
+  --mano: 'Caveat Variable', 'Segoe Print', cursive;
+  --curva: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --fondo: #151713;
+    --papel-linea: rgb(230 226 212 / 0.07);
+    --superficie: #1f221e;
+    --superficie-2: #292d27;
+    --texto: #e6e2d4;
+    --texto-suave: #a9a797;
+    --linea: rgb(230 226 212 / 0.16);
+    --tinta: #e6e2d4;
+    --tinta-texto: #151713;
+    --acento: #8fa36b;
+    --acento-texto: #121412;
+    --hoja: #1f221e;
+    --resaltador: rgb(143 163 107 / 0.5);
+    --hoja-linea: rgb(143 163 107 / 0.16);
+    --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
+    --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --fondo: #151713;
+  --papel-linea: rgb(230 226 212 / 0.07);
+  --superficie: #1f221e;
+  --superficie-2: #292d27;
+  --texto: #e6e2d4;
+  --texto-suave: #a9a797;
+  --linea: rgb(230 226 212 / 0.16);
+  --tinta: #e6e2d4;
+  --tinta-texto: #151713;
+  --acento: #8fa36b;
+  --acento-texto: #121412;
+  --hoja: #1f221e;
+  --resaltador: rgb(143 163 107 / 0.5);
+  --hoja-linea: rgb(143 163 107 / 0.16);
+  --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
+  --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--acento) var(--superficie);
+  accent-color: var(--acento);
+}
+
+body {
+  margin: 0;
+  background-color: var(--fondo);
+  /* Cuadrícula de 28px: es el papel del cuaderno, la superficie de todo el sitio (intencional) */
+  background-image:
+    linear-gradient(var(--papel-linea) 1px, transparent 1px),
+    linear-gradient(90deg, var(--papel-linea) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* En el celular, overflow-x del body no basta: si algo se asoma por el costado (una etiqueta
+   arrastrada, una animación de entrada) Chrome aleja el zoom de toda la página.
+   clip lo recorta sin crear un contenedor de scroll, así los sticky siguen funcionando. */
+main {
+  overflow-x: clip;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+  border-radius: var(--radio);
+}
+
+/* Seleccionar texto es pasarle un resaltador */
+::selection {
+  background: var(--resaltador);
+  color: var(--texto);
+}
+
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.seccion {
+  padding-block: clamp(64px, 10vw, 120px);
+}
+
+/* Dos secciones seguidas no suman su aire */
+.seccion + .seccion {
+  padding-top: clamp(24px, 4vw, 56px);
+}
+
+/* Título de sección con el prompt del README: "> stack" */
+.titulo-seccion {
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  max-width: 18ch;
+}
+
+.titulo-seccion .prompt {
+  font-family: var(--pixel);
+  font-weight: 400;
+  color: var(--acento);
+  margin-right: 0.15em;
+  letter-spacing: 0;
+}
+
+.bajada {
+  margin-top: 18px;
+  max-width: 58ch;
+  color: var(--texto-suave);
+}
+
+/* Texto escrito a mano */
+.nota {
+  font-family: var(--mano);
+  font-size: 1.45rem;
+  line-height: 1.15;
+  font-weight: 500;
+  color: var(--texto-suave);
+  letter-spacing: 0;
+}
+
+/* Nota al margen junto a un título, con flecha apuntándole. El título va dentro de .con-anotacion */
+.con-anotacion {
+  position: relative;
+  width: fit-content;
+}
+
+.anotacion {
+  position: absolute;
+  left: calc(100% + 18px);
+  bottom: 62%;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: max-content;
+  max-width: 16ch;
+  font-family: var(--mano);
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.05;
+  color: var(--vino);
+  transform: rotate(-5deg);
+}
+
+.anotacion svg {
+  flex: none;
+  order: -1;
+  transform: translateY(14px) scaleX(-1);
+}
+
+@media (max-width: 860px) {
+  .anotacion {
+    position: static;
+    margin-top: 8px;
+    max-width: none;
+    transform: rotate(-2deg);
+  }
+
+  .anotacion svg {
+    display: none;
+  }
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: var(--radio);
+  border: 1.5px solid var(--tinta);
+  background: transparent;
+  color: var(--texto);
+  font: 500 0.95rem/1 var(--fuente);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--tinta);
+  transition:
+    transform 0.3s var(--curva),
+    box-shadow 0.3s var(--curva);
+}
+
+/* Solo con mouse: en el celular el hover se queda pegado después del toque */
+@media (hover: hover) {
+  .boton:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--tinta);
+  }
+}
+
+/* En pantallas táctiles, los enlaces de texto sueltos ganan área de toque sin mover el diseño */
+@media (pointer: coarse) {
+  .tactil {
+    padding-block: 10px;
+    margin-block: -10px;
+  }
+}
+
+.boton:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--tinta);
+}
+
+.boton--lleno {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--tinta-texto);
+  box-shadow: 3px 3px 0 var(--acento);
+}
+
+.boton--lleno:hover {
+  box-shadow: 4px 4px 0 var(--acento);
+}
+
+.boton--lleno:active {
+  box-shadow: 1px 1px 0 var(--acento);
+}
+
+/* Sticker: etiqueta de color, un poco torcida */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 3px;
+  font: 600 0.82rem/1.3 var(--fuente);
+  letter-spacing: 0;
+  white-space: nowrap;
+  box-shadow: var(--sombra-sticker);
+  transform: rotate(var(--giro, -1.5deg));
+}
+
+.etiqueta--oliva {
+  background: var(--acento);
+  color: var(--acento-texto);
+}
+
+.etiqueta--vino {
+  background: var(--vino);
+  color: #f6ecee;
+}
+
+.etiqueta--tierra {
+  background: var(--tierra);
+  color: #1c1f1c;
+}
+
+.etiqueta--hueso {
+  background: var(--hueso);
+  color: #1c1f1c;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  font: 400 0.8rem/1.4 var(--mono);
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+
+/* Cinta adhesiva: se pone en un elemento con position: relative */
+.cinta::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 92px;
+  height: 26px;
+  background: rgb(207 200 180 / 0.72);
+  border-left: 2px dashed rgb(255 255 255 / 0.45);
+  border-right: 2px dashed rgb(255 255 255 / 0.45);
+  transform: translateX(-50%) rotate(var(--giro-cinta, -3deg));
+  box-shadow: 0 1px 2px rgb(26 29 25 / 0.15);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Marco "dibujado a mano": radios irregulares */
+.marco-dibujado {
+  border: 2px solid var(--tinta);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+/* Etiquetas que se despegan (ver src/scripts/arrastrar.ts) */
+[data-arrastrable] {
+  cursor: grab;
+  /* Con el dedo: deslizar en vertical sigue haciendo scroll; en horizontal, despega la etiqueta */
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+[data-arrastrable].agarrada {
+  z-index: 30;
+  cursor: grabbing;
+  scale: 1.08;
+  rotate: 3deg;
+  box-shadow: 0 14px 28px -10px rgb(26 29 25 / 0.45);
+}
+
+[data-arrastrable].volviendo {
+  transition: translate 0.6s var(--curva);
+}
+
+.repegar {
+  display: inline-flex;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  color: var(--vino);
+  font: 500 1.3rem/1 var(--mano);
+  cursor: pointer;
+}
+
+.repegar:hover {
+  text-decoration: underline;
+}
+
+.movido .repegar {
+  visibility: visible;
+  opacity: 1;
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/*
+  Aparición al entrar en pantalla (la activa un IntersectionObserver en Base.astro).
+  Solo la llevan los objetos "pegados" (fichas, notas, piezas del lab): caen y se asientan
+  en su giro. Los títulos y párrafos no se animan.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-revelar] {
+    opacity: 0;
+    translate: 0 28px;
+    scale: 1.03;
+    transition:
+      opacity 0.7s var(--curva),
+      translate 0.9s var(--curva),
+      scale 0.9s var(--curva);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  .js [data-revelar].visible {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+  Transiciones entre páginas (View Transitions entre documentos).
+  Chrome, Edge y Safari las animan; los demás navegadores navegan normal.
+  La ventana y el título de un proyecto llevan view-transition-name y "vuelan" hasta el caso.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.55s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+/* Cambio de tema como lámpara: el tema nuevo se abre en círculo desde el botón (Navegacion.astro) */
+.lampara::view-transition-old(root),
+.lampara::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.lampara * {
+  view-transition-name: none !important;
+}
+
+/* Al filtrar proyectos solo se mueven las filas; el resto de la página se queda quieto */
+.filtrando::view-transition-old(root),
+.filtrando::view-transition-new(root) {
+  animation: none;
+}

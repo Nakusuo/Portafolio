@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Destacados from './Destacados.astro';
+import Stack from './Stack.astro';
+import ListaProyectos from './ListaProyectos.astro';
+import Contacto from './Contacto.astro';
+import { proyectosEn } from '../lib/proyectos';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const proyectos = await proyectosEn(idioma);
+const destacados = proyectos.filter((p) => p.data.destacado);
+const resto = proyectos.filter((p) => !p.data.destacado);
+---
+
+<Base idioma={idioma} ruta="/trabajo" titulo={textos[idioma].nav.trabajo} imagen="proyectos/paltishop.webp">
+  <Destacados idioma={idioma} proyectos={destacados} />
+  <Stack idioma={idioma} proyectos={proyectos} />
+  <ListaProyectos idioma={idioma} proyectos={resto} />
+  <Contacto idioma={idioma} />
+</Base>
