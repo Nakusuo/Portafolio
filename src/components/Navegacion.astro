@@ -47,6 +47,9 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
       <a class="accion idioma" href={rutaEn(otro, ruta)} hreflang={otro} lang={otro}>
         <span class="largo">{t.otroIdioma}</span><span class="corto">{otro.toUpperCase()}</span>
       </a>
+      <button class="accion" type="button" data-abrir-terminal aria-label="Terminal (Ctrl+K)" title="Terminal (Ctrl+K)">
+        <Icono nombre="terminal-window" />
+      </button>
       <button class="accion" type="button" data-tema aria-label={t.tema} title={t.tema}>
         <Icono nombre="moon" class="luna" />
         <Icono nombre="sun" class="sol" />

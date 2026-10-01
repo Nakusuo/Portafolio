@@ -183,3 +183,9 @@ export const sobreMi: Texto[] = [
     en: "Right now I maintain the dashboard three gift shops use for orders, shipping and stock, plus the online store of one of them. On the side I'm building Huecko, an app to coordinate plans with friends.",
   },
 ];
+
+/** Las canciones de la cara B (vienen del README de GitHub). */
+export const pistasCaraB: Record<Idioma, string[]> = {
+  es: ['commits a las 2am', '"arreglo esto mañana" (no lo arregló)', 'el CSS que sí funcionó a la primera', 'ruido blanco'],
+  en: ['commits at 2am', "\"I'll fix this tomorrow\" (didn't)", 'the CSS that worked on the first try', 'white noise'],
+};
