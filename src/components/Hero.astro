@@ -1,0 +1,468 @@
+---
+import Icono from './Icono.astro';
+import Ventana from './Ventana.astro';
+import Repegar from './Repegar.astro';
+import { rutaEn, textos, url, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].hero;
+---
+
+<section class="hero contenedor" data-grupo-arrastre>
+  <div class="centro">
+    <p class="nota mi-nombre">
+      {t.miNombre}
+      <Icono nombre="arrow-bend-right-down" tamano={22} class="flecha-nombre" />
+    </p>
+
+    <div class="nombre-bloque">
+      <span class="etiqueta etiqueta--hueso e1" data-arrastrable style="--giro:-4deg">{t.etiquetas[0]}</span>
+      <span class="etiqueta etiqueta--tierra e2" data-arrastrable style="--giro:3deg">{t.etiquetas[1]}</span>
+      <h1 class="nombre marco-dibujado">NAKUSU</h1>
+      <span class="etiqueta etiqueta--oliva e3" data-arrastrable style="--giro:-2deg">{t.etiquetas[2]}</span>
+      <span class="etiqueta etiqueta--vino e4" data-arrastrable style="--giro:2.5deg">{t.etiquetas[3]}</span>
+    </div>
+
+    <Repegar idioma={idioma} />
+
+    <p class="estado">
+      <span class="punto" aria-hidden="true"></span>
+      {t.estado}
+    </p>
+
+    <p class="lema">{t.titulo}</p>
+    <p class="bajada-hero">{t.bajada}</p>
+
+    <a class="boton boton--lleno" href="#trabajo">
+      {t.verTrabajo}
+      <Icono nombre="arrow-down" tamano={18} />
+    </a>
+  </div>
+
+  <div class="foto foto--izq">
+    <Ventana direccion="paltishop.store">
+      <img src={url('/proyectos/paltishop.webp')} alt="paltishop.store" width="1440" height="900" fetchpriority="high" />
+    </Ventana>
+  </div>
+
+  <div class="foto foto--der">
+    <Ventana direccion="huecko.vercel.app">
+      <img src={url('/proyectos/huecko.webp')} alt="Huecko" width="1440" height="900" fetchpriority="high" />
+    </Ventana>
+  </div>
+
+  <nav class="rutas" aria-label={t.pregunta}>
+    <p class="nota pregunta">{t.pregunta}</p>
+    <ul>
+      {
+        t.rutas.map((r, i) => (
+          <li style={`--giro:${[-1.2, 0.8, -0.6][i]}deg`}>
+            <a href={rutaEn(idioma, r.destino)}>
+              <span class="etiqueta-ruta">{r.etiqueta}</span>
+              <span class="detalle">{r.detalle}</span>
+              <Icono nombre="arrow-right" tamano={20} class="flecha" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(40px, 6vw, 72px) 48px;
+  }
+
+  /* En el hero el botón flota en la esquina para no mover nada */
+  .hero :global(.repegar) {
+    position: absolute;
+    top: 16px;
+    right: var(--gutter);
+  }
+
+  .centro {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .mi-nombre {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+  }
+
+  .mi-nombre :global(.flecha-nombre) {
+    margin-top: 10px;
+    color: var(--texto-suave);
+  }
+
+  .nombre-bloque {
+    position: relative;
+    padding: 36px 60px;
+  }
+
+  .nombre {
+    display: inline-block;
+    padding: 6px 28px 2px;
+    font-family: var(--pixel);
+    font-size: clamp(4.4rem, 14vw, 8.5rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.9;
+    background: var(--fondo);
+  }
+
+  .nombre-bloque .etiqueta {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .e1 {
+    top: 10px;
+    left: -10px;
+  }
+
+  .e2 {
+    top: 14px;
+    right: -14px;
+  }
+
+  .e3 {
+    bottom: 10px;
+    left: -6px;
+  }
+
+  .e4 {
+    bottom: 12px;
+    right: -8px;
+  }
+
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--texto-suave);
+  }
+
+  /* Único punto de estado de la página: disponibilidad real */
+  .punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--acento);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--acento) 25%, transparent);
+  }
+
+  .lema {
+    margin-top: 34px;
+    font-size: clamp(1.9rem, 4.2vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    max-width: 18ch;
+  }
+
+  .bajada-hero {
+    margin: 18px 0 28px;
+    max-width: 46ch;
+    font-size: 1.1rem;
+    color: var(--texto-suave);
+  }
+
+  .foto {
+    position: absolute;
+    top: 46%;
+    width: clamp(200px, 19vw, 280px);
+  }
+
+  .foto--izq {
+    --giro: -5deg;
+    left: calc(var(--gutter) - 8px);
+  }
+
+  .foto--der {
+    --giro: 4deg;
+    right: calc(var(--gutter) - 8px);
+  }
+
+  /* La ventana lee --giro; al pasar el cursor se endereza */
+  .foto:hover {
+    --giro: 0deg;
+    z-index: 3;
+  }
+
+  .rutas {
+    margin-top: clamp(56px, 8vw, 96px);
+  }
+
+  .pregunta {
+    margin-bottom: 14px;
+  }
+
+  .rutas ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rutas li {
+    transform: rotate(var(--giro));
+  }
+
+  .rutas a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 12px;
+    padding: 18px 20px;
+    border: 1.5px solid var(--tinta);
+    border-radius: var(--radio);
+    background: var(--fondo);
+    box-shadow: 3px 3px 0 var(--tinta);
+    text-decoration: none;
+    transition:
+      transform 0.4s var(--curva),
+      box-shadow 0.4s var(--curva);
+  }
+
+  @media (hover: hover) {
+  .rutas a:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--acento);
+    }
+  }
+
+  .etiqueta-ruta {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .detalle {
+    grid-column: 1;
+    font-size: 0.88rem;
+    color: var(--texto-suave);
+  }
+
+  .rutas :global(.flecha) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    color: var(--acento);
+  }
+
+  /* Entrada escalonada al cargar */
+  @media (prefers-reduced-motion: no-preference) {
+    .centro > *,
+    .foto,
+    .rutas {
+      animation: entrar 0.9s var(--curva) both;
+    }
+
+    .centro > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    .centro > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    .centro > :nth-child(4),
+    .centro > :nth-child(5) {
+      animation-delay: 240ms;
+    }
+
+    .centro > :nth-child(6) {
+      animation-delay: 320ms;
+    }
+
+    .foto {
+      animation: abrir 0.8s var(--curva) 1.05s both;
+      transform-origin: 50% 0;
+    }
+
+    /* La captura carga dentro de la ventana ya abierta */
+    .foto img {
+      animation: cargar 0.7s ease-out 1.45s both;
+    }
+
+    /* "mi nombre es" se escribe de izquierda a derecha */
+    .mi-nombre {
+      animation: escribir 0.75s cubic-bezier(0.45, 0, 0.55, 1) 0.05s both;
+    }
+
+    .rutas {
+      animation-delay: 420ms;
+    }
+
+    /* El momento de la página: se dibuja el marco y se pegan las etiquetas una a una */
+    .nombre {
+      animation: dibujar 0.9s var(--curva) 0.55s both;
+    }
+
+    .nombre-bloque .etiqueta {
+      animation: pegar-etiqueta 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .e1 {
+      animation-delay: 1.1s;
+    }
+
+    .e2 {
+      animation-delay: 1.22s;
+    }
+
+    .e3 {
+      animation-delay: 1.34s;
+    }
+
+    .e4 {
+      animation-delay: 1.46s;
+    }
+  }
+
+  /* Mientras la terminal de arranque tapa la página, la entrada espera */
+  :global(.arrancando) .hero,
+  :global(.arrancando) .hero * {
+    animation-play-state: paused !important;
+  }
+
+  @keyframes escribir {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes abrir {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.72);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes cargar {
+    from {
+      opacity: 0;
+      filter: blur(8px);
+    }
+  }
+
+  @keyframes dibujar {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes pegar-etiqueta {
+    from {
+      opacity: 0;
+      transform: rotate(calc(var(--giro) * 4)) scale(1.5);
+    }
+    60% {
+      opacity: 1;
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--giro)) scale(1);
+    }
+  }
+
+  @keyframes entrar {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .foto {
+      width: clamp(170px, 17vw, 220px);
+      top: auto;
+      bottom: 180px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .nombre-bloque {
+      padding: 32px 24px;
+    }
+
+    .foto {
+      position: static;
+      width: min(100%, 300px);
+    }
+
+    .fotos-movil {
+      display: flex;
+    }
+
+    .hero {
+      display: grid;
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .foto--izq {
+      --giro: -2.5deg;
+      margin-top: 24px;
+    }
+
+    .foto--der {
+      --giro: 2deg;
+    }
+
+    .rutas {
+      width: 100%;
+      margin-top: 32px;
+    }
+
+    .rutas ul {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* En pantallas estrechas las etiquetas van en filas, no flotando */
+  @media (max-width: 560px) {
+    .nombre-bloque {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 10px;
+      padding: 12px 0 4px;
+    }
+
+    .nombre-bloque .etiqueta {
+      position: static;
+    }
+
+    .nombre {
+      width: 100%;
+      padding-inline: 16px;
+      text-align: center;
+    }
+  }
+</style>

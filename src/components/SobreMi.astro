@@ -1,0 +1,134 @@
+---
+import { sobreMi } from '../data/contenido';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].sobreMi;
+const es = idioma === 'es';
+
+// El mismo objeto del README de GitHub
+const campos: [string, string][] = es
+  ? [
+      ['rol', '"Estudiante de Ingeniería de Software · 3er año"'],
+      ['ahora', '["Central", "Huecko", "SafeZone"]'],
+      ['frontend', '["React", "TypeScript", "Tailwind", "Vite"]'],
+      ['backend', '["Spring Boot", "FastAPI", "PostgreSQL"]'],
+      ['tambien', '["diseño", "ilustración", "3D", "edición"]'],
+      ['filosofia', '"si se ve bien y además funciona, mejor"'],
+    ]
+  : [
+      ['role', '"Software Engineering student · 3rd year"'],
+      ['now', '["Central", "Huecko", "SafeZone"]'],
+      ['frontend', '["React", "TypeScript", "Tailwind", "Vite"]'],
+      ['backend', '["Spring Boot", "FastAPI", "PostgreSQL"]'],
+      ['also', '["design", "illustration", "3D", "editing"]'],
+      ['philosophy', '"if it looks good and also works, even better"'],
+    ];
+---
+
+<section id="sobre-mi" class="seccion contenedor sobre">
+  <div class="texto">
+    <h2 class="titulo-seccion">{t.titulo}</h2>
+    {
+      sobreMi.map((p, i) => (
+        <p style={`--i:${i + 1}`}>
+          {p[idioma]}
+        </p>
+      ))
+    }
+  </div>
+
+  <figure class="codigo cinta" style="--i:2; --giro-cinta:3deg">
+    <figcaption>whoami.ts</figcaption>
+    <pre><code><span class="clave">const</span> nakusu = {'{'}
+{campos.map(([k, v]) => (
+  <Fragment><span class="campo">{'  '}<span class="prop">{k}</span>: <span class="valor">{v}</span>,</span>{'\n'}</Fragment>
+))}{'}'};</code></pre>
+  </figure>
+</section>
+
+<style>
+  .sobre {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(32px, 6vw, 88px);
+    align-items: center;
+  }
+
+  /* Texto a mano, como nota de cuaderno */
+  .texto p {
+    margin-top: 22px;
+    max-width: 40ch;
+    font-family: var(--mano);
+    font-size: 1.7rem;
+    line-height: 1.3;
+    color: var(--texto);
+  }
+
+  .codigo {
+    position: relative;
+    margin: 0;
+    transform: rotate(1.5deg);
+    border-radius: var(--radio);
+    background: #1c1f1c;
+    color: #e6e2d4;
+    border: 1px solid var(--linea);
+    overflow: hidden;
+    box-shadow: var(--sombra);
+  }
+
+  figcaption {
+    padding: 12px 18px;
+    border-bottom: 1px solid rgb(230 226 212 / 0.1);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: #a7a594;
+  }
+
+  pre {
+    margin: 0;
+    padding: 22px 18px 26px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: clamp(0.78rem, 1.3vw, 0.9rem);
+    line-height: 1.8;
+  }
+
+  /* Celular: el código se parte en líneas en vez de obligar a deslizar de lado */
+  @media (max-width: 560px) {
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    /* Sangría colgante: si un campo no cabe, la segunda línea queda debajo del valor y no en la columna 0 */
+    .campo {
+      display: inline-block;
+      width: 100%;
+      padding-left: 4ch;
+      text-indent: -4ch;
+    }
+  }
+
+  .clave {
+    color: #b0606c;
+  }
+
+  .prop {
+    color: #8fa36b;
+  }
+
+  .valor {
+    color: #c9c2b0;
+  }
+
+  @media (max-width: 860px) {
+    .sobre {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

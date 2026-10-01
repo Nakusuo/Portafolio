@@ -1,0 +1,256 @@
+---
+import Icono from './Icono.astro';
+import Portada from './Portada.astro';
+import Ventana from './Ventana.astro';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+import { slugDe, type Proyecto } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+  /** Si se indica, muestra solo los primeros y un enlace a /trabajo. */
+  limite?: number;
+}
+
+const { idioma, proyectos, limite } = Astro.props;
+const t = textos[idioma].destacados;
+const nota = idioma === 'es' ? 'lo que más me enorgullece' : 'the work I am proudest of';
+const privadoTexto = idioma === 'es' ? 'código privado' : 'private code';
+
+// La pestaña dice de dónde salió el proyecto
+const origenes = {
+  es: { clientes: 'Para un cliente', personal: 'Proyecto propio', universidad: 'Universidad' },
+  en: { clientes: 'Client work', personal: 'Personal project', universidad: 'University' },
+}[idioma];
+const origenDe = (p: Proyecto) => {
+  const c = p.data.categorias;
+  if (c.includes('clientes')) return origenes.clientes;
+  if (c.includes('personal')) return origenes.personal;
+  return origenes.universidad;
+};
+
+const visibles = limite ? proyectos.slice(0, limite) : proyectos;
+
+// Fichas de colores en ciclo, como carpetas con pestaña
+const fondos = ['tinta', 'hueso', 'oliva', 'tierra', 'vino'];
+
+// Lo que muestra la barra de dirección de la ventana
+const direccionDe = (p: Proyecto) => {
+  if (p.data.demo) return new URL(p.data.demo).host;
+  if (p.data.privado) return privadoTexto;
+  const repo = p.data.repos[0];
+  return repo ? `github.com/Nakusuo/${repo.nombre}` : p.data.titulo;
+};
+---
+
+<section id="trabajo" class="seccion contenedor">
+  <div class="con-anotacion">
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="anotacion">
+      <Icono nombre="arrow-bend-down-left" tamano={26} />
+      {nota}
+    </p>
+  </div>
+  <p class="bajada">{t.bajada}</p>
+
+  <ol class="fichas">
+    {
+      visibles.map((p, i) => (
+        <li class:list={['ficha', fondos[i % fondos.length]]} data-revelar>
+          <span class="pestana">{origenDe(p)}</span>
+          <a href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)} class="tarjeta">
+            <div class="info">
+              {p.data.rol && <span class="rol">{p.data.rol}</span>}
+              <h3 style={`view-transition-name: titulo-${slugDe(p)}`}>{p.data.titulo}</h3>
+              <p class="resumen">{p.data.resumen}</p>
+              <ul class="chips">
+                {p.data.privado && (
+                  <li>
+                    <Icono nombre="lock-simple" tamano={13} />
+                    {t.privado}
+                  </li>
+                )}
+                {p.data.stack.slice(0, 4).map((s) => (
+                  <li>{s}</li>
+                ))}
+              </ul>
+              <span class="leer">
+                {t.leer}
+                <Icono nombre="arrow-up-right" tamano={18} />
+              </span>
+            </div>
+            <div class="foto" style={`view-transition-name: ventana-${slugDe(p)}`}>
+              <Ventana direccion={direccionDe(p)} privado={p.data.privado && !p.data.demo}>
+                <Portada proyecto={p} prioridad={i < 2} />
+              </Ventana>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+
+  {
+    limite && proyectos.length > limite && (
+      <div class="mas" data-revelar>
+        <a class="boton" href={rutaEn(idioma, '/trabajo')}>
+          {textos[idioma].inicio.verTrabajo}
+          <Icono nombre="arrow-right" tamano={18} />
+        </a>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .fichas {
+    display: grid;
+    gap: 56px;
+    margin: clamp(48px, 7vw, 80px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ficha {
+    position: relative;
+    border-radius: 0 var(--radio) var(--radio) var(--radio);
+    box-shadow: var(--sombra);
+  }
+
+  .pestana {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    padding: 6px 18px 8px;
+    border-radius: var(--radio) var(--radio) 0 0;
+    background: inherit;
+    color: inherit;
+    font: 500 1.25rem/1 var(--mano);
+    letter-spacing: 0;
+  }
+
+  .tarjeta {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    padding: clamp(24px, 4vw, 48px);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .info {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+  }
+
+  .rol {
+    font-size: 0.88rem;
+    font-weight: 500;
+    opacity: 0.75;
+  }
+
+  h3 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.035em;
+  }
+
+  .resumen {
+    max-width: 44ch;
+    opacity: 0.85;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    font: 400 0.76rem/1.5 var(--mono);
+    opacity: 0.8;
+  }
+
+  .leer {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 2px solid currentColor;
+    transition: gap 0.3s var(--curva);
+  }
+
+  .tarjeta:hover .leer {
+    gap: 12px;
+  }
+
+  .foto {
+    --giro: 1.2deg;
+  }
+
+  .ficha:nth-child(even) .foto {
+    --giro: -1.2deg;
+  }
+
+  .tarjeta:hover .foto {
+    --giro: 0deg;
+  }
+
+  .mas {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+  }
+
+  /* Fondos de ficha */
+  .tinta {
+    background: var(--tinta);
+    color: var(--tinta-texto);
+  }
+
+  .hueso {
+    background: var(--hueso);
+    color: #1c1f1c;
+  }
+
+  .oliva {
+    background: var(--acento);
+    color: var(--acento-texto);
+  }
+
+  .tierra {
+    background: var(--tierra);
+    color: #1c1f1c;
+  }
+
+  .vino {
+    background: var(--vino);
+    color: #f6ecee;
+  }
+
+  @media (max-width: 860px) {
+    .fichas {
+      gap: 52px;
+    }
+
+    .tarjeta {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .foto {
+      order: -1;
+    }
+  }
+</style>
