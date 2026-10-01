@@ -1,21 +1,35 @@
 ---
 import Icono from './Icono.astro';
 import Portada from './Portada.astro';
+import Ventana from './Ventana.astro';
 import { rutaEn, textos, type Idioma } from '../i18n/ui';
 import { slugDe, type Proyecto } from '../lib/proyectos';
 
 interface Props {
   idioma: Idioma;
   proyectos: Proyecto[];
+  /** Si se indica, muestra solo los primeros y un enlace a /trabajo. */
+  limite?: number;
 }
 
-const { idioma, proyectos } = Astro.props;
+const { idioma, proyectos, limite } = Astro.props;
 const t = textos[idioma].destacados;
 const nota = idioma === 'es' ? 'lo que más me enorgullece' : 'the work I am proudest of';
 const etiquetaProyecto = idioma === 'es' ? 'Proyecto' : 'Project';
+const privadoTexto = idioma === 'es' ? 'código privado' : 'private code';
+
+const visibles = limite ? proyectos.slice(0, limite) : proyectos;
 
 // Fichas de colores en ciclo, como carpetas con pestaña
 const fondos = ['tinta', 'hueso', 'oliva', 'tierra', 'vino'];
+
+// Lo que muestra la barra de dirección de la ventana
+const direccionDe = (p: Proyecto) => {
+  if (p.data.demo) return new URL(p.data.demo).host;
+  if (p.data.privado) return privadoTexto;
+  const repo = p.data.repos[0];
+  return repo ? `github.com/Nakusuo/${repo.nombre}` : p.data.titulo;
+};
 ---
 
 <section id="trabajo" class="seccion contenedor">
@@ -25,7 +39,7 @@ const fondos = ['tinta', 'hueso', 'oliva', 'tierra', 'vino'];
 
   <ol class="fichas">
     {
-      proyectos.map((p, i) => (
+      visibles.map((p, i) => (
         <li class:list={['ficha', fondos[i % fondos.length]]} data-revelar>
           <span class="pestana">
             {etiquetaProyecto} {String(i + 1).padStart(2, '0')}
@@ -51,14 +65,27 @@ const fondos = ['tinta', 'hueso', 'oliva', 'tierra', 'vino'];
                 <Icono nombre="arrow-up-right" tamano={18} />
               </span>
             </div>
-            <div class="foto cinta" style={`--giro-cinta:${i % 2 ? 4 : -4}deg`}>
-              <Portada proyecto={p} prioridad={i < 2} />
+            <div class="foto">
+              <Ventana direccion={direccionDe(p)} privado={p.data.privado && !p.data.demo}>
+                <Portada proyecto={p} prioridad={i < 2} />
+              </Ventana>
             </div>
           </a>
         </li>
       ))
     }
   </ol>
+
+  {
+    limite && proyectos.length > limite && (
+      <div class="mas" data-revelar>
+        <a class="boton" href={rutaEn(idioma, '/trabajo')}>
+          {textos[idioma].inicio.verTrabajo}
+          <Icono nombre="arrow-right" tamano={18} />
+        </a>
+      </div>
+    )
+  }
 </section>
 
 <style>
@@ -158,25 +185,21 @@ const fondos = ['tinta', 'hueso', 'oliva', 'tierra', 'vino'];
   }
 
   .foto {
-    position: relative;
-    padding: 10px;
-    background: #fbfaf6;
-    border-radius: 2px;
-    box-shadow: var(--sombra);
-    transform: rotate(1.2deg);
-    transition: transform 0.6s var(--curva);
+    --giro: 1.2deg;
   }
 
   .ficha:nth-child(even) .foto {
-    transform: rotate(-1.5deg);
+    --giro: -1.2deg;
   }
 
   .tarjeta:hover .foto {
-    transform: rotate(0deg) scale(1.015);
+    --giro: 0deg;
   }
 
-  .foto :global(.portada) {
-    border-radius: 1px;
+  .mas {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
   }
 
   /* Fondos de ficha */

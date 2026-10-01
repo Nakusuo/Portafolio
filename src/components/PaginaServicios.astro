@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Servicios from './Servicios.astro';
+import Contacto from './Contacto.astro';
+import { proyectosEn } from '../lib/proyectos';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const proyectos = await proyectosEn(idioma);
+---
+
+<Base idioma={idioma} ruta="/servicios" titulo={textos[idioma].nav.servicios} descripcion={textos[idioma].servicios.bajada}>
+  <Servicios idioma={idioma} proyectos={proyectos} />
+  <Contacto idioma={idioma} />
+</Base>

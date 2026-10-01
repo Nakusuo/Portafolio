@@ -290,36 +290,6 @@ p {
   z-index: 2;
 }
 
-/* Foto pegada, con marco blanco y pie a mano */
-.polaroid {
-  position: relative;
-  display: block;
-  padding: 10px 10px 14px;
-  background: #fbfaf6;
-  color: #1c1f1c;
-  border-radius: 2px;
-  box-shadow: var(--sombra);
-  transform: rotate(var(--giro, -2deg));
-  transition: transform 0.6s var(--curva);
-}
-
-.polaroid img {
-  width: 100%;
-  border-radius: 1px;
-}
-
-.polaroid figcaption {
-  margin-top: 10px;
-  font-family: var(--mano);
-  font-size: 1.3rem;
-  line-height: 1;
-  text-align: center;
-}
-
-.polaroid:hover {
-  transform: rotate(0deg) scale(1.02);
-}
-
 /* Marco "dibujado a mano": radios irregulares */
 .marco-dibujado {
   border: 2px solid var(--tinta);

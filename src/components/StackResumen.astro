@@ -1,0 +1,61 @@
+---
+// Adelanto del stack en la home: lo de uso diario, con enlace al stack completo.
+import Icono from './Icono.astro';
+import { gruposStack } from '../data/contenido';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].inicio;
+
+const diario = ['TypeScript', 'React', 'Next.js', 'Tailwind', 'Java', 'Spring Boot', 'Python', 'FastAPI', 'PostgreSQL', 'Git', 'Figma'];
+const tecnologias = gruposStack.flatMap((g) => g.tecnologias).filter((tec) => diario.includes(tec.nombre));
+const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
+---
+
+<section class="seccion contenedor resumen">
+  <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.stackTitulo}</h2>
+  <ul class="stickers" data-revelar>
+    {
+      tecnologias.map((tec, i) => (
+        <li class={`etiqueta etiqueta--${tonos[i % 4]} grande`} style={`--giro:${((i % 3) - 1) * 2}deg`}>
+          <Icono nombre={tec.icono} set="si" tamano={18} />
+          {tec.nombre}
+        </li>
+      ))
+    }
+  </ul>
+  <a class="boton" href={`${rutaEn(idioma, '/trabajo')}#stack`} data-revelar>
+    {t.verStack}
+    <Icono nombre="arrow-right" tamano={18} />
+  </a>
+</section>
+
+<style>
+  .resumen {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .stickers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 12px;
+    max-width: 820px;
+    margin: 36px 0 40px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grande {
+    padding: 9px 14px;
+    font-size: 0.85rem;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+</style>
