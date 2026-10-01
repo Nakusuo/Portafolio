@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import Navegacion from '../components/Navegacion.astro';
 import Pie from '../components/Pie.astro';
+import Terminal from '../components/Terminal.astro';
+import CaraB from '../components/CaraB.astro';
 import { textos, url, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -71,6 +73,8 @@ const rutaEn = new URL(url(ruta === '/' ? '/en/' : `/en${ruta}`), Astro.site).hr
       <slot />
     </main>
     <Pie idioma={idioma} />
+    <Terminal idioma={idioma} ruta={ruta} />
+    <CaraB idioma={idioma} />
 
     <script>
       import { activarArrastre } from '../scripts/arrastrar';

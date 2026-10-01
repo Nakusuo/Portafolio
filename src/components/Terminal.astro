@@ -1,0 +1,363 @@
+---
+// Terminal flotante: se abre con Ctrl+K, Cmd+K, "/" o el botón de la barra.
+// Los comandos navegan por el sitio, cambian el tema o el idioma y abren la cara B.
+import { enlaceContacto, perfil } from '../data/perfil';
+import { rutaEn, url, type Idioma } from '../i18n/ui';
+import { proyectosEn, slugDe } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  ruta: string;
+}
+
+const { idioma, ruta } = Astro.props;
+const otro: Idioma = idioma === 'es' ? 'en' : 'es';
+const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
+
+const config = {
+  idioma,
+  rutas: {
+    inicio: rutaEn(idioma, '/'),
+    trabajo: rutaEn(idioma, '/trabajo'),
+    servicios: rutaEn(idioma, '/servicios'),
+    lab: rutaEn(idioma, '/lab'),
+    sobreMi: rutaEn(idioma, '/sobre-mi'),
+    otroIdioma: rutaEn(otro, ruta),
+  },
+  proyectos: destacados.map((p) => ({
+    slug: slugDe(p),
+    titulo: p.data.titulo,
+    url: rutaEn(idioma, `/proyectos/${slugDe(p)}`),
+  })),
+  contacto: enlaceContacto,
+  github: perfil.github,
+  cv: perfil.cv ? url(`/${perfil.cv}`) : '',
+};
+---
+
+<dialog class="terminal" data-terminal aria-label="Terminal">
+  <div class="barra">
+    <span class="puntos" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="titulo">nakusu@portafolio: ~</span>
+    <button type="button" class="cerrar" data-cerrar-terminal aria-label={idioma === 'es' ? 'Cerrar' : 'Close'}>esc</button>
+  </div>
+  <div class="salida" data-salida role="log" aria-live="polite"></div>
+  <form class="linea" data-formulario>
+    <span class="prompt" aria-hidden="true">&gt;</span>
+    <input
+      data-entrada
+      type="text"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      aria-label={idioma === 'es' ? 'Comando' : 'Command'}
+      placeholder={idioma === 'es' ? 'escribe "ayuda"' : 'type "help"'}
+    />
+  </form>
+</dialog>
+
+<script is:inline type="application/json" data-config-terminal set:html={JSON.stringify(config)} />
+
+<script>
+  type Config = {
+    idioma: 'es' | 'en';
+    rutas: Record<'inicio' | 'trabajo' | 'servicios' | 'lab' | 'sobreMi' | 'otroIdioma', string>;
+    proyectos: { slug: string; titulo: string; url: string }[];
+    contacto: string;
+    github: string;
+    cv: string;
+  };
+
+  const dialogo = document.querySelector<HTMLDialogElement>('[data-terminal]')!;
+  const salida = dialogo.querySelector<HTMLElement>('[data-salida]')!;
+  const formulario = dialogo.querySelector<HTMLFormElement>('[data-formulario]')!;
+  const entrada = dialogo.querySelector<HTMLInputElement>('[data-entrada]')!;
+  const config: Config = JSON.parse(document.querySelector('[data-config-terminal]')!.textContent!);
+  const es = config.idioma === 'es';
+
+  const historial: string[] = [];
+  let posicion = 0;
+
+  const imprimir = (texto: string, clase = '') => {
+    const linea = document.createElement('p');
+    linea.textContent = texto;
+    if (clase) linea.className = clase;
+    salida.append(linea);
+    salida.scrollTop = salida.scrollHeight;
+  };
+
+  const ir = (destino: string) => {
+    dialogo.close();
+    location.href = destino;
+  };
+
+  const abrirFuera = (destino: string) => window.open(destino, '_blank', 'noopener');
+
+  // Cada comando con sus alias en los dos idiomas
+  const comandos: { nombres: string[]; ayuda: string; correr: (args: string[]) => void }[] = [
+    {
+      nombres: ['ayuda', 'help'],
+      ayuda: es ? 'esta lista' : 'this list',
+      correr: () => comandos.forEach((c) => imprimir(`${c.nombres[0].padEnd(10)} ${c.ayuda}`, 'tenue')),
+    },
+    { nombres: ['inicio', 'home'], ayuda: es ? 'ir al inicio' : 'go home', correr: () => ir(config.rutas.inicio) },
+    { nombres: ['trabajo', 'work'], ayuda: es ? 'proyectos y stack' : 'projects and stack', correr: () => ir(config.rutas.trabajo) },
+    { nombres: ['servicios', 'services'], ayuda: es ? 'qué puedo hacer por ti' : 'what I can build for you', correr: () => ir(config.rutas.servicios) },
+    { nombres: ['lab'], ayuda: es ? 'lo creativo' : 'the creative stuff', correr: () => ir(config.rutas.lab) },
+    { nombres: ['sobremi', 'about'], ayuda: es ? 'quién soy y cómo uso la IA' : 'who I am and how I use AI', correr: () => ir(config.rutas.sobreMi) },
+    {
+      nombres: ['proyectos', 'projects'],
+      ayuda: es ? 'lista los casos; "abrir <nombre>" para ver uno' : 'list case studies; "open <name>" to see one',
+      correr: () => config.proyectos.forEach((p) => imprimir(`${p.slug.padEnd(20)} ${p.titulo}`, 'tenue')),
+    },
+    {
+      nombres: ['abrir', 'open'],
+      ayuda: es ? 'abre un caso: abrir huecko' : 'open a case: open huecko',
+      correr: ([nombre = '']) => {
+        const proyecto = config.proyectos.find((p) => p.slug.startsWith(nombre.toLowerCase()) && nombre);
+        if (proyecto) ir(proyecto.url);
+        else imprimir(es ? 'no conozco ese proyecto; prueba "proyectos"' : 'unknown project; try "projects"', 'error');
+      },
+    },
+    { nombres: ['contacto', 'contact'], ayuda: es ? 'escríbeme' : 'get in touch', correr: () => abrirFuera(config.contacto) },
+    { nombres: ['github'], ayuda: es ? 'mis repos' : 'my repos', correr: () => abrirFuera(config.github) },
+    {
+      nombres: ['cv'],
+      ayuda: es ? 'descargar el CV' : 'download the CV',
+      correr: () => (config.cv ? abrirFuera(config.cv) : imprimir(es ? 'el CV todavía no está publicado' : 'the CV is not published yet', 'error')),
+    },
+    {
+      nombres: ['tema', 'theme'],
+      ayuda: es ? 'claro u oscuro' : 'light or dark',
+      correr: () => {
+        dialogo.close();
+        document.querySelector<HTMLButtonElement>('[data-tema]')?.click();
+      },
+    },
+    { nombres: ['idioma', 'lang'], ayuda: es ? 'switch to English' : 'cambiar a español', correr: () => ir(config.rutas.otroIdioma) },
+    {
+      nombres: ['side-b', 'cara-b'],
+      ayuda: es ? 'dale la vuelta a la cinta' : 'flip the tape',
+      correr: () => {
+        dialogo.close();
+        document.dispatchEvent(new CustomEvent('cara-b'));
+      },
+    },
+    { nombres: ['limpiar', 'clear'], ayuda: es ? 'borra la pantalla' : 'clear the screen', correr: () => (salida.innerHTML = '') },
+    { nombres: ['salir', 'exit'], ayuda: es ? 'cierra la terminal' : 'close the terminal', correr: () => dialogo.close() },
+  ];
+
+  const buscar = (nombre: string) => comandos.find((c) => c.nombres.includes(nombre));
+
+  const ejecutar = (linea: string) => {
+    const [nombre = '', ...args] = linea.trim().toLowerCase().split(/\s+/);
+    if (!nombre) return;
+    imprimir(`> ${linea.trim()}`, 'eco');
+    if (nombre === 'sudo') {
+      imprimir(es ? 'permiso denegado: aquí el admin soy yo' : 'permission denied: I am the admin here', 'error');
+      return;
+    }
+    // Escribir el nombre de un proyecto también lo abre
+    const comando = buscar(nombre) ?? (config.proyectos.some((p) => p.slug === nombre) ? buscar('abrir') : undefined);
+    if (!comando) {
+      imprimir(es ? `comando no encontrado: ${nombre}. Escribe "ayuda".` : `command not found: ${nombre}. Type "help".`, 'error');
+      return;
+    }
+    comando.correr(comando === buscar('abrir') && !args.length ? [nombre] : args);
+  };
+
+  const abrir = () => {
+    if (dialogo.open) return;
+    dialogo.showModal();
+    if (!salida.childElementCount) {
+      imprimir(es ? 'Hola. Escribe "ayuda" para ver los comandos.' : 'Hi. Type "help" to see the commands.', 'tenue');
+    }
+    entrada.focus();
+  };
+
+  formulario.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const linea = entrada.value;
+    if (linea.trim()) historial.push(linea);
+    posicion = historial.length;
+    entrada.value = '';
+    ejecutar(linea);
+  });
+
+  entrada.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowUp' && posicion > 0) {
+      e.preventDefault();
+      entrada.value = historial[--posicion];
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      posicion = Math.min(posicion + 1, historial.length);
+      entrada.value = historial[posicion] ?? '';
+    } else if (e.key === 'Tab') {
+      // Autocompleta con el primer comando o proyecto que empiece igual
+      e.preventDefault();
+      const texto = entrada.value.trim().toLowerCase();
+      if (!texto) return;
+      const opciones = [...comandos.flatMap((c) => c.nombres), ...config.proyectos.map((p) => p.slug)];
+      const sugerencia = opciones.find((o) => o.startsWith(texto));
+      if (sugerencia) entrada.value = sugerencia;
+    }
+  });
+
+  dialogo.querySelector('[data-cerrar-terminal]')?.addEventListener('click', () => dialogo.close());
+  // Un clic fuera de la ventana también la cierra
+  dialogo.addEventListener('click', (e) => {
+    if (e.target === dialogo) dialogo.close();
+  });
+  document.querySelectorAll('[data-abrir-terminal]').forEach((b) => b.addEventListener('click', abrir));
+
+  addEventListener('keydown', (e) => {
+    const escribiendo = (e.target as HTMLElement).closest('input, textarea, [contenteditable]');
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      dialogo.open ? dialogo.close() : abrir();
+    } else if (e.key === '/' && !escribiendo && !dialogo.open) {
+      e.preventDefault();
+      abrir();
+    }
+  });
+</script>
+
+<style>
+  .terminal {
+    width: min(640px, calc(100vw - 32px));
+    max-height: min(480px, calc(100dvh - 64px));
+    margin: 12vh auto auto;
+    padding: 0;
+    border: 1.5px solid #e6e2d4;
+    border-radius: 6px;
+    background: #151713;
+    color: #e6e2d4;
+    box-shadow: 6px 6px 0 #8fa36b;
+    font-family: var(--mono);
+    font-size: 0.92rem;
+  }
+
+  .terminal[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .terminal[open] {
+      animation: aparecer-terminal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+
+  @keyframes aparecer-terminal {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.97);
+    }
+  }
+
+  .terminal::backdrop {
+    background: rgb(18 20 18 / 0.45);
+    backdrop-filter: blur(2px);
+  }
+
+  .barra {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-bottom: 1px solid rgb(230 226 212 / 0.15);
+    color: #a9a797;
+    font-size: 0.78rem;
+  }
+
+  .puntos {
+    display: flex;
+    gap: 6px;
+  }
+
+  .puntos i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .puntos i:nth-child(1) {
+    background: #b0606c;
+  }
+
+  .puntos i:nth-child(2) {
+    background: #a9856b;
+  }
+
+  .puntos i:nth-child(3) {
+    background: #8fa36b;
+  }
+
+  .titulo {
+    flex: 1;
+  }
+
+  .cerrar {
+    padding: 2px 8px;
+    border: 1px solid rgb(230 226 212 / 0.25);
+    border-radius: 3px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .cerrar:hover {
+    color: #e6e2d4;
+  }
+
+  .salida {
+    flex: 1;
+    min-height: 120px;
+    overflow-y: auto;
+    padding: 14px 16px 4px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  .salida :global(.eco) {
+    color: #e6e2d4;
+  }
+
+  .salida :global(.tenue) {
+    color: #a9a797;
+  }
+
+  .salida :global(.error) {
+    color: #d08a94;
+  }
+
+  .linea {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px 14px;
+  }
+
+  .prompt {
+    color: #8fa36b;
+    font-family: var(--pixel);
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    color: #e6e2d4;
+    font: inherit;
+    caret-color: #8fa36b;
+  }
+
+  input::placeholder {
+    color: #8a887a;
+  }
+</style>

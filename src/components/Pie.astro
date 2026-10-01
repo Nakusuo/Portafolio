@@ -1,6 +1,7 @@
 ---
 import Icono from './Icono.astro';
 import { perfil } from '../data/perfil';
+import { pistasCaraB } from '../data/contenido';
 import { textos, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -11,10 +12,7 @@ const { idioma } = Astro.props;
 const t = textos[idioma].pie;
 const anio = new Date().getFullYear();
 
-const pistas =
-  idioma === 'es'
-    ? ['commits a las 2am', '"arreglo esto mañana" (no lo arregló)', 'el CSS que sí funcionó a la primera', 'ruido blanco']
-    : ['commits at 2am', '"I\'ll fix this tomorrow" (didn\'t)', 'the CSS that worked on the first try', 'white noise'];
+const pistas = pistasCaraB[idioma];
 ---
 
 <footer class="pie">
