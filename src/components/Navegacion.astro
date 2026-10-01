@@ -62,8 +62,9 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
 
 <script>
   const boton = document.querySelector<HTMLButtonElement>('[data-tema]');
-  boton?.addEventListener('click', () => {
-    const raiz = document.documentElement;
+  const raiz = document.documentElement;
+
+  const alternarTema = () => {
     const oscuroAhora =
       raiz.dataset.theme === 'dark' ||
       (!raiz.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -72,6 +73,28 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
     try {
       localStorage.setItem('tema', nuevo);
     } catch {}
+  };
+
+  // Como una lámpara: el tema nuevo se abre en círculo desde el botón
+  boton?.addEventListener('click', () => {
+    if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      alternarTema();
+      return;
+    }
+    const caja = boton.getBoundingClientRect();
+    const x = caja.left + caja.width / 2;
+    const y = caja.top + caja.height / 2;
+    const radio = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    raiz.classList.add('lampara');
+    const transicion = document.startViewTransition(alternarTema);
+    transicion.ready.then(() => {
+      raiz.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radio}px at ${x}px ${y}px)`] },
+        { duration: 650, easing: 'cubic-bezier(0.7, 0, 0.3, 1)', pseudoElement: '::view-transition-new(root)' },
+      );
+    });
+    transicion.finished.finally(() => raiz.classList.remove('lampara'));
   });
 
   // Menú en pantallas estrechas

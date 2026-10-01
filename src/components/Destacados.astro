@@ -61,7 +61,7 @@ const direccionDe = (p: Proyecto) => {
           <a href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)} class="tarjeta">
             <div class="info">
               {p.data.rol && <span class="rol">{p.data.rol}</span>}
-              <h3>{p.data.titulo}</h3>
+              <h3 style={`view-transition-name: titulo-${slugDe(p)}`}>{p.data.titulo}</h3>
               <p class="resumen">{p.data.resumen}</p>
               <ul class="chips">
                 {p.data.privado && (
@@ -79,7 +79,7 @@ const direccionDe = (p: Proyecto) => {
                 <Icono nombre="arrow-up-right" tamano={18} />
               </span>
             </div>
-            <div class="foto">
+            <div class="foto" style={`view-transition-name: ventana-${slugDe(p)}`}>
               <Ventana direccion={direccionDe(p)} privado={p.data.privado && !p.data.demo}>
                 <Portada proyecto={p} prioridad={i < 2} />
               </Ventana>

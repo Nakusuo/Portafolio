@@ -1,7 +1,7 @@
 ---
 import Icono from './Icono.astro';
 import { textos, type Idioma } from '../i18n/ui';
-import type { Proyecto } from '../lib/proyectos';
+import { slugDe, type Proyecto } from '../lib/proyectos';
 
 interface Props {
   idioma: Idioma;
@@ -36,7 +36,7 @@ const presentes = Object.keys(t.categorias).filter((c) =>
   <ul class="lista" data-lista>
     {
       proyectos.map((p) => (
-        <li class="fila" data-categorias={p.data.categorias.join(' ')}>
+        <li class="fila" data-categorias={p.data.categorias.join(' ')} style={`view-transition-name: fila-${slugDe(p)}`}>
           <h3>{p.data.titulo}</h3>
           <p class="resumen">{p.data.resumen}</p>
           <p class="pila">{p.data.stack.join(' / ')}</p>
@@ -66,17 +66,28 @@ const presentes = Object.keys(t.categorias).filter((c) =>
   const filas = document.querySelectorAll<HTMLElement>('[data-lista] > li');
   const vacio = document.querySelector<HTMLElement>('[data-vacio]');
 
+  const filtrar = (filtro: string) => {
+    let visibles = 0;
+    filas.forEach((fila) => {
+      const coincide = filtro === 'todos' || fila.dataset.categorias!.split(' ').includes(filtro);
+      fila.hidden = !coincide;
+      if (coincide) visibles++;
+    });
+    if (vacio) vacio.hidden = visibles > 0;
+  };
+
   botones.forEach((boton) =>
     boton.addEventListener('click', () => {
       const filtro = boton.dataset.filtro!;
       botones.forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
-      let visibles = 0;
-      filas.forEach((fila) => {
-        const coincide = filtro === 'todos' || fila.dataset.categorias!.split(' ').includes(filtro);
-        fila.hidden = !coincide;
-        if (coincide) visibles++;
-      });
-      if (vacio) vacio.hidden = visibles > 0;
+      // Cada fila tiene su view-transition-name: las que quedan se deslizan a su nuevo sitio
+      if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        filtrar(filtro);
+        return;
+      }
+      const raiz = document.documentElement;
+      raiz.classList.add('filtrando');
+      document.startViewTransition(() => filtrar(filtro)).finished.finally(() => raiz.classList.remove('filtrando'));
     }),
   );
 </script>
