@@ -1,30 +1,40 @@
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/geist-mono';
+@import '@fontsource-variable/caveat';
 @import '@fontsource/vt323';
 
 /*
-  Paleta tomada del README de GitHub (verde oliva sobre casi negro).
-  Un solo acento: el oliva. El vino solo aparece en la cara B del pie.
-  Radios: tarjetas e imágenes 10px; botones y etiquetas en píldora.
+  Cuaderno: papel cuadriculado claro y encima cosas "pegadas" (cintas, polaroids,
+  stickers, notas a mano). Los colores de los stickers son los del README de GitHub:
+  oliva, vino, tierra y hueso. En modo oscuro el papel es oscuro y los stickers no cambian.
+  Formas: esquinas casi rectas (4px) en todo; nada de píldoras.
 */
 :root {
-  --fondo: #eef0ea;
-  --superficie: #e3e6dd;
-  --superficie-2: #d8dccf;
+  --fondo: #f3f1ea;
+  --papel-linea: rgb(26 29 25 / 0.07);
+  --superficie: #e9e6dc;
+  --superficie-2: #dedacc;
   --texto: #1a1d19;
-  --texto-suave: #4a4f45;
-  --linea: rgb(26 29 25 / 0.14);
+  --texto-suave: #4f534a;
+  --linea: rgb(26 29 25 / 0.16);
+  --tinta: #1c1f1c;
+  --tinta-texto: #f3f1ea;
   --acento: #4f6136;
   --acento-texto: #f3f5ee;
   --vino: #8a3c48;
-  --sombra: 0 18px 40px -24px rgb(42 52 30 / 0.45);
+  --tierra: #a9856b;
+  --hueso: #cfc8b4;
+  --oliva-claro: #8fa36b;
+  --sombra: 0 10px 24px -14px rgb(42 52 30 / 0.5);
+  --sombra-sticker: 0 2px 0 rgb(26 29 25 / 0.18);
 
-  --radio: 10px;
-  --ancho: 1240px;
+  --radio: 4px;
+  --ancho: 1200px;
   --gutter: clamp(16px, 4vw, 40px);
   --fuente: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --mono: 'Geist Mono Variable', ui-monospace, monospace;
   --pixel: 'VT323', ui-monospace, monospace;
+  --mano: 'Caveat Variable', 'Segoe Print', cursive;
   --curva: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
@@ -32,31 +42,37 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --fondo: #121412;
-    --superficie: #1c1f1c;
-    --superficie-2: #262a25;
+    --fondo: #151713;
+    --papel-linea: rgb(230 226 212 / 0.07);
+    --superficie: #1f221e;
+    --superficie-2: #292d27;
     --texto: #e6e2d4;
-    --texto-suave: #a7a594;
-    --linea: rgb(230 226 212 / 0.12);
+    --texto-suave: #a9a797;
+    --linea: rgb(230 226 212 / 0.16);
+    --tinta: #e6e2d4;
+    --tinta-texto: #151713;
     --acento: #8fa36b;
     --acento-texto: #121412;
-    --vino: #b0606c;
-    --sombra: 0 18px 40px -24px rgb(0 0 0 / 0.7);
+    --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
+    --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --fondo: #121412;
-  --superficie: #1c1f1c;
-  --superficie-2: #262a25;
+  --fondo: #151713;
+  --papel-linea: rgb(230 226 212 / 0.07);
+  --superficie: #1f221e;
+  --superficie-2: #292d27;
   --texto: #e6e2d4;
-  --texto-suave: #a7a594;
-  --linea: rgb(230 226 212 / 0.12);
+  --texto-suave: #a9a797;
+  --linea: rgb(230 226 212 / 0.16);
+  --tinta: #e6e2d4;
+  --tinta-texto: #151713;
   --acento: #8fa36b;
   --acento-texto: #121412;
-  --vino: #b0606c;
-  --sombra: 0 18px 40px -24px rgb(0 0 0 / 0.7);
+  --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
+  --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
   color-scheme: dark;
 }
 
@@ -74,24 +90,18 @@ html {
 
 body {
   margin: 0;
-  background: var(--fondo);
+  background-color: var(--fondo);
+  /* Cuadrícula de 28px como papel de cuaderno */
+  background-image:
+    linear-gradient(var(--papel-linea) 1px, transparent 1px),
+    linear-gradient(90deg, var(--papel-linea) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: var(--texto);
   font-family: var(--fuente);
   font-size: 1.0625rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-}
-
-/* Grano sutil, fijo para no repintar al hacer scroll */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 img {
@@ -122,7 +132,7 @@ p {
 :focus-visible {
   outline: 2px solid var(--acento);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: var(--radio);
 }
 
 ::selection {
@@ -138,12 +148,12 @@ p {
 }
 
 .seccion {
-  padding-block: clamp(72px, 11vw, 136px);
+  padding-block: clamp(64px, 10vw, 120px);
 }
 
 /* Título de sección con el prompt del README: "> stack" */
 .titulo-seccion {
-  font-size: clamp(2.1rem, 5vw, 3.6rem);
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
   max-width: 18ch;
 }
 
@@ -161,54 +171,159 @@ p {
   color: var(--texto-suave);
 }
 
+/* Anotación a mano al lado de un título */
+.nota {
+  font-family: var(--mano);
+  font-size: 1.45rem;
+  line-height: 1.15;
+  font-weight: 500;
+  color: var(--texto-suave);
+  letter-spacing: 0;
+}
+
 .boton {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 13px 22px;
-  border-radius: 999px;
-  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  border: 1.5px solid var(--tinta);
   background: transparent;
   color: var(--texto);
   font: 500 0.95rem/1 var(--fuente);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
+  box-shadow: 3px 3px 0 var(--tinta);
   transition:
-    transform 0.4s var(--curva),
-    background-color 0.3s,
-    border-color 0.3s;
+    transform 0.3s var(--curva),
+    box-shadow 0.3s var(--curva);
 }
 
 .boton:hover {
-  border-color: var(--texto);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--tinta);
 }
 
 .boton:active {
-  transform: scale(0.97);
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--tinta);
 }
 
 .boton--lleno {
-  background: var(--acento);
-  border-color: var(--acento);
-  color: var(--acento-texto);
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--tinta-texto);
+  box-shadow: 3px 3px 0 var(--acento);
 }
 
 .boton--lleno:hover {
-  border-color: var(--acento);
-  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--acento);
+}
+
+.boton--lleno:active {
+  box-shadow: 1px 1px 0 var(--acento);
+}
+
+/* Sticker: etiqueta de color, un poco torcida */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font: 500 0.74rem/1.3 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: var(--sombra-sticker);
+  transform: rotate(var(--giro, -1.5deg));
+}
+
+.etiqueta--oliva {
+  background: var(--acento);
+  color: var(--acento-texto);
+}
+
+.etiqueta--vino {
+  background: var(--vino);
+  color: #f6ecee;
+}
+
+.etiqueta--tierra {
+  background: var(--tierra);
+  color: #1c1f1c;
+}
+
+.etiqueta--hueso {
+  background: var(--hueso);
+  color: #1c1f1c;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 11px;
-  border-radius: 999px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  background: var(--superficie);
   border: 1px solid var(--linea);
   font: 400 0.8rem/1.4 var(--mono);
   color: var(--texto-suave);
   white-space: nowrap;
+}
+
+/* Cinta adhesiva: se pone en un elemento con position: relative */
+.cinta::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 92px;
+  height: 26px;
+  background: rgb(207 200 180 / 0.72);
+  border-left: 2px dashed rgb(255 255 255 / 0.45);
+  border-right: 2px dashed rgb(255 255 255 / 0.45);
+  transform: translateX(-50%) rotate(var(--giro-cinta, -3deg));
+  box-shadow: 0 1px 2px rgb(26 29 25 / 0.15);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Foto pegada, con marco blanco y pie a mano */
+.polaroid {
+  position: relative;
+  display: block;
+  padding: 10px 10px 14px;
+  background: #fbfaf6;
+  color: #1c1f1c;
+  border-radius: 2px;
+  box-shadow: var(--sombra);
+  transform: rotate(var(--giro, -2deg));
+  transition: transform 0.6s var(--curva);
+}
+
+.polaroid img {
+  width: 100%;
+  border-radius: 1px;
+}
+
+.polaroid figcaption {
+  margin-top: 10px;
+  font-family: var(--mano);
+  font-size: 1.3rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Marco "dibujado a mano": radios irregulares */
+.marco-dibujado {
+  border: 2px solid var(--tinta);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
 }
 
 .solo-lectores {
@@ -224,10 +339,10 @@ p {
 @media (prefers-reduced-motion: no-preference) {
   .js [data-revelar] {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(24px);
     transition:
-      opacity 0.9s var(--curva),
-      transform 0.9s var(--curva);
+      opacity 0.8s var(--curva),
+      transform 0.8s var(--curva);
     transition-delay: calc(var(--i, 0) * 70ms);
   }
 

@@ -16,6 +16,7 @@ const otro: Idioma = idioma === 'es' ? 'en' : 'es';
 const enlaces = [
   { texto: t.trabajo, href: `${inicio}#trabajo` },
   { texto: t.stack, href: `${inicio}#stack` },
+  { texto: t.ia, href: `${inicio}#ia` },
   { texto: t.servicios, href: `${inicio}#servicios` },
   { texto: t.sobreMi, href: `${inicio}#sobre-mi` },
 ];
@@ -117,7 +118,7 @@ const enlaces = [
   .enlaces a {
     display: block;
     padding: 8px 14px;
-    border-radius: 999px;
+    border-radius: var(--radio);
     color: var(--texto-suave);
     font-size: 0.93rem;
     text-decoration: none;
@@ -149,7 +150,7 @@ const enlaces = [
     height: 40px;
     padding: 0 12px;
     border: 0;
-    border-radius: 999px;
+    border-radius: var(--radio);
     background: transparent;
     color: var(--texto-suave);
     font: 500 0.88rem var(--fuente);

@@ -22,7 +22,7 @@ const t = textos[idioma].lab;
       lab.map((item, i) => {
         const Etiqueta = item.enlace ? 'a' : 'div';
         return (
-          <li class:list={['pieza', item.tono]} data-revelar style={`--i:${i}`}>
+          <li class:list={['pieza', 'cinta', item.tono]} data-revelar style={`--i:${i}; --giro-cinta:${i % 2 ? 5 : -4}deg`}>
             <Etiqueta
               class="cuerpo"
               {...(item.enlace ? { href: item.enlace, target: '_blank', rel: 'noopener' } : {})}
@@ -54,10 +54,21 @@ const t = textos[idioma].lab;
   }
 
   .pieza {
+    position: relative;
     scroll-snap-align: start;
     aspect-ratio: 4 / 5;
     border-radius: var(--radio);
-    overflow: hidden;
+    box-shadow: var(--sombra);
+    transform: rotate(var(--giro-pieza, 0deg));
+  }
+
+  .pieza:nth-child(odd) {
+    --giro-pieza: -1.2deg;
+  }
+
+  .pieza:nth-child(even) {
+    --giro-pieza: 1deg;
+    margin-top: 14px;
   }
 
   .cuerpo {

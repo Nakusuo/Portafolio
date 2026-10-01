@@ -33,14 +33,14 @@ const usadoEn = (tecnologia: string) =>
 
   <div class="grupos">
     {
-      gruposStack.map((g) => (
+      gruposStack.map((g, gi) => (
         <div class="grupo" data-revelar>
           <h3>{g.titulo[idioma]}</h3>
           <ul>
-            {g.tecnologias.map((tec) => {
+            {g.tecnologias.map((tec, ti) => {
               const proyectosTec = usadoEn(tec.nombre);
               return (
-                <li>
+                <li class={`sticker sticker--${gi % 4}`} style={`--giro:${((ti % 3) - 1) * 1.4}deg`}>
                   <Icono nombre={tec.icono} set="si" tamano={22} class="logo" />
                   <span class="nombre">{tec.nombre}</span>
                   {proyectosTec.length > 0 && (
@@ -99,39 +99,61 @@ const usadoEn = (tecnologia: string) =>
     list-style: none;
   }
 
-  li {
+  ul {
+    gap: 12px 10px;
+  }
+
+  /* Cada tecnología es un sticker pegado un poco torcido */
+  .sticker {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
     column-gap: 12px;
-    padding: 12px;
-    border-radius: var(--radio);
-    transition: background-color 0.25s;
+    padding: 12px 14px;
+    border-radius: 3px;
+    box-shadow: var(--sombra-sticker);
+    transform: rotate(var(--giro));
+    transition: transform 0.4s var(--curva);
   }
 
-  li:hover {
-    background: var(--superficie);
+  .sticker:hover {
+    transform: rotate(0deg) scale(1.04);
   }
 
-  li :global(.logo) {
+  .sticker :global(.logo) {
     grid-row: span 2;
-    color: var(--texto-suave);
-    transition: color 0.25s;
   }
 
-  li:hover :global(.logo) {
-    color: var(--acento);
+  .sticker--0 {
+    background: var(--acento);
+    color: var(--acento-texto);
+  }
+
+  .sticker--1 {
+    background: var(--vino);
+    color: #f6ecee;
+  }
+
+  .sticker--2 {
+    background: var(--tierra);
+    color: #1c1f1c;
+  }
+
+  .sticker--3 {
+    background: var(--hueso);
+    color: #1c1f1c;
   }
 
   .nombre {
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .usos {
     grid-column: 2;
-    font-size: 0.8rem;
-    line-height: 1.35;
-    color: var(--texto-suave);
+    font-family: var(--mano);
+    font-size: 1.05rem;
+    line-height: 1.15;
+    opacity: 0.85;
   }
 
   @media (max-width: 860px) {

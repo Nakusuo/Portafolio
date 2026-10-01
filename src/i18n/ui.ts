@@ -26,11 +26,15 @@ export const textos = {
       stack: 'Stack',
       servicios: 'Servicios',
       sobreMi: 'Sobre mí',
+      ia: 'IA',
       contacto: 'Escríbeme',
       tema: 'Cambiar tema',
       otroIdioma: 'English',
     },
     hero: {
+      miNombre: 'mi nombre es',
+      etiquetas: ['hago cosas', 'Ing. de Software · 3er año', 'frontend + backend', 'también diseño'],
+      estado: 'Abierto a prácticas y proyectos',
       titulo: 'Diseño interfaces y construyo lo que hay detrás.',
       bajada:
         'Estudiante de Ingeniería de Software. Hago frontend, backend y diseño, y ya tengo sistemas funcionando con clientes reales.',
@@ -79,6 +83,32 @@ export const textos = {
       titulo: 'Lab',
       bajada: 'Lo que hago cuando nadie me lo pide: diseño, ilustración, 3D y configurar mi escritorio más de lo razonable.',
     },
+    ia: {
+      titulo: 'Cómo uso la IA',
+      nota: 'sin humo',
+      bajada:
+        'La uso todos los días, pero no como una máquina de "hazme esto". Es una herramienta más: me ayuda a buscar, a planear y a desarrollar mejor. Las decisiones y el código final siguen siendo míos.',
+      pasos: [
+        {
+          titulo: 'Investigar',
+          detalle:
+            'Comparar opciones antes de elegir una librería, leer documentación más rápido y entender errores que no había visto antes.',
+        },
+        {
+          titulo: 'Planear',
+          detalle:
+            'Desglosar una funcionalidad en pasos, escribir la especificación y detectar casos borde antes de escribir código.',
+        },
+        {
+          titulo: 'Desarrollar',
+          detalle:
+            'Un segundo par de ojos: revisar código, proponer pruebas y pensar en voz alta cuando algo no cuadra. Lo que entra al repo lo leo y lo entiendo.',
+        },
+      ],
+      noHago: 'Lo que no hago:',
+      tachado: 'pegar un prompt, copiar la respuesta y publicarla sin entenderla.',
+      herramientas: 'Las que uso',
+    },
     sobreMi: {
       titulo: 'Sobre mí',
     },
@@ -111,11 +141,15 @@ export const textos = {
       stack: 'Stack',
       servicios: 'Services',
       sobreMi: 'About',
+      ia: 'AI',
       contacto: 'Get in touch',
       tema: 'Toggle theme',
       otroIdioma: 'Español',
     },
     hero: {
+      miNombre: 'my name is',
+      etiquetas: ['I make things', 'Software Eng. · 3rd year', 'frontend + backend', 'design too'],
+      estado: 'Open to internships and projects',
       titulo: 'I design interfaces and build what runs behind them.',
       bajada:
         'Software engineering student. I work across frontend, backend and design, with systems already running for real clients.',
@@ -163,6 +197,32 @@ export const textos = {
     lab: {
       titulo: 'Lab',
       bajada: 'What I make when nobody asks: design, illustration, 3D and tuning my desktop more than is reasonable.',
+    },
+    ia: {
+      titulo: 'How I use AI',
+      nota: 'no hype',
+      bajada:
+        'I use it every day, but not as a "do this for me" machine. It is one more tool: it helps me research, plan and build better. The decisions and the final code are still mine.',
+      pasos: [
+        {
+          titulo: 'Research',
+          detalle:
+            'Compare options before picking a library, read documentation faster and understand errors I had never seen before.',
+        },
+        {
+          titulo: 'Plan',
+          detalle:
+            'Break a feature into steps, write the spec and catch edge cases before writing any code.',
+        },
+        {
+          titulo: 'Build',
+          detalle:
+            'A second pair of eyes: review code, suggest tests and think out loud when something does not add up. Whatever lands in the repo, I read and understand.',
+        },
+      ],
+      noHago: 'What I do not do:',
+      tachado: 'paste a prompt, copy the answer and ship it without understanding it.',
+      herramientas: 'What I use',
     },
     sobreMi: {
       titulo: 'About',
