@@ -11,9 +11,11 @@ interface Props {
   /** Ruta equivalente en el otro idioma, sin prefijo (por ejemplo '/proyectos/huecko'). */
   ruta?: string;
   imagen?: string;
+  /** Muestra el arranque de terminal la primera vez de cada visita (solo en la home). */
+  arranque?: boolean;
 }
 
-const { idioma, ruta = '/', titulo, descripcion, imagen } = Astro.props;
+const { idioma, ruta = '/', titulo, descripcion, imagen, arranque = false } = Astro.props;
 const t = textos[idioma];
 const tituloFinal = titulo ? `${titulo} · Nakusu` : t.meta.titulo;
 const descripcionFinal = descripcion ?? t.meta.descripcion;
@@ -49,6 +51,18 @@ const rutaEn = new URL(url(ruta === '/' ? '/en/' : `/en${ruta}`), Astro.site).hr
       } catch {}
       document.documentElement.classList.add('js');
     </script>
+    {
+      arranque && (
+        <script is:inline>
+          // Primera vez en la visita: la terminal tapa la página hasta que termina de "arrancar"
+          try {
+            if (!sessionStorage.getItem('arranque') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              document.documentElement.classList.add('arrancando');
+            }
+          } catch {}
+        </script>
+      )
+    }
   </head>
   <body>
     <a class="saltar" href="#contenido">{idioma === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>

@@ -5,6 +5,7 @@ import Hero from './Hero.astro';
 import Destacados from './Destacados.astro';
 import StackResumen from './StackResumen.astro';
 import Contacto from './Contacto.astro';
+import Arranque from './Arranque.astro';
 import { proyectosEn } from '../lib/proyectos';
 import type { Idioma } from '../i18n/ui';
 
@@ -16,7 +17,8 @@ const { idioma } = Astro.props;
 const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
 ---
 
-<Base idioma={idioma} imagen="proyectos/paltishop.webp">
+<Base idioma={idioma} imagen="proyectos/paltishop.webp" arranque>
+  <Arranque idioma={idioma} />
   <Hero idioma={idioma} />
   <Destacados idioma={idioma} proyectos={destacados} limite={3} />
   <StackResumen idioma={idioma} />
