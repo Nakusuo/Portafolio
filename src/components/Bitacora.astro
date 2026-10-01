@@ -1,0 +1,133 @@
+---
+// "En qué ando": los últimos commits reales, con el formato de un git log.
+// Se lee al compilar (ver src/lib/github.ts); si no hay datos, la sección no se pinta.
+import Icono from './Icono.astro';
+import Ventana from './Ventana.astro';
+import { perfil } from '../data/perfil';
+import { ultimosCommits } from '../lib/github';
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const commits = await ultimosCommits(6);
+const fecha = new Intl.DateTimeFormat(idioma === 'es' ? 'es-PE' : 'en-US', { day: 'numeric', month: 'short' });
+const es = idioma === 'es';
+---
+
+{
+  commits.length > 0 && (
+    <section class="seccion contenedor bitacora">
+      <div class="con-anotacion">
+        <h2 class="titulo-seccion">
+          <span class="prompt">&gt;</span>
+          {es ? 'En qué ando' : "What I'm working on"}
+        </h2>
+        <p class="anotacion">
+          <Icono nombre="arrow-bend-down-left" tamano={26} />
+          {es ? 'se actualiza a diario' : 'updated daily'}
+        </p>
+      </div>
+
+      <Ventana direccion={`git log --${es ? 'ultimos' : 'latest'} ${commits.length}`}>
+        <ol class="log">
+          {commits.map((c) => (
+            <li>
+              <a href={c.url} target="_blank" rel="noopener">
+                <span class="sha">{c.sha}</span>
+                <span class="mensaje">{c.mensaje}</span>
+                <span class="repo">{c.repo}</span>
+                <time datetime={c.fecha}>{fecha.format(new Date(c.fecha))}</time>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </Ventana>
+
+      <a class="todo tactil" href={perfil.github} target="_blank" rel="noopener">
+        <Icono nombre="github-logo" tamano={18} />
+        {es ? 'Ver todo en GitHub' : 'See everything on GitHub'}
+      </a>
+    </section>
+  )
+}
+
+<style>
+  .bitacora :global(.ventana) {
+    margin-top: clamp(28px, 4vw, 44px);
+    background: #151713;
+  }
+
+  .log {
+    margin: 0;
+    padding: 10px 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+  }
+
+  .log a {
+    display: grid;
+    grid-template-columns: 7ch minmax(0, 1fr) auto 7ch;
+    align-items: baseline;
+    gap: 18px;
+    padding: 9px 20px;
+    color: #e6e2d4;
+    text-decoration: none;
+  }
+
+  .log a:hover {
+    background: rgb(143 163 107 / 0.14);
+  }
+
+  .sha {
+    color: #c9a26b;
+  }
+
+  .mensaje {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .repo {
+    color: #8fa36b;
+  }
+
+  time {
+    color: #a9a797;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .todo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .todo:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 700px) {
+    .log a {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 2px 12px;
+    }
+
+    .sha {
+      display: none;
+    }
+
+    .mensaje {
+      grid-column: 1 / -1;
+      white-space: normal;
+    }
+  }
+</style>

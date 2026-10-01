@@ -1,0 +1,28 @@
+---
+// Iconos de Phosphor (interfaz) y Simple Icons (logos de tecnologías), en SVG en línea.
+import { getIconData, iconToSVG, iconToHTML, replaceIDs } from '@iconify/utils';
+import ph from '@iconify-json/ph/icons.json';
+import si from '@iconify-json/simple-icons/icons.json';
+
+interface Props {
+  nombre: string;
+  set?: 'ph' | 'si';
+  tamano?: number;
+  class?: string;
+  etiqueta?: string;
+}
+
+const { nombre, set = 'ph', tamano = 20, class: clase, etiqueta } = Astro.props;
+const datos = getIconData(set === 'ph' ? ph : si, nombre);
+if (!datos) throw new Error(`No existe el icono "${nombre}" en ${set}`);
+
+const { attributes, body } = iconToSVG(datos, { height: tamano });
+const svg = iconToHTML(replaceIDs(body), {
+  ...attributes,
+  class: clase ?? '',
+  fill: 'currentColor',
+  ...(etiqueta ? { role: 'img', 'aria-label': etiqueta } : { 'aria-hidden': 'true' }),
+});
+---
+
+<Fragment set:html={svg} />

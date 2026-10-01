@@ -1,0 +1,168 @@
+---
+import Icono from './Icono.astro';
+import Ventana from './Ventana.astro';
+import { lab } from '../data/contenido';
+import { textos, url, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].lab;
+const pendiente = idioma === 'es' ? 'piezas por subir' : 'pieces coming soon';
+---
+
+<section id="lab" class="seccion contenedor">
+  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <p class="bajada">{t.bajada}</p>
+
+  <ul class="tablero">
+    {
+      lab.map((item, i) => {
+        const Etiqueta = item.enlace ? 'a' : 'div';
+        const atributos = item.enlace ? { href: item.enlace, target: '_blank', rel: 'noopener' } : {};
+        return (
+          <li class:list={['pieza', `pieza--${i}`, item.tono, { 'con-imagen': item.imagen }]} data-revelar style={`--i:${i}`}>
+            <Etiqueta class="cuerpo" {...atributos}>
+              {item.imagen && (
+                <Ventana direccion={item.direccion ?? ''}>
+                  <img src={url(`/${item.imagen}`)} alt={item.titulo[idioma]} loading="lazy" decoding="async" width="1366" height="768" />
+                </Ventana>
+              )}
+              {!item.imagen && <Icono nombre={item.icono} tamano={40} class="icono" />}
+              <div class="texto">
+                <h3>
+                  {item.titulo[idioma]}
+                  {item.enlace && <Icono nombre="arrow-up-right" tamano={20} class="flecha" />}
+                </h3>
+                <p>{item.detalle[idioma]}</p>
+                {!item.imagen && <span class="nota pendiente">{pendiente}</span>}
+              </div>
+            </Etiqueta>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  /* Tablero de corcho: piezas de distinto tamaño, como en un muro de referencias */
+  .tablero {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 28px;
+    margin: clamp(40px, 6vw, 64px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pieza--0 {
+    grid-column: span 7;
+  }
+
+  .pieza--1 {
+    grid-column: span 5;
+    align-self: end;
+  }
+
+  .pieza--2 {
+    grid-column: span 5;
+  }
+
+  .pieza--3 {
+    grid-column: span 7;
+    align-self: start;
+    margin-top: 32px;
+  }
+
+  .pieza {
+    position: relative;
+    border-radius: 2px;
+    box-shadow: var(--sombra);
+    transform: rotate(var(--giro-pieza, 0deg));
+    transition: transform 0.6s var(--curva);
+  }
+
+  .pieza:nth-child(odd) {
+    --giro-pieza: -0.8deg;
+  }
+
+  .pieza:nth-child(even) {
+    --giro-pieza: 1deg;
+  }
+
+  .pieza:hover {
+    --giro-pieza: 0deg;
+  }
+
+  .cuerpo {
+    display: grid;
+    gap: 22px;
+    height: 100%;
+    padding: 22px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .con-imagen .cuerpo {
+    padding: 18px 18px 24px;
+  }
+
+  .texto {
+    display: grid;
+    gap: 8px;
+    align-content: end;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.55rem;
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    max-width: 46ch;
+    font-size: 0.97rem;
+    opacity: 0.85;
+  }
+
+  .pendiente {
+    color: inherit;
+    opacity: 0.7;
+    font-size: 1.25rem;
+  }
+
+  .cuerpo :global(.icono) {
+    opacity: 0.85;
+  }
+
+  .oliva {
+    background: var(--acento);
+    color: var(--acento-texto);
+  }
+
+  .tierra {
+    background: var(--tierra);
+    color: #1c1f1c;
+  }
+
+  .hueso {
+    background: var(--hueso);
+    color: #1c1f1c;
+  }
+
+  @media (max-width: 860px) {
+    .tablero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pieza[class*='pieza--'] {
+      grid-column: auto;
+      margin-top: 0;
+    }
+  }
+</style>

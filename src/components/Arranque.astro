@@ -1,0 +1,156 @@
+---
+// Arranque de terminal: tapa la home la primera vez de cada visita, escribe unas líneas
+// y se levanta. Solo aparece si Base puso la clase .arrancando en <html> (sin JS no se ve).
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const lineas =
+  idioma === 'es'
+    ? ['cargando proyectos', 'abriendo ventanas', 'pegando etiquetas']
+    : ['loading projects', 'opening windows', 'sticking labels'];
+const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or press any key to skip';
+---
+
+<div class="arranque" aria-hidden="true" data-arranque>
+  <div class="consola">
+    <p class="orden"><span class="prompt">&gt;</span> <span data-orden></span><span class="cursor">_</span></p>
+    <ol data-lineas>
+      {lineas.map((l) => <li data-texto={l}></li>)}
+    </ol>
+  </div>
+  <p class="saltar">{saltar}</p>
+</div>
+
+<script>
+  const raiz = document.documentElement;
+  const capa = document.querySelector<HTMLElement>('[data-arranque]');
+
+  if (capa && raiz.classList.contains('arrancando')) {
+    const orden = capa.querySelector<HTMLElement>('[data-orden]')!;
+    const lineas = [...capa.querySelectorAll<HTMLElement>('[data-lineas] li')];
+    const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    let terminado = false;
+    capa.classList.add('activa');
+
+    const terminar = () => {
+      if (terminado) return;
+      terminado = true;
+      try {
+        sessionStorage.setItem('arranque', '1');
+      } catch {}
+      capa.classList.add('saliendo');
+      // La página empieza su entrada justo cuando la terminal se levanta
+      setTimeout(() => raiz.classList.remove('arrancando'), 120);
+      capa.addEventListener('transitionend', () => capa.remove(), { once: true });
+    };
+
+    // Tope: aunque el equipo vaya lento, la terminal nunca tapa la página más de 2,5 s
+    setTimeout(terminar, 2500);
+    addEventListener('keydown', terminar, { once: true });
+    capa.addEventListener('pointerdown', terminar, { once: true });
+
+    (async () => {
+      for (const letra of 'nakusu --start') {
+        if (terminado) return;
+        orden.textContent += letra;
+        await esperar(38);
+      }
+      for (const li of lineas) {
+        await esperar(140);
+        if (terminado) return;
+        li.textContent = `${li.dataset.texto} `;
+        li.classList.add('ok');
+      }
+      await esperar(320);
+      terminar();
+    })();
+  }
+</script>
+
+<style>
+  .arranque {
+    display: none;
+  }
+
+  /* Lo que queda debajo no se pinta mientras la terminal lo tapa: así la escritura va fluida */
+  :global(.arrancando body > header),
+  :global(.arrancando body > footer),
+  :global(.arrancando main > :not([data-arranque])) {
+    visibility: hidden;
+  }
+
+  :global(.arrancando) .arranque,
+  .arranque.activa {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 28px;
+    padding: var(--gutter);
+    background: #151713;
+    color: #e6e2d4;
+    font-family: var(--mono);
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 0.7s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+
+  /* Se levanta como una persiana */
+  .arranque.activa.saliendo {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .consola {
+    width: min(100%, 440px);
+    font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+    line-height: 1.9;
+  }
+
+  .orden {
+    font-family: var(--pixel);
+    font-size: 1.9em;
+    line-height: 1.2;
+  }
+
+  .prompt {
+    color: #8fa36b;
+  }
+
+  .cursor {
+    color: #8fa36b;
+    animation: parpadeo-arranque 0.9s steps(1) infinite;
+  }
+
+  @keyframes parpadeo-arranque {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  ol {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    color: #a9a797;
+  }
+
+  li {
+    min-height: 1.9em;
+  }
+
+  li.ok::after {
+    content: '... ok';
+    color: #8fa36b;
+  }
+
+  .saltar {
+    font-size: 0.75rem;
+    color: #a9a797;
+    opacity: 0.6;
+  }
+</style>

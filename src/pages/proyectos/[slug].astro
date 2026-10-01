@@ -1,0 +1,15 @@
+---
+import CasoEstudio from '../../components/CasoEstudio.astro';
+import { proyectosEn, slugDe } from '../../lib/proyectos';
+
+export async function getStaticPaths() {
+  const proyectos = await proyectosEn('es');
+  return proyectos
+    .filter((p) => p.data.destacado)
+    .map((proyecto) => ({ params: { slug: slugDe(proyecto) }, props: { proyecto } }));
+}
+
+const { proyecto } = Astro.props;
+---
+
+<CasoEstudio idioma="es" proyecto={proyecto} />
