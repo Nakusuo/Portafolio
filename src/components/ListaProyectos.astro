@@ -42,13 +42,13 @@ const presentes = Object.keys(t.categorias).filter((c) =>
           <p class="pila">{p.data.stack.join(' / ')}</p>
           <div class="enlaces">
             {p.data.demo && (
-              <a href={p.data.demo} target="_blank" rel="noopener">
+              <a class="tactil" href={p.data.demo} target="_blank" rel="noopener">
                 {t.proyectos.demo}
                 <Icono nombre="arrow-up-right" tamano={15} />
               </a>
             )}
             {p.data.repos.map((r, i) => (
-              <a href={r.url} target="_blank" rel="noopener" aria-label={`${t.proyectos.repo} ${r.nombre}`}>
+              <a class="tactil" href={r.url} target="_blank" rel="noopener" aria-label={`${t.proyectos.repo} ${r.nombre}`}>
                 <Icono nombre="github-logo" tamano={16} />
                 {p.data.repos.length > 1 ? `${t.proyectos.repo} ${i + 1}` : t.proyectos.repo}
               </a>
@@ -114,6 +114,12 @@ const presentes = Object.keys(t.categorias).filter((c) =>
       border-color 0.2s;
   }
 
+  @media (pointer: coarse) {
+    .filtro {
+      min-height: 44px;
+    }
+  }
+
   .filtro:hover {
     border-color: var(--texto);
     color: var(--texto);
@@ -144,8 +150,10 @@ const presentes = Object.keys(t.categorias).filter((c) =>
     transition: translate 0.4s var(--curva);
   }
 
+  @media (hover: hover) {
   .fila:hover > * {
-    translate: 8px 0;
+      translate: 8px 0;
+    }
   }
 
   h3 {
@@ -192,10 +200,6 @@ const presentes = Object.keys(t.categorias).filter((c) =>
   @media (max-width: 860px) {
     .fila {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .fila:hover > * {
-      translate: 0 0;
     }
 
     .enlaces {

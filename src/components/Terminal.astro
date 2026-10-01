@@ -78,10 +78,15 @@ const config = {
   const historial: string[] = [];
   let posicion = 0;
 
-  const imprimir = (texto: string, clase = '') => {
+  // `sangria`: ancho de la primera columna; si la línea no cabe, el resto sigue alineado a la segunda
+  const imprimir = (texto: string, clase = '', sangria = 0) => {
     const linea = document.createElement('p');
     linea.textContent = texto;
     if (clase) linea.className = clase;
+    if (sangria) {
+      linea.style.paddingLeft = `${sangria}ch`;
+      linea.style.textIndent = `-${sangria}ch`;
+    }
     salida.append(linea);
     salida.scrollTop = salida.scrollHeight;
   };
@@ -98,7 +103,7 @@ const config = {
     {
       nombres: ['ayuda', 'help'],
       ayuda: es ? 'esta lista' : 'this list',
-      correr: () => comandos.forEach((c) => imprimir(`${c.nombres[0].padEnd(10)} ${c.ayuda}`, 'tenue')),
+      correr: () => comandos.forEach((c) => imprimir(`${c.nombres[0].padEnd(10)} ${c.ayuda}`, 'tenue', 11)),
     },
     { nombres: ['inicio', 'home'], ayuda: es ? 'ir al inicio' : 'go home', correr: () => ir(config.rutas.inicio) },
     { nombres: ['trabajo', 'work'], ayuda: es ? 'proyectos y stack' : 'projects and stack', correr: () => ir(config.rutas.trabajo) },
@@ -108,7 +113,7 @@ const config = {
     {
       nombres: ['proyectos', 'projects'],
       ayuda: es ? 'lista los casos; "abrir <nombre>" para ver uno' : 'list case studies; "open <name>" to see one',
-      correr: () => config.proyectos.forEach((p) => imprimir(`${p.slug.padEnd(20)} ${p.titulo}`, 'tenue')),
+      correr: () => config.proyectos.forEach((p) => imprimir(`${p.slug.padEnd(20)} ${p.titulo}`, 'tenue', 21)),
     },
     {
       nombres: ['abrir', 'open'],

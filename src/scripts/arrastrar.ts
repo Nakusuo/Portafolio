@@ -8,6 +8,7 @@ export function activarArrastre() {
   document.querySelectorAll<HTMLElement>('[data-arrastrable]').forEach((etiqueta) => {
     let inicioX = 0;
     let inicioY = 0;
+    let previo = { dx: etiqueta.dataset.dx, dy: etiqueta.dataset.dy, translate: '' };
 
     etiqueta.addEventListener('pointerdown', (e) => {
       if (e.button !== 0) return;
@@ -15,6 +16,7 @@ export function activarArrastre() {
       etiqueta.setPointerCapture(e.pointerId);
       etiqueta.classList.remove('volviendo');
       etiqueta.classList.add('agarrada');
+      previo = { dx: etiqueta.dataset.dx, dy: etiqueta.dataset.dy, translate: etiqueta.style.translate };
       inicioX = e.clientX - Number(etiqueta.dataset.dx ?? 0);
       inicioY = e.clientY - Number(etiqueta.dataset.dy ?? 0);
     });
@@ -37,7 +39,15 @@ export function activarArrastre() {
       }
     };
     etiqueta.addEventListener('pointerup', soltar);
-    etiqueta.addEventListener('pointercancel', soltar);
+    // El navegador cancela cuando el dedo decide hacer scroll: la etiqueta vuelve a donde estaba
+    etiqueta.addEventListener('pointercancel', () => {
+      etiqueta.classList.remove('agarrada');
+      if (previo.dx === undefined) delete etiqueta.dataset.dx;
+      else etiqueta.dataset.dx = previo.dx;
+      if (previo.dy === undefined) delete etiqueta.dataset.dy;
+      else etiqueta.dataset.dy = previo.dy;
+      etiqueta.style.translate = previo.translate;
+    });
   });
 
   document.querySelectorAll<HTMLButtonElement>('[data-repegar]').forEach((boton) => {
