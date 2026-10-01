@@ -117,8 +117,16 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
     transition: transform 0.4s var(--curva);
   }
 
+  @media (hover: hover) {
   .prueba:hover {
-    transform: rotate(0deg) translateX(3px);
+      transform: rotate(0deg) translateX(3px);
+    }
+  }
+
+  @media (pointer: coarse) {
+    .prueba {
+      padding-block: 9px;
+    }
   }
 
   .postit {

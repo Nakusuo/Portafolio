@@ -41,6 +41,13 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
           </li>
         ))
       }
+      <!-- En el celular no caben en la barra: viven dentro del menú -->
+      <li class="solo-movil separado">
+        <a href={rutaEn(otro, ruta)} hreflang={otro} lang={otro}>{t.otroIdioma}</a>
+      </li>
+      <li class="solo-movil">
+        <a class="cta" href={enlaceContacto} target="_blank" rel="noopener">{t.contacto}</a>
+      </li>
     </ul>
 
     <div class="acciones">
@@ -103,9 +110,19 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
   // Menú en pantallas estrechas
   const cabecera = document.querySelector<HTMLElement>('[data-cabecera]');
   const menu = document.querySelector<HTMLButtonElement>('[data-menu]');
+  const cerrarMenu = () => {
+    cabecera?.classList.remove('abierta');
+    menu?.setAttribute('aria-expanded', 'false');
+  };
   menu?.addEventListener('click', () => {
     const abierto = cabecera?.classList.toggle('abierta') ?? false;
     menu.setAttribute('aria-expanded', String(abierto));
+  });
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarMenu();
+  });
+  document.addEventListener('click', (e) => {
+    if (!cabecera?.contains(e.target as Node)) cerrarMenu();
   });
 </script>
 
@@ -114,7 +131,7 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--fondo) 85%, transparent);
+    background: color-mix(in srgb, var(--fondo) 94%, transparent);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-bottom: 1.5px solid var(--tinta);
@@ -131,6 +148,7 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
     font-family: var(--pixel);
     font-size: 1.75rem;
     line-height: 1;
+    padding-block: 8px;
     text-decoration: none;
     letter-spacing: 0.02em;
   }
@@ -204,8 +222,8 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
   .accion {
     display: inline-grid;
     place-items: center;
-    min-width: 40px;
-    height: 40px;
+    min-width: 44px;
+    height: 44px;
     padding: 0 12px;
     border: 0;
     border-radius: var(--radio);
@@ -222,7 +240,8 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
   }
 
   .corto,
-  .menu {
+  .menu,
+  .solo-movil {
     display: none;
   }
 
@@ -314,6 +333,39 @@ const activo = (r: string) => sinBarra(rutaEn(idioma, r)) === actual;
       padding: 9px 14px;
       font-size: 0.88rem;
       margin-left: 0;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .contacto {
+      min-height: 44px;
+    }
+  }
+
+  /* Celular: la barra se queda con la marca, la terminal, el tema y el menú */
+  @media (max-width: 560px) {
+    .acciones .idioma,
+    .acciones .contacto {
+      display: none;
+    }
+
+    .solo-movil {
+      display: block;
+    }
+
+    .separado {
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px solid var(--linea);
+    }
+
+    .enlaces .cta {
+      margin-top: 6px;
+      border: 1.5px solid var(--tinta);
+      background: var(--texto);
+      color: var(--fondo);
+      font-weight: 600;
+      text-align: center;
     }
   }
 </style>
