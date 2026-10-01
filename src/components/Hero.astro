@@ -1,0 +1,253 @@
+---
+import Icono from './Icono.astro';
+import { textos, url, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].hero;
+---
+
+<section class="hero contenedor">
+  <div class="texto">
+    <p class="saludo">&gt; {idioma === 'es' ? 'hola, soy Nakusu' : "hi, I'm Nakusu"}</p>
+    <h1>{t.titulo}</h1>
+    <p class="bajada-hero">{t.bajada}</p>
+    <a class="boton boton--lleno" href="#trabajo">
+      {t.verTrabajo}
+      <Icono nombre="arrow-down" tamano={18} />
+    </a>
+  </div>
+
+  <figure class="collage" aria-label={t.capturas}>
+    <img
+      class="captura captura--atras"
+      src={url('/proyectos/huecko.webp')}
+      alt="Huecko"
+      width="1440"
+      height="900"
+      fetchpriority="high"
+    />
+    <img
+      class="captura captura--frente"
+      src={url('/proyectos/paltishop.webp')}
+      alt="paltishop.store"
+      width="1440"
+      height="900"
+      fetchpriority="high"
+    />
+  </figure>
+
+  <nav class="rutas" aria-label={t.pregunta}>
+    <p class="pregunta">{t.pregunta}</p>
+    <ul>
+      {
+        t.rutas.map((r) => (
+          <li>
+            <a href={r.destino}>
+              <span class="etiqueta">{r.etiqueta}</span>
+              <span class="detalle">{r.detalle}</span>
+              <Icono nombre="arrow-right" tamano={20} class="flecha" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-areas:
+      'texto collage'
+      'rutas rutas';
+    align-items: center;
+    column-gap: clamp(32px, 5vw, 72px);
+    row-gap: clamp(40px, 6vw, 72px);
+    min-height: calc(100dvh - 68px);
+    padding-block: clamp(40px, 7vw, 88px) 48px;
+  }
+
+  .texto {
+    grid-area: texto;
+  }
+
+  .saludo {
+    font-family: var(--pixel);
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--acento);
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 4.6vw, 4rem);
+    letter-spacing: -0.045em;
+    max-width: 16ch;
+  }
+
+  .bajada-hero {
+    margin: 24px 0 32px;
+    max-width: 44ch;
+    font-size: 1.12rem;
+    color: var(--texto-suave);
+  }
+
+  .collage {
+    grid-area: collage;
+    position: relative;
+    margin: 0;
+    aspect-ratio: 1 / 0.86;
+  }
+
+  .captura {
+    position: absolute;
+    width: 82%;
+    border-radius: var(--radio);
+    border: 1px solid var(--linea);
+    box-shadow: var(--sombra);
+    transition: transform 0.9s var(--curva);
+  }
+
+  .captura--atras {
+    top: 0;
+    right: 0;
+    transform: rotate(2.5deg);
+  }
+
+  .captura--frente {
+    bottom: 0;
+    left: 0;
+    transform: rotate(-2deg);
+  }
+
+  .collage:hover .captura--atras {
+    transform: rotate(4deg) translate(10px, -8px);
+  }
+
+  .collage:hover .captura--frente {
+    transform: rotate(-3.5deg) translate(-10px, 8px);
+  }
+
+  .rutas {
+    grid-area: rutas;
+    border-top: 1px solid var(--linea);
+    padding-top: 22px;
+  }
+
+  .pregunta {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    margin-bottom: 14px;
+  }
+
+  .rutas ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rutas a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 12px;
+    padding: 18px 20px;
+    border-radius: var(--radio);
+    background: var(--superficie);
+    text-decoration: none;
+    transition:
+      background-color 0.3s,
+      transform 0.5s var(--curva);
+  }
+
+  .rutas a:hover {
+    background: var(--superficie-2);
+    transform: translateY(-3px);
+  }
+
+  .etiqueta {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .detalle {
+    grid-column: 1;
+    font-size: 0.88rem;
+    color: var(--texto-suave);
+  }
+
+  .rutas :global(.flecha) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    color: var(--acento);
+    transition: transform 0.4s var(--curva);
+  }
+
+  .rutas a:hover :global(.flecha) {
+    transform: translateX(4px);
+  }
+
+  /* Entrada escalonada al cargar */
+  @media (prefers-reduced-motion: no-preference) {
+    .texto > *,
+    .collage,
+    .rutas {
+      animation: entrar 1s var(--curva) both;
+    }
+
+    .texto > :nth-child(2) {
+      animation-delay: 80ms;
+    }
+
+    .texto > :nth-child(3) {
+      animation-delay: 160ms;
+    }
+
+    .texto > :nth-child(4) {
+      animation-delay: 240ms;
+    }
+
+    .collage {
+      animation-delay: 200ms;
+    }
+
+    .rutas {
+      animation-delay: 380ms;
+    }
+  }
+
+  @keyframes entrar {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'texto'
+        'collage'
+        'rutas';
+      min-height: 0;
+    }
+
+    .collage {
+      max-width: 560px;
+      width: 100%;
+    }
+
+    .rutas ul {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

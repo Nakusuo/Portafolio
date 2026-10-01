@@ -1,0 +1,221 @@
+---
+import Icono from './Icono.astro';
+import { enlaceContacto } from '../data/perfil';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+  ruta: string;
+}
+
+const { idioma, ruta } = Astro.props;
+const t = textos[idioma].nav;
+const inicio = rutaEn(idioma, '/');
+const otro: Idioma = idioma === 'es' ? 'en' : 'es';
+
+const enlaces = [
+  { texto: t.trabajo, href: `${inicio}#trabajo` },
+  { texto: t.stack, href: `${inicio}#stack` },
+  { texto: t.servicios, href: `${inicio}#servicios` },
+  { texto: t.sobreMi, href: `${inicio}#sobre-mi` },
+];
+---
+
+<header class="barra">
+  <nav class="contenedor fila" aria-label={idioma === 'es' ? 'Principal' : 'Main'}>
+    <a class="marca" href={inicio} aria-label="Nakusu">
+      <span class="cursor" aria-hidden="true">&gt;</span>nakusu<span class="parpadeo" aria-hidden="true">_</span>
+    </a>
+
+    <ul class="enlaces">
+      {enlaces.map((e) => <li><a href={e.href}>{e.texto}</a></li>)}
+    </ul>
+
+    <div class="acciones">
+      <a class="accion idioma" href={rutaEn(otro, ruta)} hreflang={otro} lang={otro}>
+        <span class="largo">{t.otroIdioma}</span><span class="corto">{otro.toUpperCase()}</span>
+      </a>
+      <button class="accion" type="button" data-tema aria-label={t.tema} title={t.tema}>
+        <Icono nombre="moon" class="luna" />
+        <Icono nombre="sun" class="sol" />
+      </button>
+      <a class="boton boton--lleno contacto" href={enlaceContacto} target="_blank" rel="noopener">{t.contacto}</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const boton = document.querySelector<HTMLButtonElement>('[data-tema]');
+  boton?.addEventListener('click', () => {
+    const raiz = document.documentElement;
+    const oscuroAhora =
+      raiz.dataset.theme === 'dark' ||
+      (!raiz.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+    const nuevo = oscuroAhora ? 'light' : 'dark';
+    raiz.dataset.theme = nuevo;
+    try {
+      localStorage.setItem('tema', nuevo);
+    } catch {}
+  });
+</script>
+
+<style>
+  .barra {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--fondo) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .fila {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 68px;
+  }
+
+  .marca {
+    font-family: var(--pixel);
+    font-size: 1.75rem;
+    line-height: 1;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .cursor {
+    color: var(--acento);
+    margin-right: 6px;
+  }
+
+  .parpadeo {
+    color: var(--acento);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .parpadeo {
+      animation: parpadeo 1.1s steps(1) infinite;
+    }
+  }
+
+  @keyframes parpadeo {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .enlaces {
+    display: flex;
+    gap: 4px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enlaces a {
+    display: block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: var(--texto-suave);
+    font-size: 0.93rem;
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .enlaces a:hover {
+    color: var(--texto);
+    background: var(--superficie);
+  }
+
+  .acciones {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .enlaces + .acciones {
+    margin-left: 0;
+  }
+
+  .accion {
+    display: inline-grid;
+    place-items: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--texto-suave);
+    font: 500 0.88rem var(--fuente);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .accion:hover {
+    color: var(--texto);
+    background: var(--superficie);
+  }
+
+  .corto {
+    display: none;
+  }
+
+  /* Muestra la luna en claro y el sol en oscuro */
+  .accion :global(.sol) {
+    display: none;
+  }
+
+  :global([data-theme='dark']) .accion :global(.sol) {
+    display: block;
+  }
+
+  :global([data-theme='dark']) .accion :global(.luna) {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .accion :global(.sol) {
+      display: block;
+    }
+
+    :global(:root:not([data-theme='light'])) .accion :global(.luna) {
+      display: none;
+    }
+  }
+
+  .contacto {
+    padding: 10px 18px;
+    margin-left: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .enlaces {
+      display: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .fila {
+      gap: 8px;
+    }
+
+    .largo {
+      display: none;
+    }
+
+    .corto {
+      display: inline;
+    }
+
+    .contacto {
+      padding: 9px 14px;
+      font-size: 0.88rem;
+    }
+  }
+</style>

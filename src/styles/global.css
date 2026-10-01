@@ -1,0 +1,251 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource/vt323';
+
+/*
+  Paleta tomada del README de GitHub (verde oliva sobre casi negro).
+  Un solo acento: el oliva. El vino solo aparece en la cara B del pie.
+  Radios: tarjetas e imágenes 10px; botones y etiquetas en píldora.
+*/
+:root {
+  --fondo: #eef0ea;
+  --superficie: #e3e6dd;
+  --superficie-2: #d8dccf;
+  --texto: #1a1d19;
+  --texto-suave: #4a4f45;
+  --linea: rgb(26 29 25 / 0.14);
+  --acento: #4f6136;
+  --acento-texto: #f3f5ee;
+  --vino: #8a3c48;
+  --sombra: 0 18px 40px -24px rgb(42 52 30 / 0.45);
+
+  --radio: 10px;
+  --ancho: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --fuente: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --pixel: 'VT323', ui-monospace, monospace;
+  --curva: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --fondo: #121412;
+    --superficie: #1c1f1c;
+    --superficie-2: #262a25;
+    --texto: #e6e2d4;
+    --texto-suave: #a7a594;
+    --linea: rgb(230 226 212 / 0.12);
+    --acento: #8fa36b;
+    --acento-texto: #121412;
+    --vino: #b0606c;
+    --sombra: 0 18px 40px -24px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --fondo: #121412;
+  --superficie: #1c1f1c;
+  --superficie-2: #262a25;
+  --texto: #e6e2d4;
+  --texto-suave: #a7a594;
+  --linea: rgb(230 226 212 / 0.12);
+  --acento: #8fa36b;
+  --acento-texto: #121412;
+  --vino: #b0606c;
+  --sombra: 0 18px 40px -24px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Grano sutil, fijo para no repintar al hacer scroll */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--acento);
+  color: var(--acento-texto);
+}
+
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.seccion {
+  padding-block: clamp(72px, 11vw, 136px);
+}
+
+/* Título de sección con el prompt del README: "> stack" */
+.titulo-seccion {
+  font-size: clamp(2.1rem, 5vw, 3.6rem);
+  max-width: 18ch;
+}
+
+.titulo-seccion .prompt {
+  font-family: var(--pixel);
+  font-weight: 400;
+  color: var(--acento);
+  margin-right: 0.15em;
+  letter-spacing: 0;
+}
+
+.bajada {
+  margin-top: 18px;
+  max-width: 58ch;
+  color: var(--texto-suave);
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--linea);
+  background: transparent;
+  color: var(--texto);
+  font: 500 0.95rem/1 var(--fuente);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 0.4s var(--curva),
+    background-color 0.3s,
+    border-color 0.3s;
+}
+
+.boton:hover {
+  border-color: var(--texto);
+}
+
+.boton:active {
+  transform: scale(0.97);
+}
+
+.boton--lleno {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: var(--acento-texto);
+}
+
+.boton--lleno:hover {
+  border-color: var(--acento);
+  transform: translateY(-2px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--linea);
+  font: 400 0.8rem/1.4 var(--mono);
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Aparición al entrar en pantalla (la activa un IntersectionObserver en Base.astro) */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-revelar] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s var(--curva),
+      transform 0.9s var(--curva);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  .js [data-revelar].visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

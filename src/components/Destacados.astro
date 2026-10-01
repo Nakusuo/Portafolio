@@ -1,0 +1,150 @@
+---
+import Icono from './Icono.astro';
+import Portada from './Portada.astro';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+import { slugDe, type Proyecto } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+}
+
+const { idioma, proyectos } = Astro.props;
+const t = textos[idioma].destacados;
+---
+
+<section id="trabajo" class="seccion contenedor">
+  <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <p class="bajada" data-revelar>{t.bajada}</p>
+
+  <ul class="rejilla">
+    {
+      proyectos.map((p, i) => (
+        <li class="celda" data-revelar style={`--i:${i % 2}`}>
+          <a href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)} class="tarjeta">
+            <Portada proyecto={p} prioridad={i < 2} />
+            <div class="info">
+              <h3>
+                {p.data.titulo}
+                <Icono nombre="arrow-up-right" tamano={22} class="flecha" />
+              </h3>
+              <p class="resumen">{p.data.resumen}</p>
+              <div class="chips">
+                {p.data.privado && (
+                  <span class="chip">
+                    <Icono nombre="lock-simple" tamano={13} />
+                    {t.privado}
+                  </span>
+                )}
+                {p.data.stack.slice(0, 4).map((s) => (
+                  <span class="chip">{s}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(36px, 5vw, 64px) clamp(20px, 3vw, 40px);
+    margin: clamp(40px, 6vw, 72px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Ritmo: 7+5, 5+7 y el último a lo ancho */
+  .celda:nth-child(4n + 1) {
+    grid-column: span 7;
+  }
+
+  .celda:nth-child(4n + 2) {
+    grid-column: span 5;
+    margin-top: clamp(0px, 8vw, 120px);
+  }
+
+  .celda:nth-child(4n + 3) {
+    grid-column: span 5;
+  }
+
+  .celda:nth-child(4n + 4) {
+    grid-column: span 7;
+    margin-top: clamp(0px, 6vw, 80px);
+  }
+
+  .celda:last-child:nth-child(4n + 1) {
+    grid-column: 1 / -1;
+  }
+
+  .celda:last-child:nth-child(4n + 1) .tarjeta {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(20px, 3vw, 40px);
+    align-items: end;
+  }
+
+  .tarjeta {
+    display: block;
+    text-decoration: none;
+  }
+
+  .tarjeta:hover :global(.portada img),
+  .tarjeta:hover :global(.tipografica) {
+    transform: scale(1.03);
+  }
+
+  .info {
+    padding-top: 20px;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+  }
+
+  h3 :global(.flecha) {
+    color: var(--acento);
+    opacity: 0;
+    transform: translate(-6px, 6px);
+    transition:
+      opacity 0.3s,
+      transform 0.5s var(--curva);
+  }
+
+  .tarjeta:hover h3 :global(.flecha),
+  .tarjeta:focus-visible h3 :global(.flecha) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .resumen {
+    margin-top: 10px;
+    max-width: 52ch;
+    color: var(--texto-suave);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 860px) {
+    .celda:nth-child(n) {
+      grid-column: 1 / -1;
+      margin-top: 0;
+    }
+
+    .celda:last-child:nth-child(4n + 1) .tarjeta {
+      display: block;
+    }
+  }
+</style>

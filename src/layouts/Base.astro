@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+import Navegacion from '../components/Navegacion.astro';
+import Pie from '../components/Pie.astro';
+import { textos, url, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+  titulo?: string;
+  descripcion?: string;
+  /** Ruta equivalente en el otro idioma, sin prefijo (por ejemplo '/proyectos/huecko'). */
+  ruta?: string;
+  imagen?: string;
+}
+
+const { idioma, ruta = '/', titulo, descripcion, imagen } = Astro.props;
+const t = textos[idioma];
+const tituloFinal = titulo ? `${titulo} · Nakusu` : t.meta.titulo;
+const descripcionFinal = descripcion ?? t.meta.descripcion;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const imagenOg = imagen ? new URL(url(`/${imagen}`), Astro.site).href : undefined;
+const rutaEs = new URL(url(ruta), Astro.site).href;
+const rutaEn = new URL(url(ruta === '/' ? '/en/' : `/en${ruta}`), Astro.site).href;
+---
+
+<!doctype html>
+<html lang={idioma}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloFinal}</title>
+    <meta name="description" content={descripcionFinal} />
+    <link rel="canonical" href={canonica} />
+    <link rel="alternate" hreflang="es" href={rutaEs} />
+    <link rel="alternate" hreflang="en" href={rutaEn} />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <meta property="og:title" content={tituloFinal} />
+    <meta property="og:description" content={descripcionFinal} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonica} />
+    {imagenOg && <meta property="og:image" content={imagenOg} />}
+    <meta name="theme-color" content="#121412" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#eef0ea" media="(prefers-color-scheme: light)" />
+    <script is:inline>
+      // Aplica el tema guardado antes de pintar, para que no parpadee
+      try {
+        const tema = localStorage.getItem('tema');
+        if (tema === 'light' || tema === 'dark') document.documentElement.dataset.theme = tema;
+      } catch {}
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">{idioma === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <Navegacion idioma={idioma} ruta={ruta} />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Pie idioma={idioma} />
+
+    <script>
+      // Revela los bloques marcados con data-revelar al entrar en pantalla
+      const observador = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              observador.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+      );
+      document.querySelectorAll('[data-revelar]').forEach((el) => observador.observe(el));
+    </script>
+  </body>
+</html>
+
+<style>
+  .saltar {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--acento);
+    color: var(--acento-texto);
+    text-decoration: none;
+    transition: top 0.2s;
+  }
+
+  .saltar:focus {
+    top: 12px;
+  }
+</style>

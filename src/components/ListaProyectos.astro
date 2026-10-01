@@ -1,0 +1,192 @@
+---
+import Icono from './Icono.astro';
+import { textos, type Idioma } from '../i18n/ui';
+import type { Proyecto } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+}
+
+const { idioma, proyectos } = Astro.props;
+const t = textos[idioma];
+type Categoria = keyof typeof t.categorias;
+
+// Solo se ofrecen los filtros que tienen algún proyecto
+const presentes = Object.keys(t.categorias).filter((c) =>
+  proyectos.some((p) => p.data.categorias.includes(c as Categoria)),
+) as Categoria[];
+---
+
+<section id="proyectos" class="seccion contenedor">
+  <h2 class="titulo-seccion" data-revelar>{t.proyectos.titulo}</h2>
+  <p class="bajada" data-revelar>{t.proyectos.bajada}</p>
+
+  <div class="filtros" role="group" aria-label={idioma === 'es' ? 'Filtrar proyectos' : 'Filter projects'} data-revelar>
+    <button type="button" class="filtro" data-filtro="todos" aria-pressed="true">{t.proyectos.todos}</button>
+    {
+      presentes.map((c) => (
+        <button type="button" class="filtro" data-filtro={c} aria-pressed="false">
+          {t.categorias[c]}
+        </button>
+      ))
+    }
+  </div>
+
+  <ul class="lista" data-lista>
+    {
+      proyectos.map((p) => (
+        <li class="fila" data-categorias={p.data.categorias.join(' ')}>
+          <h3>{p.data.titulo}</h3>
+          <p class="resumen">{p.data.resumen}</p>
+          <p class="pila">{p.data.stack.join(' / ')}</p>
+          <div class="enlaces">
+            {p.data.demo && (
+              <a href={p.data.demo} target="_blank" rel="noopener">
+                {t.proyectos.demo}
+                <Icono nombre="arrow-up-right" tamano={15} />
+              </a>
+            )}
+            {p.data.repos.map((r, i) => (
+              <a href={r.url} target="_blank" rel="noopener" aria-label={`${t.proyectos.repo} ${r.nombre}`}>
+                <Icono nombre="github-logo" tamano={16} />
+                {p.data.repos.length > 1 ? `${t.proyectos.repo} ${i + 1}` : t.proyectos.repo}
+              </a>
+            ))}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="vacio" data-vacio hidden>{t.proyectos.vacio}</p>
+</section>
+
+<script>
+  const botones = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+  const filas = document.querySelectorAll<HTMLElement>('[data-lista] > li');
+  const vacio = document.querySelector<HTMLElement>('[data-vacio]');
+
+  botones.forEach((boton) =>
+    boton.addEventListener('click', () => {
+      const filtro = boton.dataset.filtro!;
+      botones.forEach((b) => b.setAttribute('aria-pressed', String(b === boton)));
+      let visibles = 0;
+      filas.forEach((fila) => {
+        const coincide = filtro === 'todos' || fila.dataset.categorias!.split(' ').includes(filtro);
+        fila.hidden = !coincide;
+        if (coincide) visibles++;
+      });
+      if (vacio) vacio.hidden = visibles > 0;
+    }),
+  );
+</script>
+
+<style>
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 36px 0 12px;
+  }
+
+  .filtro {
+    padding: 8px 16px;
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--texto-suave);
+    font: 500 0.9rem var(--fuente);
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .filtro:hover {
+    border-color: var(--texto);
+    color: var(--texto);
+  }
+
+  .filtro[aria-pressed='true'] {
+    background: var(--texto);
+    border-color: var(--texto);
+    color: var(--fondo);
+  }
+
+  .lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fila {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 3fr) auto;
+    align-items: baseline;
+    gap: 8px 28px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--linea);
+    transition: padding 0.4s var(--curva);
+  }
+
+  .fila:hover {
+    padding-inline: 12px;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+
+  .resumen {
+    color: var(--texto-suave);
+    font-size: 0.97rem;
+  }
+
+  .pila {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+  }
+
+  .enlaces {
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+  }
+
+  .enlaces a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .enlaces a:hover {
+    color: var(--acento);
+  }
+
+  .vacio {
+    padding: 32px 0;
+    color: var(--texto-suave);
+  }
+
+  @media (max-width: 860px) {
+    .fila {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .fila:hover {
+      padding-inline: 0;
+    }
+
+    .enlaces {
+      justify-content: flex-start;
+      margin-top: 4px;
+    }
+  }
+</style>
