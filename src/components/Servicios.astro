@@ -1,0 +1,179 @@
+---
+import Icono from './Icono.astro';
+import { comoTrabajo, servicios } from '../data/contenido';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+import type { Proyecto } from '../lib/proyectos';
+import { slugDe } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+}
+
+const { idioma, proyectos } = Astro.props;
+const t = textos[idioma];
+const ejemplo = idioma === 'es' ? 'Lo hice en' : 'I did it in';
+const tituloDe = (slug: string) => proyectos.find((p) => slugDe(p) === slug)?.data.titulo;
+const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
+---
+
+<section id="servicios" class="seccion contenedor">
+  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.servicios.titulo}</h2>
+  <p class="bajada">{t.servicios.bajada}</p>
+
+  <div class="mesa">
+    <!-- Hoja rayada de cuaderno: las líneas van cada 32px y el texto se apoya en ellas -->
+    <ol class="hoja cinta" data-revelar>
+      {
+        servicios.map((s, i) => (
+          <li>
+            <Icono nombre={iconos[i]} tamano={26} class="margen" />
+            <h3>{s.titulo[idioma]}</h3>
+            <p>{s.detalle[idioma]}</p>
+            {s.prueba && tituloDe(s.prueba) && (
+              <a class="etiqueta etiqueta--oliva prueba" href={rutaEn(idioma, `/proyectos/${s.prueba}`)} style={`--giro:${i % 2 ? 1.5 : -1.5}deg`}>
+                {ejemplo} {tituloDe(s.prueba)}
+                <Icono nombre="arrow-right" tamano={15} />
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+
+    <aside class="postit" data-revelar style="--i:2">
+      <h3>{idioma === 'es' ? 'Cómo trabajo' : 'How I work'}</h3>
+      <ul>
+        {comoTrabajo.map((c) => <li>{c[idioma]}</li>)}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .mesa {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    gap: clamp(28px, 4vw, 56px);
+    align-items: start;
+    margin-top: clamp(48px, 6vw, 72px);
+  }
+
+  .hoja {
+    --renglon: 32px;
+    position: relative;
+    margin: 0;
+    padding: var(--renglon) clamp(20px, 4vw, 48px) var(--renglon) clamp(64px, 8vw, 96px);
+    list-style: none;
+    background-color: var(--hoja);
+    background-image: linear-gradient(transparent calc(var(--renglon) - 1px), var(--hoja-linea) calc(var(--renglon) - 1px));
+    background-size: 100% var(--renglon);
+    border-radius: 2px;
+    box-shadow: var(--sombra);
+    transform: rotate(-0.6deg);
+  }
+
+  /* Línea de margen, como en un cuaderno real */
+  .hoja::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: clamp(48px, 6vw, 72px);
+    width: 1.5px;
+    background: color-mix(in srgb, var(--vino) 55%, transparent);
+  }
+
+  .hoja li {
+    position: relative;
+    line-height: var(--renglon);
+  }
+
+  .hoja li + li {
+    margin-top: var(--renglon);
+  }
+
+  .hoja :global(.margen) {
+    position: absolute;
+    top: 3px;
+    left: calc(-1 * clamp(56px, 7vw, 82px));
+    color: var(--vino);
+  }
+
+  .hoja h3 {
+    font-size: 1.45rem;
+    line-height: var(--renglon);
+    letter-spacing: -0.025em;
+  }
+
+  .hoja p {
+    max-width: 52ch;
+    color: var(--texto-suave);
+  }
+
+  .prueba {
+    margin-top: 6px;
+    text-decoration: none;
+    transition: transform 0.4s var(--curva);
+  }
+
+  @media (hover: hover) {
+  .prueba:hover {
+      transform: rotate(0deg) translateX(3px);
+    }
+  }
+
+  @media (pointer: coarse) {
+    .prueba {
+      padding-block: 9px;
+    }
+  }
+
+  .postit {
+    position: sticky;
+    top: 100px;
+    padding: 30px 26px 32px;
+    background: var(--hueso);
+    color: #1c1f1c;
+    border-radius: 2px;
+    box-shadow: var(--sombra);
+    transform: rotate(2deg);
+  }
+
+  .postit h3 {
+    font-family: var(--mano);
+    font-size: 2.1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .postit ul {
+    display: grid;
+    gap: 14px;
+    margin: 16px 0 0;
+    padding-left: 1.1em;
+    font-family: var(--mano);
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+
+  .postit li::marker {
+    content: '- ';
+    color: var(--vino);
+  }
+
+  @media (max-width: 860px) {
+    .mesa {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hoja {
+      transform: none;
+    }
+
+    .postit {
+      position: static;
+      transform: rotate(1deg);
+    }
+  }
+</style>

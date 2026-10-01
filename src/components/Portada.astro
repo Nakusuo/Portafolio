@@ -1,0 +1,129 @@
+---
+// Portada de un proyecto: la captura si existe; si no, una portada tipográfica
+// con el nombre en la fuente pixel, el icono de su dominio y el stack.
+import Icono from './Icono.astro';
+import { url } from '../i18n/ui';
+import type { Proyecto } from '../lib/proyectos';
+
+interface Props {
+  proyecto: Proyecto;
+  prioridad?: boolean;
+}
+
+const { proyecto, prioridad = false } = Astro.props;
+const { titulo, portada, tono, stack, icono } = proyecto.data;
+---
+
+{
+  portada ? (
+    <div class="portada">
+      <img
+        src={url(`/${portada}`)}
+        alt={titulo}
+        width="1440"
+        height="900"
+        loading={prioridad ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </div>
+  ) : (
+    <div class:list={['portada', 'tipografica', tono]} aria-hidden="true">
+      <span class="nombre">{titulo}</span>
+      {icono && <Icono nombre={icono} tamano={220} class="icono" />}
+      <ul class="pila">
+        {stack.map((s) => (
+          <li>{s}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+<style>
+  .portada {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--superficie);
+  }
+
+  .portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .tipografica {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(18px, 3vw, 32px);
+    /* Puntos de papel punteado, del mismo color que el texto */
+    background-image: radial-gradient(currentColor 1px, transparent 1.2px);
+    background-size: 18px 18px;
+    background-position: -9px -9px;
+  }
+
+  /* El fondo de color va debajo de los puntos */
+  .tipografica::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--fondo-portada);
+    opacity: 0.9;
+  }
+
+  .tipografica > * {
+    position: relative;
+  }
+
+  .nombre {
+    font-family: var(--pixel);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    line-height: 0.85;
+    max-width: 9ch;
+  }
+
+  .tipografica :global(.icono) {
+    position: absolute;
+    right: -4%;
+    bottom: -12%;
+    width: 52%;
+    height: auto;
+    opacity: 0.22;
+  }
+
+  .pila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pila li {
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    font: 500 0.72rem/1.4 var(--fuente);
+    background: var(--fondo-portada);
+  }
+
+  /* Tonos tomados de la paleta del README */
+  .oliva {
+    --fondo-portada: #4a5f3a;
+    color: #e6ead9;
+  }
+
+  .tierra {
+    --fondo-portada: #a9856b;
+    color: #1c1f1c;
+  }
+
+  .hueso {
+    --fondo-portada: #c9c2b0;
+    color: #1c1f1c;
+  }
+</style>
