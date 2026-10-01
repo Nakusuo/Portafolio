@@ -1,0 +1,156 @@
+---
+// Easter egg: escribir "side b" (o "cara b") en cualquier parte, o el comando side-b de la terminal,
+// le da la vuelta a la página como a un cassette y muestra la cara B.
+import { pistasCaraB } from '../data/contenido';
+import { url, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const es = idioma === 'es';
+---
+
+<dialog class="cara-b" data-cara-b aria-label={es ? 'Cara B' : 'Side B'}>
+  <img src={url('/lab/banner.svg')} alt="" class="cinta-img" width="1200" height="340" />
+  <h2>{es ? 'Cara B' : 'Side B'}</h2>
+  <p class="rotulo">{es ? 'cinta encontrada en una carpeta sin nombre' : 'tape found in an unnamed folder'}</p>
+  <ol start="5">
+    {pistasCaraB[idioma].map((p) => <li>{p}</li>)}
+  </ol>
+  <button type="button" class="volver" data-volver-cara-a>
+    {es ? 'volver a la cara A' : 'back to side A'}
+  </button>
+</dialog>
+
+<script>
+  const raiz = document.documentElement;
+  const dialogo = document.querySelector<HTMLDialogElement>('[data-cara-b]')!;
+  const sinMovimiento = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const voltear = () => {
+    if (dialogo.open) return;
+    if (sinMovimiento()) {
+      dialogo.showModal();
+      return;
+    }
+    // La página gira de canto y, cuando ya no se ve, aparece la cara B girando desde el otro lado
+    raiz.classList.add('volteando');
+    setTimeout(() => dialogo.showModal(), 380);
+  };
+
+  dialogo.addEventListener('close', () => raiz.classList.remove('volteando'));
+  dialogo.querySelector('[data-volver-cara-a]')?.addEventListener('click', () => dialogo.close());
+  document.addEventListener('cara-b', voltear);
+
+  // Escribir "sideb" o "carab" (con o sin espacio) fuera de un campo de texto
+  let teclas = '';
+  addEventListener('keydown', (e) => {
+    if ((e.target as HTMLElement).closest('input, textarea, [contenteditable], dialog')) return;
+    if (e.key.length !== 1) return;
+    teclas = (teclas + e.key.toLowerCase()).replace(/[^a-z]/g, '').slice(-5);
+    if (teclas === 'sideb' || teclas === 'carab') {
+      teclas = '';
+      voltear();
+    }
+  });
+</script>
+
+<style>
+  /* La página se pone de canto mientras sale la cara B */
+  :global(html.volteando body > :not(dialog)) {
+    transform: perspective(1400px) rotateY(88deg);
+    opacity: 0;
+    transition:
+      transform 0.38s cubic-bezier(0.7, 0, 0.84, 0),
+      opacity 0.38s;
+  }
+
+  :global(body > :not(dialog)) {
+    transition:
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.5s;
+  }
+
+  .cara-b {
+    width: min(560px, calc(100vw - 32px));
+    padding: 28px 28px 32px;
+    border: 1.5px solid #e6e2d4;
+    border-radius: 6px;
+    background: #2b2521;
+    color: #e6e2d4;
+    box-shadow: 6px 6px 0 #b0606c;
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cara-b[open] {
+      animation: girar-cara-b 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+
+  @keyframes girar-cara-b {
+    from {
+      opacity: 0;
+      transform: perspective(1400px) rotateY(-88deg);
+    }
+  }
+
+  .cara-b::backdrop {
+    background: #151713;
+  }
+
+  .cinta-img {
+    width: 100%;
+    border-radius: 4px;
+    /* Es la cara A del cassette: la mostramos girada */
+    transform: scaleX(-1);
+    opacity: 0.85;
+  }
+
+  h2 {
+    margin-top: 22px;
+    font-family: var(--pixel);
+    font-size: 3rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #d08a94;
+  }
+
+  .rotulo {
+    font-family: var(--mano);
+    font-size: 1.4rem;
+    color: #c9c2b0;
+  }
+
+  ol {
+    display: grid;
+    gap: 4px;
+    width: fit-content;
+    margin: 18px auto 24px;
+    padding-left: 2.2em;
+    font-family: var(--pixel);
+    font-size: 1.45rem;
+    text-align: left;
+  }
+
+  li::marker {
+    color: #d08a94;
+  }
+
+  .volver {
+    padding: 10px 18px;
+    border: 1.5px solid #e6e2d4;
+    border-radius: 4px;
+    background: none;
+    color: #e6e2d4;
+    font: 500 0.95rem var(--fuente);
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #b0606c;
+  }
+
+  .volver:hover {
+    background: rgb(230 226 212 / 0.08);
+  }
+</style>
