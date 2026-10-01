@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Recompila cada día para refrescar "En qué ando" (últimos commits)
+  schedule:
+    - cron: '30 11 * * *'
 
 permissions:
   contents: read
@@ -17,6 +20,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v7
       - uses: withastro/action@v6

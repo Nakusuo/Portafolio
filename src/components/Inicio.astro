@@ -6,6 +6,7 @@ import Destacados from './Destacados.astro';
 import StackResumen from './StackResumen.astro';
 import Contacto from './Contacto.astro';
 import Arranque from './Arranque.astro';
+import Bitacora from './Bitacora.astro';
 import { proyectosEn } from '../lib/proyectos';
 import type { Idioma } from '../i18n/ui';
 
@@ -22,5 +23,6 @@ const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
   <Hero idioma={idioma} />
   <Destacados idioma={idioma} proyectos={destacados} limite={3} />
   <StackResumen idioma={idioma} />
+  <Bitacora idioma={idioma} />
   <Contacto idioma={idioma} />
 </Base>
