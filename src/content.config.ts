@@ -24,6 +24,8 @@ const proyectos = defineCollection({
     portada: z.string().optional(),
     /** Color de la portada tipográfica cuando no hay imagen. */
     tono: z.enum(['oliva', 'tierra', 'hueso']).default('oliva'),
+    /** Icono de Phosphor para la portada tipográfica (por ejemplo 'storefront'). */
+    icono: z.string().optional(),
   }),
 });
 

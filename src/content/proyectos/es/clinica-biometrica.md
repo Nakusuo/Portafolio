@@ -10,19 +10,20 @@ repos:
   - { nombre: 'Backend-ClinicaBiometrica', url: 'https://github.com/Nakusuo/Backend-ClinicaBiometrica' }
   - { nombre: 'Frontend-ClinicaBiometrica', url: 'https://github.com/Nakusuo/Frontend-ClinicaBiometrica' }
 tono: tierra
+icono: heartbeat
 ---
 
 ## El problema
 
-Un portal de telemedicina tiene que resolver a la vez la agenda, la historia clínica y la consulta a distancia, y hacerlo sin que el paciente pelee con contraseñas.
+Un portal de telemedicina junta en un solo lugar la agenda, la historia clínica y la consulta a distancia. Este además permite entrar con reconocimiento facial.
 
 ## Qué construí
 
-- **API de telemedicina**: pacientes, doctores, citas y expedientes.
-- **Autenticación con JWT** y un endpoint de **inicio de sesión facial**.
-- **Portal web** con gestión de citas y **videollamadas por WebRTC**.
+- API de telemedicina: pacientes, doctores, citas y expedientes.
+- Autenticación con JWT y un endpoint de inicio de sesión facial.
+- Portal web con gestión de citas y videollamadas por WebRTC.
 
 ## Cómo está hecho
 
-- **Backend en FastAPI y PostgreSQL**, documentado en Swagger desde el primer commit y empaquetado con Docker.
-- **Frontend en Angular 16 con Angular Material.**
+- Backend en FastAPI y PostgreSQL, documentado en Swagger desde el primer commit y empaquetado con Docker.
+- Frontend en Angular 16 con Angular Material.

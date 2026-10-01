@@ -8,6 +8,7 @@ destacado: true
 orden: 1
 privado: true
 tono: oliva
+icono: storefront
 ---
 
 ## The problem
@@ -16,20 +17,20 @@ Three gift shops tracked orders and payments in Poscake (Pancake POS), while eac
 
 ## What I built
 
-**Central** is a standalone app on its own domain that replaces Poscake and becomes the business's source of truth:
+Central is a standalone app on its own domain that replaces Poscake and becomes the business's source of truth:
 
-- **End-to-end orders**: payment to verify, to collect, to ship, in transit, at the courier, incidents, cash on delivery, returns, exchanges and cancellations.
-- **Shipping** through couriers, with online tracking where the courier supports it.
-- **Catalog, packs, stock and discount codes** shared across shops.
-- **Customers and reports**, with accounts and roles for the team.
-- **Push notifications** on the phone when an order comes in.
+- End-to-end orders: payment to verify, to collect, to ship, in transit, at the courier, incidents, cash on delivery, returns, exchanges and cancellations.
+- Shipping through couriers, with online tracking where the courier supports it.
+- Catalog, packs, stock and discount codes shared across shops.
+- Customers and reports, with accounts and roles for the team.
+- Push notifications on the phone when an order comes in.
 
 ## How it's built
 
-- **Next.js 15 with the App Router, React 19 and TypeScript**, using CSS Modules and no component library.
-- **Database on `node:sqlite`**, so there are no native modules to compile. `sharp` processes catalog images.
-- **Two-way sync**: a process pulls new and changed data from each website's MySQL database every minute. Writing back to the websites requires explicit permission and takes a backup first.
-- **Tests** with Node's test runner plus end-to-end browser tests. A seed script generates fake orders in every stage so nothing is tested on real customer data.
+- Next.js 15 with the App Router, React 19 and TypeScript, using CSS Modules and no component library.
+- Database on `node:sqlite`, so there are no native modules to compile. `sharp` processes catalog images.
+- Two-way sync: a process pulls new and changed data from each website's MySQL database every minute. Writing back to the websites requires explicit permission and takes a backup first.
+- Tests with Node's test runner plus end-to-end browser tests. A seed script generates fake orders in every stage so nothing is tested on real customer data.
 
 ## How we work
 

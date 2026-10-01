@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icono from './Icono.astro';
 import Portada from './Portada.astro';
+import Ventana from './Ventana.astro';
 import { rutaEn, textos, type Idioma } from '../i18n/ui';
 import { proyectosEn, slugDe, type Proyecto } from '../lib/proyectos';
 
@@ -35,7 +36,9 @@ const slug = slugDe(proyecto);
     </header>
 
     <div class="portada-caso">
-      <Portada proyecto={proyecto} prioridad />
+      <Ventana direccion={demo ? new URL(demo).host : privado ? (idioma === 'es' ? 'código privado' : 'private code') : `github.com/Nakusuo/${repos[0]?.nombre ?? ''}`} privado={privado && !demo}>
+        <Portada proyecto={proyecto} prioridad />
+      </Ventana>
     </div>
 
     <div class="cuerpo">
@@ -129,8 +132,8 @@ const slug = slugDe(proyecto);
   }
 
   h1 {
-    font-size: clamp(3rem, 9vw, 7.5rem);
-    letter-spacing: -0.06em;
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: -0.04em;
     line-height: 0.95;
   }
 
@@ -142,7 +145,7 @@ const slug = slugDe(proyecto);
   }
 
   .portada-caso :global(.portada) {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 2 / 1;
   }
 
   .cuerpo {
@@ -279,7 +282,7 @@ const slug = slugDe(proyecto);
     gap: 16px;
     font-size: clamp(2rem, 6vw, 4.5rem);
     font-weight: 600;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.035em;
     line-height: 1;
   }
 

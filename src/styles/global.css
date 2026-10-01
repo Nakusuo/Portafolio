@@ -25,6 +25,8 @@
   --tierra: #a9856b;
   --hueso: #cfc8b4;
   --oliva-claro: #8fa36b;
+  --hoja: #fbfaf6;
+  --hoja-linea: rgb(79 97 54 / 0.18);
   --sombra: 0 10px 24px -14px rgb(42 52 30 / 0.5);
   --sombra-sticker: 0 2px 0 rgb(26 29 25 / 0.18);
 
@@ -53,6 +55,8 @@
     --tinta-texto: #151713;
     --acento: #8fa36b;
     --acento-texto: #121412;
+    --hoja: #1f221e;
+    --hoja-linea: rgb(143 163 107 / 0.16);
     --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
     --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
     color-scheme: dark;
@@ -71,6 +75,8 @@
   --tinta-texto: #151713;
   --acento: #8fa36b;
   --acento-texto: #121412;
+  --hoja: #1f221e;
+  --hoja-linea: rgb(143 163 107 / 0.16);
   --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
   --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
   color-scheme: dark;
@@ -86,12 +92,14 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
   -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--acento) var(--superficie);
+  accent-color: var(--acento);
 }
 
 body {
   margin: 0;
   background-color: var(--fondo);
-  /* Cuadrícula de 28px como papel de cuaderno */
+  /* Cuadrícula de 28px: es el papel del cuaderno, la superficie de todo el sitio (intencional) */
   background-image:
     linear-gradient(var(--papel-linea) 1px, transparent 1px),
     linear-gradient(90deg, var(--papel-linea) 1px, transparent 1px);
@@ -112,6 +120,8 @@ img {
 
 a {
   color: inherit;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
 }
 
 h1,
@@ -119,7 +129,7 @@ h2,
 h3 {
   margin: 0;
   line-height: 1.05;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   font-weight: 600;
   text-wrap: balance;
 }
@@ -151,6 +161,11 @@ p {
   padding-block: clamp(64px, 10vw, 120px);
 }
 
+/* Dos secciones seguidas no suman su aire */
+.seccion + .seccion {
+  padding-top: clamp(24px, 4vw, 56px);
+}
+
 /* Título de sección con el prompt del README: "> stack" */
 .titulo-seccion {
   font-size: clamp(2.1rem, 5vw, 3.4rem);
@@ -171,7 +186,7 @@ p {
   color: var(--texto-suave);
 }
 
-/* Anotación a mano al lado de un título */
+/* Texto escrito a mano */
 .nota {
   font-family: var(--mano);
   font-size: 1.45rem;
@@ -179,6 +194,48 @@ p {
   font-weight: 500;
   color: var(--texto-suave);
   letter-spacing: 0;
+}
+
+/* Nota al margen junto a un título, con flecha apuntándole. El título va dentro de .con-anotacion */
+.con-anotacion {
+  position: relative;
+  width: fit-content;
+}
+
+.anotacion {
+  position: absolute;
+  left: calc(100% + 18px);
+  bottom: 62%;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: max-content;
+  max-width: 16ch;
+  font-family: var(--mano);
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.05;
+  color: var(--vino);
+  transform: rotate(-5deg);
+}
+
+.anotacion svg {
+  flex: none;
+  order: -1;
+  transform: translateY(14px) scaleX(-1);
+}
+
+@media (max-width: 860px) {
+  .anotacion {
+    position: static;
+    margin-top: 8px;
+    max-width: none;
+    transform: rotate(-2deg);
+  }
+
+  .anotacion svg {
+    display: none;
+  }
 }
 
 .boton {
@@ -230,11 +287,10 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
+  padding: 5px 11px;
   border-radius: 3px;
-  font: 500 0.74rem/1.3 var(--mono);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font: 600 0.82rem/1.3 var(--fuente);
+  letter-spacing: 0;
   white-space: nowrap;
   box-shadow: var(--sombra-sticker);
   transform: rotate(var(--giro, -1.5deg));
@@ -305,20 +361,30 @@ p {
   white-space: nowrap;
 }
 
-/* Aparición al entrar en pantalla (la activa un IntersectionObserver en Base.astro) */
+/*
+  Aparición al entrar en pantalla (la activa un IntersectionObserver en Base.astro).
+  Solo la llevan los objetos "pegados" (fichas, notas, piezas del lab): caen y se asientan
+  en su giro. Los títulos y párrafos no se animan.
+*/
 @media (prefers-reduced-motion: no-preference) {
   .js [data-revelar] {
     opacity: 0;
-    transform: translateY(24px);
+    translate: 0 28px;
+    scale: 1.03;
+    filter: blur(3px);
     transition:
-      opacity 0.8s var(--curva),
-      transform 0.8s var(--curva);
-    transition-delay: calc(var(--i, 0) * 70ms);
+      opacity 0.7s var(--curva),
+      translate 0.9s var(--curva),
+      scale 0.9s var(--curva),
+      filter 0.7s var(--curva);
+    transition-delay: calc(var(--i, 0) * 90ms);
   }
 
   .js [data-revelar].visible {
     opacity: 1;
-    transform: none;
+    translate: 0 0;
+    scale: 1;
+    filter: none;
   }
 }
 

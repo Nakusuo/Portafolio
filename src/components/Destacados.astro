@@ -15,8 +15,19 @@ interface Props {
 const { idioma, proyectos, limite } = Astro.props;
 const t = textos[idioma].destacados;
 const nota = idioma === 'es' ? 'lo que más me enorgullece' : 'the work I am proudest of';
-const etiquetaProyecto = idioma === 'es' ? 'Proyecto' : 'Project';
 const privadoTexto = idioma === 'es' ? 'código privado' : 'private code';
+
+// La pestaña dice de dónde salió el proyecto
+const origenes = {
+  es: { clientes: 'Para un cliente', personal: 'Proyecto propio', universidad: 'Universidad' },
+  en: { clientes: 'Client work', personal: 'Personal project', universidad: 'University' },
+}[idioma];
+const origenDe = (p: Proyecto) => {
+  const c = p.data.categorias;
+  if (c.includes('clientes')) return origenes.clientes;
+  if (c.includes('personal')) return origenes.personal;
+  return origenes.universidad;
+};
 
 const visibles = limite ? proyectos.slice(0, limite) : proyectos;
 
@@ -33,17 +44,20 @@ const direccionDe = (p: Proyecto) => {
 ---
 
 <section id="trabajo" class="seccion contenedor">
-  <p class="nota" data-revelar>{nota}</p>
-  <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.titulo}</h2>
-  <p class="bajada" data-revelar>{t.bajada}</p>
+  <div class="con-anotacion">
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="anotacion">
+      <Icono nombre="arrow-bend-down-left" tamano={26} />
+      {nota}
+    </p>
+  </div>
+  <p class="bajada">{t.bajada}</p>
 
   <ol class="fichas">
     {
       visibles.map((p, i) => (
         <li class:list={['ficha', fondos[i % fondos.length]]} data-revelar>
-          <span class="pestana">
-            {etiquetaProyecto} {String(i + 1).padStart(2, '0')}
-          </span>
+          <span class="pestana">{origenDe(p)}</span>
           <a href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)} class="tarjeta">
             <div class="info">
               {p.data.rol && <span class="rol">{p.data.rol}</span>}
@@ -107,13 +121,12 @@ const direccionDe = (p: Proyecto) => {
     position: absolute;
     top: -30px;
     left: 0;
-    padding: 7px 18px 9px;
+    padding: 6px 18px 8px;
     border-radius: var(--radio) var(--radio) 0 0;
     background: inherit;
     color: inherit;
-    font: 500 0.74rem var(--mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font: 500 1.25rem/1 var(--mano);
+    letter-spacing: 0;
   }
 
   .tarjeta {
@@ -133,15 +146,14 @@ const direccionDe = (p: Proyecto) => {
   }
 
   .rol {
-    font: 500 0.76rem var(--mono);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 0.88rem;
+    font-weight: 500;
     opacity: 0.75;
   }
 
   h3 {
     font-size: clamp(2rem, 4vw, 3.2rem);
-    letter-spacing: -0.045em;
+    letter-spacing: -0.035em;
   }
 
   .resumen {

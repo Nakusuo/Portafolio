@@ -18,14 +18,14 @@ const canales = [
 ---
 
 <section id="contacto" class="seccion contenedor contacto">
-  <h2 data-revelar>{t.contacto.titulo}</h2>
-  <p class="bajada" data-revelar>{t.contacto.bajada}</p>
-  <a class="boton boton--lleno grande" href={enlaceContacto} target="_blank" rel="noopener" data-revelar>
+  <h2>{t.contacto.titulo}</h2>
+  <p class="bajada">{t.contacto.bajada}</p>
+  <a class="boton boton--lleno grande" href={enlaceContacto} target="_blank" rel="noopener">
     {t.nav.contacto}
     <Icono nombre="arrow-up-right" tamano={20} />
   </a>
 
-  <ul class="canales" data-revelar>
+  <ul class="canales">
     {
       canales.map((c) => (
         <li>
@@ -47,8 +47,8 @@ const canales = [
   }
 
   h2 {
-    font-size: clamp(3.4rem, 11vw, 9rem);
-    letter-spacing: -0.06em;
+    font-size: clamp(3rem, 9vw, 6rem);
+    letter-spacing: -0.04em;
     line-height: 0.95;
   }
 
