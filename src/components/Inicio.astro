@@ -4,6 +4,7 @@ import Hero from './Hero.astro';
 import Destacados from './Destacados.astro';
 import ListaProyectos from './ListaProyectos.astro';
 import Stack from './Stack.astro';
+import ComoUsoIA from './ComoUsoIA.astro';
 import Servicios from './Servicios.astro';
 import Lab from './Lab.astro';
 import SobreMi from './SobreMi.astro';
@@ -26,6 +27,7 @@ const resto = proyectos.filter((p) => !p.data.destacado);
   <Destacados idioma={idioma} proyectos={destacados} />
   <ListaProyectos idioma={idioma} proyectos={resto} />
   <Stack idioma={idioma} proyectos={proyectos} />
+  <ComoUsoIA idioma={idioma} />
   <Servicios idioma={idioma} proyectos={proyectos} />
   <Lab idioma={idioma} />
   <SobreMi idioma={idioma} />

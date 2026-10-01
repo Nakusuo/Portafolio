@@ -11,43 +11,52 @@ const t = textos[idioma].hero;
 ---
 
 <section class="hero contenedor">
-  <div class="texto">
-    <p class="saludo">&gt; {idioma === 'es' ? 'hola, soy Nakusu' : "hi, I'm Nakusu"}</p>
-    <h1>{t.titulo}</h1>
+  <div class="centro">
+    <p class="nota mi-nombre">
+      {t.miNombre}
+      <Icono nombre="arrow-bend-right-down" tamano={22} class="flecha-nombre" />
+    </p>
+
+    <div class="nombre-bloque">
+      <span class="etiqueta etiqueta--hueso e1" style="--giro:-4deg">{t.etiquetas[0]}</span>
+      <span class="etiqueta etiqueta--tierra e2" style="--giro:3deg">{t.etiquetas[1]}</span>
+      <h1 class="nombre marco-dibujado">NAKUSU</h1>
+      <span class="etiqueta etiqueta--oliva e3" style="--giro:-2deg">{t.etiquetas[2]}</span>
+      <span class="etiqueta etiqueta--vino e4" style="--giro:2.5deg">{t.etiquetas[3]}</span>
+    </div>
+
+    <p class="estado">
+      <span class="punto" aria-hidden="true"></span>
+      {t.estado}
+    </p>
+
+    <p class="lema">{t.titulo}</p>
     <p class="bajada-hero">{t.bajada}</p>
+
     <a class="boton boton--lleno" href="#trabajo">
       {t.verTrabajo}
       <Icono nombre="arrow-down" tamano={18} />
     </a>
   </div>
 
-  <figure class="collage" aria-label={t.capturas}>
-    <img
-      class="captura captura--atras"
-      src={url('/proyectos/huecko.webp')}
-      alt="Huecko"
-      width="1440"
-      height="900"
-      fetchpriority="high"
-    />
-    <img
-      class="captura captura--frente"
-      src={url('/proyectos/paltishop.webp')}
-      alt="paltishop.store"
-      width="1440"
-      height="900"
-      fetchpriority="high"
-    />
+  <figure class="polaroid cinta foto foto--izq" style="--giro:-6deg; --giro-cinta:4deg">
+    <img src={url('/proyectos/paltishop.webp')} alt="paltishop.store" width="1440" height="900" fetchpriority="high" />
+    <figcaption>paltishop.store</figcaption>
+  </figure>
+
+  <figure class="polaroid cinta foto foto--der" style="--giro:5deg; --giro-cinta:-5deg">
+    <img src={url('/proyectos/huecko.webp')} alt="Huecko" width="1440" height="900" fetchpriority="high" />
+    <figcaption>Huecko</figcaption>
   </figure>
 
   <nav class="rutas" aria-label={t.pregunta}>
-    <p class="pregunta">{t.pregunta}</p>
+    <p class="nota pregunta">{t.pregunta}</p>
     <ul>
       {
-        t.rutas.map((r) => (
-          <li>
+        t.rutas.map((r, i) => (
+          <li style={`--giro:${[-1.2, 0.8, -0.6][i]}deg`}>
             <a href={r.destino}>
-              <span class="etiqueta">{r.etiqueta}</span>
+              <span class="etiqueta-ruta">{r.etiqueta}</span>
               <span class="detalle">{r.detalle}</span>
               <Icono nombre="arrow-right" tamano={20} class="flecha" />
             </a>
@@ -60,98 +69,140 @@ const t = textos[idioma].hero;
 
 <style>
   .hero {
+    position: relative;
+    padding-block: clamp(40px, 6vw, 72px) 48px;
+  }
+
+  .centro {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    grid-template-areas:
-      'texto collage'
-      'rutas rutas';
-    align-items: center;
-    column-gap: clamp(32px, 5vw, 72px);
-    row-gap: clamp(40px, 6vw, 72px);
-    min-height: calc(100dvh - 68px);
-    padding-block: clamp(40px, 7vw, 88px) 48px;
+    justify-items: center;
+    text-align: center;
+    max-width: 720px;
+    margin-inline: auto;
   }
 
-  .texto {
-    grid-area: texto;
-  }
-
-  .saludo {
-    font-family: var(--pixel);
+  .mi-nombre {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 4px;
+    margin-bottom: 10px;
     font-size: 1.6rem;
-    line-height: 1;
-    color: var(--acento);
-    margin-bottom: 22px;
   }
 
-  h1 {
-    font-size: clamp(2.5rem, 4.6vw, 4rem);
-    letter-spacing: -0.045em;
-    max-width: 16ch;
+  .mi-nombre :global(.flecha-nombre) {
+    margin-top: 10px;
+    color: var(--texto-suave);
+  }
+
+  .nombre-bloque {
+    position: relative;
+    padding: 36px 60px;
+  }
+
+  .nombre {
+    display: inline-block;
+    padding: 6px 28px 2px;
+    font-family: var(--pixel);
+    font-size: clamp(4.4rem, 14vw, 8.5rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.9;
+    background: var(--fondo);
+  }
+
+  .nombre-bloque .etiqueta {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .e1 {
+    top: 10px;
+    left: -10px;
+  }
+
+  .e2 {
+    top: 14px;
+    right: -14px;
+  }
+
+  .e3 {
+    bottom: 10px;
+    left: -6px;
+  }
+
+  .e4 {
+    bottom: 12px;
+    right: -8px;
+  }
+
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: 500 0.76rem var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+  }
+
+  /* Único punto de estado de la página: disponibilidad real */
+  .punto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--acento);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--acento) 25%, transparent);
+  }
+
+  .lema {
+    margin-top: 34px;
+    font-size: clamp(1.9rem, 4.2vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    max-width: 18ch;
   }
 
   .bajada-hero {
-    margin: 24px 0 32px;
-    max-width: 44ch;
-    font-size: 1.12rem;
+    margin: 18px 0 28px;
+    max-width: 46ch;
+    font-size: 1.1rem;
     color: var(--texto-suave);
   }
 
-  .collage {
-    grid-area: collage;
-    position: relative;
-    margin: 0;
-    aspect-ratio: 1 / 0.86;
-  }
-
-  .captura {
+  .foto {
     position: absolute;
-    width: 82%;
-    border-radius: var(--radio);
-    border: 1px solid var(--linea);
-    box-shadow: var(--sombra);
-    transition: transform 0.9s var(--curva);
+    top: 46%;
+    width: clamp(180px, 17vw, 250px);
   }
 
-  .captura--atras {
-    top: 0;
-    right: 0;
-    transform: rotate(2.5deg);
+  .foto--izq {
+    left: calc(var(--gutter) - 8px);
   }
 
-  .captura--frente {
-    bottom: 0;
-    left: 0;
-    transform: rotate(-2deg);
-  }
-
-  .collage:hover .captura--atras {
-    transform: rotate(4deg) translate(10px, -8px);
-  }
-
-  .collage:hover .captura--frente {
-    transform: rotate(-3.5deg) translate(-10px, 8px);
+  .foto--der {
+    right: calc(var(--gutter) - 8px);
   }
 
   .rutas {
-    grid-area: rutas;
-    border-top: 1px solid var(--linea);
-    padding-top: 22px;
+    margin-top: clamp(56px, 8vw, 96px);
   }
 
   .pregunta {
-    font-size: 0.9rem;
-    color: var(--texto-suave);
     margin-bottom: 14px;
   }
 
   .rutas ul {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    gap: 16px;
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .rutas li {
+    transform: rotate(var(--giro));
   }
 
   .rutas a {
@@ -159,20 +210,22 @@ const t = textos[idioma].hero;
     grid-template-columns: 1fr auto;
     gap: 2px 12px;
     padding: 18px 20px;
+    border: 1.5px solid var(--tinta);
     border-radius: var(--radio);
-    background: var(--superficie);
+    background: var(--fondo);
+    box-shadow: 3px 3px 0 var(--tinta);
     text-decoration: none;
     transition:
-      background-color 0.3s,
-      transform 0.5s var(--curva);
+      transform 0.4s var(--curva),
+      box-shadow 0.4s var(--curva);
   }
 
   .rutas a:hover {
-    background: var(--superficie-2);
-    transform: translateY(-3px);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--acento);
   }
 
-  .etiqueta {
+  .etiqueta-ruta {
     font-weight: 600;
     font-size: 1.05rem;
   }
@@ -188,66 +241,126 @@ const t = textos[idioma].hero;
     grid-row: 1 / span 2;
     align-self: center;
     color: var(--acento);
-    transition: transform 0.4s var(--curva);
-  }
-
-  .rutas a:hover :global(.flecha) {
-    transform: translateX(4px);
   }
 
   /* Entrada escalonada al cargar */
   @media (prefers-reduced-motion: no-preference) {
-    .texto > *,
-    .collage,
+    .centro > *,
+    .foto,
     .rutas {
-      animation: entrar 1s var(--curva) both;
+      animation: entrar 0.9s var(--curva) both;
     }
 
-    .texto > :nth-child(2) {
+    .centro > :nth-child(2) {
       animation-delay: 80ms;
     }
 
-    .texto > :nth-child(3) {
+    .centro > :nth-child(3) {
       animation-delay: 160ms;
     }
 
-    .texto > :nth-child(4) {
+    .centro > :nth-child(4),
+    .centro > :nth-child(5) {
       animation-delay: 240ms;
     }
 
-    .collage {
-      animation-delay: 200ms;
+    .centro > :nth-child(6) {
+      animation-delay: 320ms;
+    }
+
+    .foto {
+      animation-delay: 300ms;
+      animation-name: pegar;
     }
 
     .rutas {
-      animation-delay: 380ms;
+      animation-delay: 420ms;
     }
   }
 
   @keyframes entrar {
     from {
       opacity: 0;
-      transform: translateY(24px);
+      transform: translateY(20px);
+    }
+  }
+
+  @keyframes pegar {
+    from {
+      opacity: 0;
+      transform: rotate(var(--giro)) scale(1.08) translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--giro));
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .foto {
+      width: clamp(150px, 16vw, 200px);
+      top: auto;
+      bottom: 180px;
     }
   }
 
   @media (max-width: 860px) {
-    .hero {
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-areas:
-        'texto'
-        'collage'
-        'rutas';
-      min-height: 0;
+    .nombre-bloque {
+      padding: 32px 24px;
     }
 
-    .collage {
-      max-width: 560px;
+    .foto {
+      position: static;
+      width: min(100%, 300px);
+    }
+
+    .fotos-movil {
+      display: flex;
+    }
+
+    .hero {
+      display: grid;
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .foto--izq {
+      margin-top: 24px;
+      transform: rotate(-3deg);
+    }
+
+    .foto--der {
+      transform: rotate(2.5deg);
+    }
+
+    .rutas {
       width: 100%;
+      margin-top: 32px;
     }
 
     .rutas ul {
       grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* En pantallas estrechas las etiquetas van en filas, no flotando */
+  @media (max-width: 560px) {
+    .nombre-bloque {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 10px;
+      padding: 12px 0 4px;
+    }
+
+    .nombre-bloque .etiqueta {
+      position: static;
+    }
+
+    .nombre {
+      width: 100%;
+      padding-inline: 16px;
+      text-align: center;
     }
   }
 </style>

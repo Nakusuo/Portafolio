@@ -1,0 +1,157 @@
+---
+import Icono from './Icono.astro';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].ia;
+
+const iconos = ['magnifying-glass', 'map-trifold', 'code'];
+const tonos = ['hueso', 'tierra', 'oliva'];
+const giros = [-1.5, 1, -0.8];
+const herramientas = [
+  { nombre: 'Claude Code', icono: 'terminal-window' },
+  { nombre: 'ChatGPT', icono: 'chat-circle-dots' },
+  { nombre: 'Copilot', icono: 'sparkle' },
+];
+---
+
+<section id="ia" class="seccion contenedor">
+  <p class="nota" data-revelar>{t.nota}</p>
+  <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <p class="bajada" data-revelar>{t.bajada}</p>
+
+  <ol class="notas">
+    {
+      t.pasos.map((paso, i) => (
+        <li class:list={['papelito', 'cinta', tonos[i]]} style={`--giro:${giros[i]}deg; --giro-cinta:${-giros[i] * 2}deg; --i:${i}`} data-revelar>
+          <Icono nombre={iconos[i]} tamano={28} />
+          <h3>{paso.titulo}</h3>
+          <p>{paso.detalle}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="pie-ia" data-revelar>
+    <p class="no-hago">
+      <Icono nombre="prohibit" tamano={20} />
+      <span>{t.noHago} <s>{t.tachado}</s></span>
+    </p>
+    <ul class="herramientas" aria-label={t.herramientas}>
+      {
+        herramientas.map((h, i) => (
+          <li class="etiqueta etiqueta--hueso" style={`--giro:${[-2, 1.5, -1][i]}deg`}>
+            <Icono nombre={h.icono} tamano={14} />
+            {h.nombre}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .notas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin: clamp(40px, 6vw, 64px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .papelito {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 34px 26px 28px;
+    border-radius: 2px;
+    box-shadow: var(--sombra);
+    transform: rotate(var(--giro));
+  }
+
+  .papelito:nth-child(2) {
+    margin-top: 28px;
+  }
+
+  .papelito h3 {
+    font-size: 1.6rem;
+  }
+
+  .papelito p {
+    font-size: 0.98rem;
+    opacity: 0.85;
+  }
+
+  .hueso {
+    background: var(--hueso);
+    color: #1c1f1c;
+  }
+
+  .tierra {
+    background: var(--tierra);
+    color: #1c1f1c;
+  }
+
+  .oliva {
+    background: var(--acento);
+    color: var(--acento-texto);
+  }
+
+  .pie-ia {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 32px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1.5px dashed var(--linea);
+  }
+
+  .no-hago {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 52ch;
+    font-family: var(--mano);
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .no-hago :global(svg) {
+    flex: none;
+    margin-top: 5px;
+    color: var(--vino);
+  }
+
+  .no-hago s {
+    text-decoration-color: var(--vino);
+    text-decoration-thickness: 2px;
+  }
+
+  .herramientas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 860px) {
+    .notas {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+
+    .papelito:nth-child(2) {
+      margin-top: 0;
+    }
+  }
+</style>
