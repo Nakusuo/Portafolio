@@ -1,6 +1,7 @@
 ---
 import Icono from './Icono.astro';
 import Ventana from './Ventana.astro';
+import Repegar from './Repegar.astro';
 import { rutaEn, textos, url, type Idioma } from '../i18n/ui';
 
 interface Props {
@@ -11,7 +12,7 @@ const { idioma } = Astro.props;
 const t = textos[idioma].hero;
 ---
 
-<section class="hero contenedor">
+<section class="hero contenedor" data-grupo-arrastre>
   <div class="centro">
     <p class="nota mi-nombre">
       {t.miNombre}
@@ -19,12 +20,14 @@ const t = textos[idioma].hero;
     </p>
 
     <div class="nombre-bloque">
-      <span class="etiqueta etiqueta--hueso e1" style="--giro:-4deg">{t.etiquetas[0]}</span>
-      <span class="etiqueta etiqueta--tierra e2" style="--giro:3deg">{t.etiquetas[1]}</span>
+      <span class="etiqueta etiqueta--hueso e1" data-arrastrable style="--giro:-4deg">{t.etiquetas[0]}</span>
+      <span class="etiqueta etiqueta--tierra e2" data-arrastrable style="--giro:3deg">{t.etiquetas[1]}</span>
       <h1 class="nombre marco-dibujado">NAKUSU</h1>
-      <span class="etiqueta etiqueta--oliva e3" style="--giro:-2deg">{t.etiquetas[2]}</span>
-      <span class="etiqueta etiqueta--vino e4" style="--giro:2.5deg">{t.etiquetas[3]}</span>
+      <span class="etiqueta etiqueta--oliva e3" data-arrastrable style="--giro:-2deg">{t.etiquetas[2]}</span>
+      <span class="etiqueta etiqueta--vino e4" data-arrastrable style="--giro:2.5deg">{t.etiquetas[3]}</span>
     </div>
+
+    <Repegar idioma={idioma} />
 
     <p class="estado">
       <span class="punto" aria-hidden="true"></span>
@@ -74,6 +77,13 @@ const t = textos[idioma].hero;
   .hero {
     position: relative;
     padding-block: clamp(40px, 6vw, 72px) 48px;
+  }
+
+  /* En el hero el botón flota en la esquina para no mover nada */
+  .hero :global(.repegar) {
+    position: absolute;
+    top: 16px;
+    right: var(--gutter);
   }
 
   .centro {
