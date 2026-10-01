@@ -73,6 +73,11 @@ const rutaEn = new URL(url(ruta === '/' ? '/en/' : `/en${ruta}`), Astro.site).hr
     <Pie idioma={idioma} />
 
     <script>
+      import { activarArrastre } from '../scripts/arrastrar';
+      activarArrastre();
+    </script>
+
+    <script>
       // Revela los bloques marcados con data-revelar al entrar en pantalla
       const observador = new IntersectionObserver(
         (entradas) => {
