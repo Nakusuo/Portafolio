@@ -19,10 +19,10 @@ const presentes = Object.keys(t.categorias).filter((c) =>
 ---
 
 <section id="proyectos" class="seccion contenedor">
-  <h2 class="titulo-seccion" data-revelar>{t.proyectos.titulo}</h2>
-  <p class="bajada" data-revelar>{t.proyectos.bajada}</p>
+  <h2 class="titulo-seccion">{t.proyectos.titulo}</h2>
+  <p class="bajada">{t.proyectos.bajada}</p>
 
-  <div class="filtros" role="group" aria-label={idioma === 'es' ? 'Filtrar proyectos' : 'Filter projects'} data-revelar>
+  <div class="filtros" role="group" aria-label={idioma === 'es' ? 'Filtrar proyectos' : 'Filter projects'}>
     <button type="button" class="filtro" data-filtro="todos" aria-pressed="true">{t.proyectos.todos}</button>
     {
       presentes.map((c) => (
@@ -127,11 +127,14 @@ const presentes = Object.keys(t.categorias).filter((c) =>
     gap: 8px 28px;
     padding: 22px 0;
     border-bottom: 1px solid var(--linea);
-    transition: padding 0.4s var(--curva);
   }
 
-  .fila:hover {
-    padding-inline: 12px;
+  .fila > * {
+    transition: translate 0.4s var(--curva);
+  }
+
+  .fila:hover > * {
+    translate: 8px 0;
   }
 
   h3 {
@@ -180,8 +183,8 @@ const presentes = Object.keys(t.categorias).filter((c) =>
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .fila:hover {
-      padding-inline: 0;
+    .fila:hover > * {
+      translate: 0 0;
     }
 
     .enlaces {

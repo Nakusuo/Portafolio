@@ -19,11 +19,11 @@ const usadoEn = (tecnologia: string) =>
 
 <section id="stack" class="seccion contenedor stack">
   <div class="lateral">
-    <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.titulo}</h2>
-    <p class="bajada" data-revelar>{t.bajada}</p>
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="bajada">{t.bajada}</p>
     {
       perfil.cv && (
-        <a class="boton" href={url(`/${perfil.cv}`)} download data-revelar>
+        <a class="boton" href={url(`/${perfil.cv}`)} download>
           <Icono nombre="file-text" tamano={18} />
           {t.cv}
         </a>
@@ -34,7 +34,7 @@ const usadoEn = (tecnologia: string) =>
   <div class="grupos">
     {
       gruposStack.map((g, gi) => (
-        <div class="grupo" data-revelar>
+        <div class="grupo">
           <h3>{g.titulo[idioma]}</h3>
           <ul>
             {g.tecnologias.map((tec, ti) => {

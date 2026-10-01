@@ -76,13 +76,13 @@ export const textos = {
     },
     stack: {
       titulo: 'Lo que domino',
-      bajada: 'Sin barras de porcentaje. Cada tecnología dice en qué proyecto la usé, para que lo compruebes.',
+      bajada: 'Debajo de cada tecnología están los proyectos donde la usé.',
       usadoEn: 'Usado en',
       cv: 'Descargar CV',
     },
     servicios: {
       titulo: 'Lo que puedo hacer por ti',
-      bajada: 'Si tienes un negocio y necesitas algo que funcione, esto es lo que hago.',
+      bajada: 'Hago webs y sistemas para negocios. Cada servicio enlaza a un proyecto real donde ya lo hice.',
     },
     lab: {
       titulo: 'Lab',
@@ -90,36 +90,32 @@ export const textos = {
     },
     ia: {
       titulo: 'Cómo uso la IA',
-      nota: 'sin humo',
       bajada:
-        'La uso todos los días, pero no como una máquina de "hazme esto". Es una herramienta más: me ayuda a buscar, a planear y a desarrollar mejor. Las decisiones y el código final siguen siendo míos.',
+        'Es una herramienta más en mi forma de trabajar. Las decisiones las tomo yo, y reviso cada cambio antes de que entre al proyecto.',
       pasos: [
         {
           titulo: 'Investigar',
           detalle:
-            'Comparar opciones antes de elegir una librería, leer documentación más rápido y entender errores que no había visto antes.',
+            'Comparo librerías antes de elegir una y entiendo errores nuevos sin pasar la tarde en foros.',
         },
         {
           titulo: 'Planear',
           detalle:
-            'Desglosar una funcionalidad en pasos, escribir la especificación y detectar casos borde antes de escribir código.',
+            'Antes de escribir código, parto la funcionalidad en pasos pequeños y busco los casos borde.',
         },
         {
           titulo: 'Desarrollar',
-          detalle:
-            'Un segundo par de ojos: revisar código, proponer pruebas y pensar en voz alta cuando algo no cuadra. Lo que entra al repo lo leo y lo entiendo.',
+          detalle: 'Me ayuda a revisar código y a escribir pruebas. Leo y entiendo todo lo que subo al repo.',
         },
       ],
-      noHago: 'Lo que no hago:',
-      tachado: 'pegar un prompt, copiar la respuesta y publicarla sin entenderla.',
-      herramientas: 'Las que uso',
+      herramientas: 'Con qué',
     },
     sobreMi: {
       titulo: 'Sobre mí',
     },
     contacto: {
       titulo: '¿Hablamos?',
-      bajada: 'Prácticas, un proyecto o solo para comentar algo que viste aquí. Respondo rápido.',
+      bajada: 'Para prácticas, un proyecto o un comentario sobre algo que viste aquí.',
     },
     caso: {
       volver: 'Volver al trabajo',
@@ -127,11 +123,11 @@ export const textos = {
       stack: 'Stack',
       enlaces: 'Enlaces',
       siguiente: 'Siguiente caso',
-      privado: 'El código es privado porque es de un cliente. Puedo enseñarlo en una entrevista.',
+      privado: 'El código es privado porque pertenece a un cliente.',
       verWeb: 'Ver en vivo',
     },
     pie: {
-      hecho: 'Hecho a mano con Astro.',
+      hecho: 'Hecho con Astro.',
       caraB: 'side B',
     },
   },
@@ -196,13 +192,13 @@ export const textos = {
     },
     stack: {
       titulo: 'What I work with',
-      bajada: 'No percentage bars. Each technology lists the projects where I used it, so you can check.',
+      bajada: 'Under each technology are the projects where I used it.',
       usadoEn: 'Used in',
       cv: 'Download CV',
     },
     servicios: {
       titulo: 'What I can build for you',
-      bajada: 'If you run a business and need something that works, this is what I do.',
+      bajada: 'I build websites and systems for businesses. Each service links to a real project where I already did it.',
     },
     lab: {
       titulo: 'Lab',
@@ -210,36 +206,30 @@ export const textos = {
     },
     ia: {
       titulo: 'How I use AI',
-      nota: 'no hype',
       bajada:
-        'I use it every day, but not as a "do this for me" machine. It is one more tool: it helps me research, plan and build better. The decisions and the final code are still mine.',
+        'It is one more tool in how I work. I make the decisions, and I review every change before it goes into the project.',
       pasos: [
         {
           titulo: 'Research',
-          detalle:
-            'Compare options before picking a library, read documentation faster and understand errors I had never seen before.',
+          detalle: 'I compare libraries before picking one and work through unfamiliar errors without losing an afternoon to forums.',
         },
         {
           titulo: 'Plan',
-          detalle:
-            'Break a feature into steps, write the spec and catch edge cases before writing any code.',
+          detalle: 'Before writing code, I break the feature into small steps and look for edge cases.',
         },
         {
           titulo: 'Build',
-          detalle:
-            'A second pair of eyes: review code, suggest tests and think out loud when something does not add up. Whatever lands in the repo, I read and understand.',
+          detalle: 'It helps me review code and write tests. I read and understand everything I push to the repo.',
         },
       ],
-      noHago: 'What I do not do:',
-      tachado: 'paste a prompt, copy the answer and ship it without understanding it.',
-      herramientas: 'What I use',
+      herramientas: 'Tools',
     },
     sobreMi: {
       titulo: 'About',
     },
     contacto: {
       titulo: "Let's talk",
-      bajada: 'Internships, a project, or just a comment on something you saw here. I reply fast.',
+      bajada: 'About internships, a project, or something you saw here.',
     },
     caso: {
       volver: 'Back to work',
@@ -247,11 +237,11 @@ export const textos = {
       stack: 'Stack',
       enlaces: 'Links',
       siguiente: 'Next case',
-      privado: "The code is private because it belongs to a client. I'm happy to walk through it in an interview.",
+      privado: 'The code is private because it belongs to a client.',
       verWeb: 'See it live',
     },
     pie: {
-      hecho: 'Handmade with Astro.',
+      hecho: 'Built with Astro.',
       caraB: 'side B',
     },
   },

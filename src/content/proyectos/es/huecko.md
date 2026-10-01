@@ -21,17 +21,17 @@ Quedar con un grupo de amigos siempre termina igual: decenas de mensajes pregunt
 
 ## Qué hace
 
-Cada persona registra su disponibilidad una vez, con bloques recurrentes (las clases de cada semana) y puntuales. La app cruza los horarios del grupo y propone **ventanas donde de verdad coinciden**.
+Cada persona registra su disponibilidad una vez, con bloques recurrentes (las clases de cada semana) y puntuales. La app cruza los horarios del grupo y propone ventanas donde de verdad coinciden.
 
-- **Heatmap semanal** de la disponibilidad del grupo, con un umbral configurable.
-- **Propuestas con votación**: de 2 a 5 ventanas, confirmación, retrasos e imprevistos.
-- **Importación de horarios por foto (OCR)** que entra como borrador para revisarlo.
-- **Panel de administración**, publicado en la versión 0.4.0.
+- Heatmap semanal de la disponibilidad del grupo, con un umbral configurable.
+- Propuestas con votación: de 2 a 5 ventanas, confirmación, retrasos e imprevistos.
+- Importación de horarios por foto (OCR) que entra como borrador para revisarlo.
+- Panel de administración, publicado en la versión 0.4.0.
 - Tus bloques de horario son privados: el grupo solo ve cuándo estás libre.
 
 ## Cómo está hecho
 
-- **Frontend** en React, TypeScript y Vite, desplegado en Vercel. Tiene un modo demo que funciona sin backend.
-- **Backend** en Spring Boot 3 con Java 17, sobre PostgreSQL y MongoDB.
-- **Contrato de API documentado** entre el front y el backend, para que los dos avancen por separado.
-- **Servicio de IA** en construcción para sugerir ventanas de horario a partir de la disponibilidad del grupo.
+- Frontend en React, TypeScript y Vite, desplegado en Vercel. Tiene un modo demo que funciona sin backend.
+- Backend en Spring Boot 3 con Java 17, sobre PostgreSQL y MongoDB.
+- Contrato de API documentado entre el front y el backend, para que los dos avancen por separado.
+- Servicio de IA en construcción para sugerir ventanas de horario a partir de la disponibilidad del grupo.

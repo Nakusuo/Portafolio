@@ -105,20 +105,30 @@ export const servicios: { titulo: Texto; detalle: Texto; prueba?: string }[] = [
 
 export const comoTrabajo: Texto[] = [
   {
-    es: 'Entregas pequeñas y seguidas: ves avances reales cada pocos días, no una sorpresa al final.',
-    en: 'Small, frequent deliveries: you see real progress every few days, not a surprise at the end.',
+    es: 'Entrego por partes pequeñas, así ves avances cada pocos días.',
+    en: 'I deliver in small parts, so you see progress every few days.',
   },
   {
-    es: 'Lo visual lo decides tú. Te muestro opciones antes de cambiar algo que se ve.',
-    en: 'You make the visual calls. I show options before changing anything people will see.',
+    es: 'Lo visual lo decides tú: te muestro opciones antes de cambiar algo que se ve.',
+    en: 'You make the visual calls: I show options before changing anything people will see.',
   },
   {
-    es: 'Nada toca tus datos reales sin una copia de respaldo antes.',
-    en: 'Nothing touches your real data without a backup first.',
+    es: 'Antes de tocar tus datos reales, saco una copia de respaldo.',
+    en: 'Before touching your real data, I take a backup.',
   },
 ];
 
-export const lab: { titulo: Texto; detalle: Texto; enlace?: string; tono: 'oliva' | 'tierra' | 'hueso' }[] = [
+export const lab: {
+  titulo: Texto;
+  detalle: Texto;
+  enlace?: string;
+  tono: 'oliva' | 'tierra' | 'hueso';
+  /** Imagen dentro de public/ y dirección que muestra la ventana. */
+  imagen?: string;
+  direccion?: string;
+  /** Icono de Phosphor cuando no hay imagen. */
+  icono: string;
+}[] = [
   {
     titulo: { es: 'Mi escritorio en KDE Plasma 6', en: 'My KDE Plasma 6 desktop' },
     detalle: {
@@ -127,6 +137,9 @@ export const lab: { titulo: Texto; detalle: Texto; enlace?: string; tono: 'oliva
     },
     enlace: 'https://github.com/Nakusuo/dotfiles',
     tono: 'oliva',
+    imagen: 'lab/kde.webp',
+    direccion: '~/dotfiles',
+    icono: 'desktop-tower',
   },
   {
     titulo: { es: 'Un README que se actualiza solo', en: 'A self-updating README' },
@@ -136,6 +149,9 @@ export const lab: { titulo: Texto; detalle: Texto; enlace?: string; tono: 'oliva
     },
     enlace: 'https://github.com/Nakusuo/Nakusuo',
     tono: 'hueso',
+    imagen: 'lab/banner.svg',
+    direccion: 'github.com/Nakusuo',
+    icono: 'git-branch',
   },
   {
     titulo: { es: 'Ilustración y diseño gráfico', en: 'Illustration and graphic design' },
@@ -144,6 +160,7 @@ export const lab: { titulo: Texto; detalle: Texto; enlace?: string; tono: 'oliva
       en: 'Krita, Illustrator and Photoshop. One-off pieces, identities and covers.',
     },
     tono: 'tierra',
+    icono: 'paint-brush',
   },
   {
     titulo: { es: '3D y motion', en: '3D and motion' },
@@ -152,6 +169,7 @@ export const lab: { titulo: Texto; detalle: Texto; enlace?: string; tono: 'oliva
       en: 'Modelling in Blender and animation in After Effects.',
     },
     tono: 'oliva',
+    icono: 'cube',
   },
 ];
 

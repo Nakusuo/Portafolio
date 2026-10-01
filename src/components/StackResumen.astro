@@ -17,8 +17,8 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
 ---
 
 <section class="seccion contenedor resumen">
-  <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.stackTitulo}</h2>
-  <ul class="stickers" data-revelar>
+  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.stackTitulo}</h2>
+  <ul class="stickers">
     {
       tecnologias.map((tec, i) => (
         <li class={`etiqueta etiqueta--${tonos[i % 4]} grande`} style={`--giro:${((i % 3) - 1) * 2}deg`}>
@@ -28,7 +28,7 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
       ))
     }
   </ul>
-  <a class="boton" href={`${rutaEn(idioma, '/trabajo')}#stack`} data-revelar>
+  <a class="boton" href={`${rutaEn(idioma, '/trabajo')}#stack`}>
     {t.verStack}
     <Icono nombre="arrow-right" tamano={18} />
   </a>
