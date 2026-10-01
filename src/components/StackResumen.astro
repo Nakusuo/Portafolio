@@ -1,6 +1,7 @@
 ---
 // Adelanto del stack en la home: lo de uso diario, con enlace al stack completo.
 import Icono from './Icono.astro';
+import Repegar from './Repegar.astro';
 import { gruposStack } from '../data/contenido';
 import { rutaEn, textos, type Idioma } from '../i18n/ui';
 
@@ -16,18 +17,19 @@ const tecnologias = gruposStack.flatMap((g) => g.tecnologias).filter((tec) => di
 const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
 ---
 
-<section class="seccion contenedor resumen">
+<section class="seccion contenedor resumen" data-grupo-arrastre>
   <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.stackTitulo}</h2>
   <ul class="stickers">
     {
       tecnologias.map((tec, i) => (
-        <li class={`etiqueta etiqueta--${tonos[i % 4]} grande`} style={`--giro:${((i % 3) - 1) * 2}deg`}>
+        <li class={`etiqueta etiqueta--${tonos[i % 4]} grande`} data-arrastrable style={`--giro:${((i % 3) - 1) * 2}deg`}>
           <Icono nombre={tec.icono} set="si" tamano={18} />
           {tec.nombre}
         </li>
       ))
     }
   </ul>
+  <Repegar idioma={idioma} />
   <a class="boton" href={`${rutaEn(idioma, '/trabajo')}#stack`}>
     {t.verStack}
     <Icono nombre="arrow-right" tamano={18} />
@@ -53,6 +55,7 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
   }
 
   .grande {
+    position: relative;
     padding: 9px 14px;
     font-size: 0.85rem;
     text-transform: none;

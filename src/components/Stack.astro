@@ -1,5 +1,6 @@
 ---
 import Icono from './Icono.astro';
+import Repegar from './Repegar.astro';
 import { gruposStack } from '../data/contenido';
 import { perfil } from '../data/perfil';
 import { textos, url, type Idioma } from '../i18n/ui';
@@ -17,10 +18,11 @@ const usadoEn = (tecnologia: string) =>
   proyectos.filter((p) => p.data.stack.includes(tecnologia)).map((p) => p.data.titulo);
 ---
 
-<section id="stack" class="seccion contenedor stack">
+<section id="stack" class="seccion contenedor stack" data-grupo-arrastre>
   <div class="lateral">
     <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
     <p class="bajada">{t.bajada}</p>
+    <Repegar idioma={idioma} />
     {
       perfil.cv && (
         <a class="boton" href={url(`/${perfil.cv}`)} download>
@@ -40,7 +42,7 @@ const usadoEn = (tecnologia: string) =>
             {g.tecnologias.map((tec, ti) => {
               const proyectosTec = usadoEn(tec.nombre);
               return (
-                <li class={`sticker sticker--${gi % 4}`} style={`--giro:${((ti % 3) - 1) * 1.4}deg`}>
+                <li class={`sticker sticker--${gi % 4}`} data-arrastrable style={`--giro:${((ti % 3) - 1) * 1.4}deg`}>
                   <Icono nombre={tec.icono} set="si" tamano={22} class="logo" />
                   <span class="nombre">{tec.nombre}</span>
                   {proyectosTec.length > 0 && (
@@ -105,6 +107,7 @@ const usadoEn = (tecnologia: string) =>
 
   /* Cada tecnología es un sticker pegado un poco torcido */
   .sticker {
+    position: relative;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;

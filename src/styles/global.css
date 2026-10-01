@@ -356,6 +356,50 @@ p {
   border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
 }
 
+/* Etiquetas que se despegan (ver src/scripts/arrastrar.ts) */
+[data-arrastrable] {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+[data-arrastrable].agarrada {
+  z-index: 30;
+  cursor: grabbing;
+  scale: 1.08;
+  rotate: 3deg;
+  box-shadow: 0 14px 28px -10px rgb(26 29 25 / 0.45);
+}
+
+[data-arrastrable].volviendo {
+  transition: translate 0.6s var(--curva);
+}
+
+.repegar {
+  display: inline-flex;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  color: var(--vino);
+  font: 500 1.3rem/1 var(--mano);
+  cursor: pointer;
+}
+
+.repegar:hover {
+  text-decoration: underline;
+}
+
+.movido .repegar {
+  visibility: visible;
+  opacity: 1;
+}
+
 .solo-lectores {
   position: absolute;
   width: 1px;
