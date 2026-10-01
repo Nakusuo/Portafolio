@@ -1,0 +1,304 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Icono from './Icono.astro';
+import Portada from './Portada.astro';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+import { proyectosEn, slugDe, type Proyecto } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyecto: Proyecto;
+}
+
+const { idioma, proyecto } = Astro.props;
+const t = textos[idioma].caso;
+const { titulo, resumen, rol, stack, repos, demo, privado, portada } = proyecto.data;
+const { Content } = await render(proyecto);
+
+const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
+const posicion = destacados.findIndex((p) => p.id === proyecto.id);
+const siguiente = destacados[(posicion + 1) % destacados.length];
+const slug = slugDe(proyecto);
+---
+
+<Base idioma={idioma} ruta={`/proyectos/${slug}`} titulo={titulo} descripcion={resumen} imagen={portada}>
+  <article class="contenedor caso">
+    <a class="volver" href={`${rutaEn(idioma, '/')}#trabajo`}>
+      <Icono nombre="arrow-left" tamano={16} />
+      {t.volver}
+    </a>
+
+    <header class="cabecera">
+      <h1>{titulo}</h1>
+      <p class="resumen">{resumen}</p>
+    </header>
+
+    <div class="portada-caso">
+      <Portada proyecto={proyecto} prioridad />
+    </div>
+
+    <div class="cuerpo">
+      <aside class="ficha">
+        {
+          rol && (
+            <div>
+              <h2>{t.rol}</h2>
+              <p>{rol}</p>
+            </div>
+          )
+        }
+        <div>
+          <h2>{t.stack}</h2>
+          <ul class="chips">{stack.map((s) => <li class="chip">{s}</li>)}</ul>
+        </div>
+        {
+          (demo || repos.length > 0) && (
+            <div>
+              <h2>{t.enlaces}</h2>
+              <ul class="enlaces">
+                {demo && (
+                  <li>
+                    <a href={demo} target="_blank" rel="noopener">
+                      <Icono nombre="arrow-up-right" tamano={16} />
+                      {t.verWeb}
+                    </a>
+                  </li>
+                )}
+                {repos.map((r) => (
+                  <li>
+                    <a href={r.url} target="_blank" rel="noopener">
+                      <Icono nombre="github-logo" tamano={16} />
+                      {r.nombre}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        {
+          privado && (
+            <p class="aviso">
+              <Icono nombre="lock-simple" tamano={16} />
+              {t.privado}
+            </p>
+          )
+        }
+      </aside>
+
+      <div class="prosa">
+        <Content />
+      </div>
+    </div>
+
+    {
+      siguiente && siguiente.id !== proyecto.id && (
+        <a class="siguiente" href={rutaEn(idioma, `/proyectos/${slugDe(siguiente)}`)}>
+          <span>{t.siguiente}</span>
+          <strong>
+            {siguiente.data.titulo}
+            <Icono nombre="arrow-right" tamano={28} />
+          </strong>
+        </a>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .caso {
+    padding-block: 40px 96px;
+  }
+
+  .volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.92rem;
+    color: var(--texto-suave);
+    text-decoration: none;
+  }
+
+  .volver:hover {
+    color: var(--texto);
+  }
+
+  .cabecera {
+    margin: clamp(32px, 6vw, 72px) 0 clamp(28px, 4vw, 48px);
+  }
+
+  h1 {
+    font-size: clamp(3rem, 9vw, 7.5rem);
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  .resumen {
+    margin-top: 22px;
+    max-width: 56ch;
+    font-size: 1.2rem;
+    color: var(--texto-suave);
+  }
+
+  .portada-caso :global(.portada) {
+    aspect-ratio: 16 / 9;
+  }
+
+  .cuerpo {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+    gap: clamp(32px, 6vw, 96px);
+    margin-top: clamp(40px, 6vw, 80px);
+  }
+
+  .ficha {
+    display: grid;
+    align-content: start;
+    gap: 28px;
+    position: sticky;
+    top: 100px;
+    align-self: start;
+  }
+
+  .ficha h2 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--texto-suave);
+    margin-bottom: 10px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enlaces {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enlaces a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .enlaces a:hover {
+    color: var(--acento);
+  }
+
+  .aviso {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: var(--radio);
+    background: var(--superficie);
+    font-size: 0.88rem;
+    color: var(--texto-suave);
+  }
+
+  .aviso :global(svg) {
+    flex: none;
+    margin-top: 3px;
+  }
+
+  .prosa {
+    max-width: 68ch;
+    font-size: 1.1rem;
+  }
+
+  .prosa :global(h2) {
+    margin: 48px 0 16px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+
+  .prosa :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prosa :global(p),
+  .prosa :global(li) {
+    color: var(--texto-suave);
+  }
+
+  .prosa :global(strong) {
+    color: var(--texto);
+    font-weight: 600;
+  }
+
+  .prosa :global(p + p),
+  .prosa :global(p + ul) {
+    margin-top: 16px;
+  }
+
+  .prosa :global(ul) {
+    display: grid;
+    gap: 10px;
+    padding-left: 1.2em;
+  }
+
+  .prosa :global(li::marker) {
+    color: var(--acento);
+  }
+
+  .prosa :global(code) {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: var(--superficie);
+    font-family: var(--mono);
+    font-size: 0.86em;
+  }
+
+  .siguiente {
+    display: grid;
+    gap: 8px;
+    margin-top: clamp(64px, 10vw, 128px);
+    padding-top: 32px;
+    border-top: 1px solid var(--linea);
+    text-decoration: none;
+  }
+
+  .siguiente span {
+    color: var(--texto-suave);
+  }
+
+  .siguiente strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .siguiente :global(svg) {
+    color: var(--acento);
+    transition: transform 0.5s var(--curva);
+  }
+
+  .siguiente:hover :global(svg) {
+    transform: translateX(10px);
+  }
+
+  @media (max-width: 860px) {
+    .cuerpo {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ficha {
+      position: static;
+    }
+  }
+</style>

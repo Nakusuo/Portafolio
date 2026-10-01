@@ -1,0 +1,108 @@
+---
+import Icono from './Icono.astro';
+import { lab } from '../data/contenido';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].lab;
+---
+
+<section id="lab" class="seccion lab">
+  <div class="contenedor">
+    <h2 class="titulo-seccion" data-revelar><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="bajada" data-revelar>{t.bajada}</p>
+  </div>
+
+  <ul class="tira" tabindex="0" aria-label={t.titulo}>
+    {
+      lab.map((item, i) => {
+        const Etiqueta = item.enlace ? 'a' : 'div';
+        return (
+          <li class:list={['pieza', item.tono]} data-revelar style={`--i:${i}`}>
+            <Etiqueta
+              class="cuerpo"
+              {...(item.enlace ? { href: item.enlace, target: '_blank', rel: 'noopener' } : {})}
+            >
+              <h3>{item.titulo[idioma]}</h3>
+              <p>{item.detalle[idioma]}</p>
+              {item.enlace && <Icono nombre="arrow-up-right" tamano={22} class="flecha" />}
+            </Etiqueta>
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  .tira {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(280px, 26%);
+    gap: 16px;
+    margin: clamp(36px, 5vw, 56px) 0 0;
+    padding: 4px max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))) 20px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter)));
+    scrollbar-width: thin;
+  }
+
+  .pieza {
+    scroll-snap-align: start;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radio);
+    overflow: hidden;
+  }
+
+  .cuerpo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 10px;
+    height: 100%;
+    padding: 26px;
+    text-decoration: none;
+    transition: transform 0.6s var(--curva);
+  }
+
+  a.cuerpo:hover {
+    transform: scale(0.985);
+  }
+
+  h3 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    opacity: 0.82;
+  }
+
+  .cuerpo :global(.flecha) {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
+
+  .oliva {
+    background: #4a5f3a;
+    color: #e6ead9;
+  }
+
+  .tierra {
+    background: #a9856b;
+    color: #1c1f1c;
+  }
+
+  .hueso {
+    background: #c9c2b0;
+    color: #1c1f1c;
+  }
+</style>

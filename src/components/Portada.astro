@@ -1,0 +1,88 @@
+---
+// Portada de un proyecto: la captura si existe; si no, una portada tipográfica con su color.
+import { url } from '../i18n/ui';
+import type { Proyecto } from '../lib/proyectos';
+
+interface Props {
+  proyecto: Proyecto;
+  prioridad?: boolean;
+}
+
+const { proyecto, prioridad = false } = Astro.props;
+const { titulo, portada, tono, stack } = proyecto.data;
+---
+
+{
+  portada ? (
+    <div class="portada">
+      <img
+        src={url(`/${portada}`)}
+        alt={titulo}
+        width="1440"
+        height="900"
+        loading={prioridad ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </div>
+  ) : (
+    <div class:list={['portada', 'tipografica', tono]} aria-hidden="true">
+      <span class="nombre">{titulo}</span>
+      <span class="pila">{stack.join('  /  ')}</span>
+    </div>
+  )
+}
+
+<style>
+  .portada {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radio);
+    background: var(--superficie);
+  }
+
+  .portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 1.1s var(--curva);
+  }
+
+  .tipografica {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(20px, 3vw, 36px);
+    transition: transform 1.1s var(--curva);
+  }
+
+  .nombre {
+    font-size: clamp(2.4rem, 6vw, 5.2rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+  }
+
+  .pila {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    opacity: 0.75;
+  }
+
+  /* Tonos tomados de la paleta del README */
+  .oliva {
+    background: #4a5f3a;
+    color: #e6ead9;
+  }
+
+  .tierra {
+    background: #a9856b;
+    color: #1c1f1c;
+  }
+
+  .hueso {
+    background: #c9c2b0;
+    color: #1c1f1c;
+  }
+</style>

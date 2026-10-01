@@ -1,0 +1,144 @@
+---
+import Icono from './Icono.astro';
+import { perfil } from '../data/perfil';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].pie;
+const anio = new Date().getFullYear();
+
+const pistas =
+  idioma === 'es'
+    ? ['commits a las 2am', '"arreglo esto mañana" (no lo arregló)', 'el CSS que sí funcionó a la primera', 'ruido blanco']
+    : ['commits at 2am', '"I\'ll fix this tomorrow" (didn\'t)', 'the CSS that worked on the first try', 'white noise'];
+---
+
+<footer class="pie">
+  <div class="contenedor fila">
+    <p class="firma">© {anio} {perfil.nombre}. {t.hecho}</p>
+
+    <ul class="redes">
+      <li>
+        <a href={perfil.github} target="_blank" rel="noopener" aria-label="GitHub">
+          <Icono nombre="github-logo" tamano={22} />
+        </a>
+      </li>
+      <li>
+        <a href={perfil.instagram} target="_blank" rel="noopener" aria-label="Instagram">
+          <Icono nombre="instagram-logo" tamano={22} />
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <details class="contenedor cara-b">
+    <summary>&#9656; {t.caraB}</summary>
+    <div class="cinta">
+      <p class="rotulo">{idioma === 'es' ? 'cinta encontrada en una carpeta sin nombre' : 'tape found in an unnamed folder'}</p>
+      <ol start="5">
+        {pistas.map((p) => <li>{p}</li>)}
+      </ol>
+      <p class="despedida">
+        {idioma === 'es' ? 'Si estás leyendo esto, abriste el desplegable. Bien hecho.' : 'If you are reading this, you opened the dropdown. Well done.'}
+        <span aria-hidden="true">|-/</span>
+      </p>
+    </div>
+  </details>
+</footer>
+
+<style>
+  .pie {
+    border-top: 1px solid var(--linea);
+    padding-block: 32px 40px;
+    color: var(--texto-suave);
+    font-size: 0.92rem;
+  }
+
+  .fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .redes {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .redes a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .redes a:hover {
+    color: var(--texto);
+    background: var(--superficie);
+  }
+
+  .cara-b {
+    margin-top: 20px;
+  }
+
+  .cara-b summary {
+    width: fit-content;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+    cursor: pointer;
+    list-style: none;
+    opacity: 0.6;
+  }
+
+  .cara-b summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .cara-b summary:hover {
+    color: var(--vino);
+    opacity: 1;
+  }
+
+  .cinta {
+    margin-top: 16px;
+    max-width: 460px;
+    padding: 20px 24px;
+    border: 1px solid color-mix(in srgb, var(--vino) 45%, transparent);
+    border-radius: var(--radio);
+    font-family: var(--pixel);
+    font-size: 1.3rem;
+    line-height: 1.3;
+    color: var(--texto);
+  }
+
+  .rotulo {
+    color: var(--vino);
+  }
+
+  .cinta ol {
+    margin: 12px 0;
+    padding-left: 2.2em;
+  }
+
+  .cinta li::marker {
+    color: var(--vino);
+  }
+
+  .despedida {
+    color: var(--texto-suave);
+  }
+</style>

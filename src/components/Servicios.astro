@@ -1,0 +1,132 @@
+---
+import Icono from './Icono.astro';
+import { comoTrabajo, servicios } from '../data/contenido';
+import { enlaceContacto } from '../data/perfil';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+import type { Proyecto } from '../lib/proyectos';
+import { slugDe } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+}
+
+const { idioma, proyectos } = Astro.props;
+const t = textos[idioma];
+const ejemplo = idioma === 'es' ? 'Ejemplo' : 'Example';
+const tituloDe = (slug: string) => proyectos.find((p) => slugDe(p) === slug)?.data.titulo;
+---
+
+<section id="servicios" class="seccion contenedor">
+  <h2 class="titulo-seccion" data-revelar>{t.servicios.titulo}</h2>
+  <p class="bajada" data-revelar>{t.servicios.bajada}</p>
+
+  <ol class="servicios">
+    {
+      servicios.map((s, i) => (
+        <li data-revelar style={`--i:${i}`}>
+          <h3>{s.titulo[idioma]}</h3>
+          <p>{s.detalle[idioma]}</p>
+          {s.prueba && tituloDe(s.prueba) && (
+            <a href={rutaEn(idioma, `/proyectos/${s.prueba}`)}>
+              {ejemplo}: {tituloDe(s.prueba)}
+              <Icono nombre="arrow-right" tamano={16} />
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="como" data-revelar>
+    <h3>{idioma === 'es' ? 'Cómo trabajo' : 'How I work'}</h3>
+    <ul>
+      {comoTrabajo.map((c) => <li>{c[idioma]}</li>)}
+    </ul>
+    <a class="boton boton--lleno" href={enlaceContacto} target="_blank" rel="noopener">{t.nav.contacto}</a>
+  </div>
+</section>
+
+<style>
+  .servicios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(24px, 4vw, 64px);
+    margin: clamp(36px, 5vw, 64px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .servicios li {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 32px 0;
+    border-top: 1px solid var(--linea);
+  }
+
+  .servicios h3 {
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  }
+
+  .servicios p {
+    max-width: 46ch;
+    color: var(--texto-suave);
+  }
+
+  .servicios a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--acento);
+    text-decoration: none;
+  }
+
+  .servicios a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .como {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+    align-items: center;
+    gap: 24px clamp(24px, 4vw, 56px);
+    margin-top: 40px;
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--radio);
+    background: var(--superficie);
+  }
+
+  .como h3 {
+    font-size: 1.5rem;
+  }
+
+  .como ul {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding-left: 1.1em;
+    color: var(--texto-suave);
+  }
+
+  .como li::marker {
+    content: '> ';
+    font-family: var(--pixel);
+    color: var(--acento);
+  }
+
+  @media (max-width: 860px) {
+    .servicios,
+    .como {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .como .boton {
+      width: fit-content;
+    }
+  }
+</style>

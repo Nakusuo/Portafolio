@@ -1,0 +1,86 @@
+---
+import Icono from './Icono.astro';
+import { enlaceContacto, perfil } from '../data/perfil';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma];
+
+const canales = [
+  perfil.correo && { icono: 'envelope-simple', texto: perfil.correo, href: `mailto:${perfil.correo}` },
+  { icono: 'github-logo', texto: `github.com/${perfil.usuarioGithub}`, href: perfil.github },
+  { icono: 'instagram-logo', texto: perfil.instagramUsuario, href: perfil.instagram },
+].filter(Boolean) as { icono: string; texto: string; href: string }[];
+---
+
+<section id="contacto" class="seccion contenedor contacto">
+  <h2 data-revelar>{t.contacto.titulo}</h2>
+  <p class="bajada" data-revelar>{t.contacto.bajada}</p>
+  <a class="boton boton--lleno grande" href={enlaceContacto} target="_blank" rel="noopener" data-revelar>
+    {t.nav.contacto}
+    <Icono nombre="arrow-up-right" tamano={20} />
+  </a>
+
+  <ul class="canales" data-revelar>
+    {
+      canales.map((c) => (
+        <li>
+          <a href={c.href} target="_blank" rel="noopener">
+            <Icono nombre={c.icono} tamano={20} />
+            {c.texto}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .contacto {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: clamp(3.4rem, 11vw, 9rem);
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+  }
+
+  .bajada {
+    margin-inline: auto;
+  }
+
+  .grande {
+    margin-top: 36px;
+    padding: 18px 30px;
+    font-size: 1.05rem;
+  }
+
+  .canales {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 28px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .canales a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-suave);
+    text-decoration: none;
+  }
+
+  .canales a:hover {
+    color: var(--texto);
+  }
+</style>
