@@ -184,6 +184,14 @@ export const sobreMi: Texto[] = [
   },
 ];
 
+/** Principios cortos, como notas pegadas en Sobre mí. */
+export const principios: Texto[] = [
+  { es: 'Lo que subo al repo, lo entiendo.', en: 'If I push it, I understand it.' },
+  { es: 'Muchas entregas chicas le ganan a una grande.', en: 'Many small releases beat one big one.' },
+  { es: 'Si no se usa bien en el celular, no está terminado.', en: "If it doesn't work well on a phone, it isn't done." },
+  { es: 'Un formulario corto le gana a uno completo.', en: 'A short form beats a complete one.' },
+];
+
 /** Las canciones de la cara B (vienen del README de GitHub). */
 export const pistasCaraB: Record<Idioma, string[]> = {
   es: ['commits a las 2am', '"arreglo esto mañana" (no lo arregló)', 'el CSS que sí funcionó a la primera', 'ruido blanco'],
