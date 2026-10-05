@@ -117,6 +117,12 @@ export const textos = {
       titulo: 'Principios',
       bajada: 'Lo que me repito cuando trabajo.',
     },
+    trayectoria: {
+      titulo: 'Trayectoria',
+      experiencia: 'Experiencia',
+      formacion: 'Formación',
+      certificados: 'Certificados',
+    },
     contacto: {
       titulo: '¿Hablamos?',
       bajada: 'Para prácticas, un proyecto o un comentario sobre algo que viste aquí.',
@@ -234,6 +240,12 @@ export const textos = {
     principios: {
       titulo: 'Principles',
       bajada: 'What I keep telling myself while I work.',
+    },
+    trayectoria: {
+      titulo: 'Path so far',
+      experiencia: 'Experience',
+      formacion: 'Education',
+      certificados: 'Certificates',
     },
     contacto: {
       titulo: "Let's talk",

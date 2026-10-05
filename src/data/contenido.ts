@@ -192,6 +192,102 @@ export const principios: Texto[] = [
   { es: 'Un formulario corto le gana a uno completo.', en: 'A short form beats a complete one.' },
 ];
 
+export interface Paso {
+  lugar: string;
+  rol: Texto;
+  fechas: Texto;
+  detalle?: Texto;
+}
+
+/** Experiencia, del más reciente al más antiguo (sale del CV). */
+export const experiencia: Paso[] = [
+  {
+    lugar: 'Central · panel de tres tiendas',
+    rol: { es: 'Desarrollo y mantenimiento', en: 'Development and maintenance' },
+    fechas: { es: 'Hoy', en: 'Now' },
+    detalle: {
+      es: 'Panel en producción para pedidos, envíos y stock, más la tienda web de una de las marcas.',
+      en: 'Production dashboard for orders, shipping and stock, plus the online store of one of the brands.',
+    },
+  },
+  {
+    lugar: 'Policía Nacional del Perú · UNITIC',
+    rol: { es: 'Auxiliar administrativo, Unidad de Tecnología', en: 'Administrative assistant, IT Unit' },
+    fechas: { es: 'nov. 2024 – mar. 2026', en: 'Nov 2024 – Mar 2026' },
+    detalle: {
+      es: 'Soporte técnico a los equipos del área: diagnóstico, reparación e instalación de software. Apoyo en capacitaciones internas.',
+      en: 'Tech support for the unit: diagnosis, repair and software installs. Helped run internal trainings.',
+    },
+  },
+  {
+    lugar: 'CMM Ingenieros Constructora y Consultoría',
+    rol: { es: 'Asistente administrativa', en: 'Administrative assistant' },
+    fechas: { es: 'nov. 2023 – ago. 2024', en: 'Nov 2023 – Aug 2024' },
+    detalle: {
+      es: 'Registros y reportes para gerencia, seguimiento de trámites y atención a clientes.',
+      en: 'Records and reports for management, paperwork follow-up and client support.',
+    },
+  },
+];
+
+export const formacion: Paso[] = [
+  {
+    lugar: 'Universidad Tecnológica del Perú (UTP)',
+    rol: { es: 'Ingeniería de Software · 8.º ciclo', en: 'Software Engineering · 8th term' },
+    fechas: { es: '2023 – hoy', en: '2023 – now' },
+  },
+  {
+    lugar: 'Británico',
+    rol: { es: 'Inglés · Advanced Phase', en: 'English · Advanced Phase' },
+    fechas: { es: '2023', en: '2023' },
+  },
+];
+
+/** Certificados agrupados por quien los emite. */
+export const certificados: { emisor: string; fechas: string; tono: 'oliva' | 'vino' | 'tierra' | 'hueso'; cursos: Texto[] }[] = [
+  {
+    emisor: 'Cisco Networking Academy · UTP',
+    fechas: '2025',
+    tono: 'vino',
+    cursos: [
+      { es: 'Introducción a la ciberseguridad', en: 'Introduction to Cybersecurity' },
+      { es: 'CCNA: Introducción a las redes', en: 'CCNA: Introduction to Networks' },
+      { es: 'Seguridad de terminales', en: 'Endpoint Security' },
+      { es: 'Defensa de la red', en: 'Network Defense' },
+      { es: 'Gestión de amenazas cibernéticas', en: 'Cyber Threat Management' },
+    ],
+  },
+  {
+    emisor: 'UTP · Ingeniería de Software',
+    fechas: '2025 – 2026',
+    tono: 'oliva',
+    cursos: [
+      { es: 'Soporte técnico de computadoras', en: 'Computer Technical Support' },
+      { es: 'Excel intermedio', en: 'Intermediate Excel' },
+      { es: 'Tutora STEM de Física', en: 'STEM Physics Tutor' },
+      { es: 'Tutora STEM de Matemática', en: 'STEM Math Tutor' },
+    ],
+  },
+  {
+    emisor: 'UNI · Oficina de TI',
+    fechas: '2024',
+    tono: 'tierra',
+    cursos: [{ es: 'Programación en Python básico · nota 18/20', en: 'Basic Python Programming · grade 18/20' }],
+  },
+  {
+    emisor: 'Lima Educa · Perú Digital',
+    fechas: '2024',
+    tono: 'hueso',
+    cursos: [
+      { es: 'SQL Server Fundamentals', en: 'SQL Server Fundamentals' },
+      { es: 'Power BI', en: 'Power BI' },
+      { es: 'Tablas dinámicas y dashboards', en: 'Pivot tables and dashboards' },
+      { es: 'Excel, Word y PowerPoint', en: 'Excel, Word and PowerPoint' },
+      { es: 'Soporte técnico remoto', en: 'Remote technical support' },
+    ],
+  },
+];
+
 /** Las canciones de la cara B (vienen del README de GitHub). */
 export const pistasCaraB: Record<Idioma, string[]> = {
   es: ['commits a las 2am', '"arreglo esto mañana" (no lo arregló)', 'el CSS que sí funcionó a la primera', 'ruido blanco'],
