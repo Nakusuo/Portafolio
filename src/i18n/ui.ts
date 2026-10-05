@@ -33,7 +33,7 @@ export const textos = {
     },
     hero: {
       miNombre: 'mi nombre es',
-      etiquetas: ['hago cosas', 'Ing. de Software · 3er año', 'frontend + backend', 'también diseño'],
+      etiquetas: ['hago cosas', 'Ing. de Software · 4.º año', 'frontend + backend', 'también diseño'],
       estado: 'Abierto a prácticas y proyectos',
       titulo: 'Diseño interfaces y construyo lo que hay detrás.',
       bajada:
@@ -153,7 +153,7 @@ export const textos = {
     },
     hero: {
       miNombre: 'my name is',
-      etiquetas: ['I make things', 'Software Eng. · 3rd year', 'frontend + backend', 'design too'],
+      etiquetas: ['I make things', 'Software Eng. · 4th year', 'frontend + backend', 'design too'],
       estado: 'Open to internships and projects',
       titulo: 'I design interfaces and build what runs behind them.',
       bajada:
