@@ -1,0 +1,259 @@
+---
+// Navegar dibujando: trazas un símbolo en la hoja y el sitio te lleva a esa sección.
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const es = idioma === 'es';
+const nav = textos[idioma].nav;
+
+// Cada símbolo con su dibujo para la leyenda (viewBox 0 0 40 40)
+const simbolos = [
+  { forma: 'circulo', destino: rutaEn(idioma, '/sobre-mi'), nombre: nav.sobreMi, d: 'M20 5a15 15 0 1 1 0 30a15 15 0 1 1 0-30' },
+  { forma: 'cuadrado', destino: rutaEn(idioma, '/trabajo'), nombre: nav.trabajo, d: 'M6 6h28v28H6z' },
+  { forma: 'triangulo', destino: rutaEn(idioma, '/lab'), nombre: nav.lab, d: 'M20 5L36 34H4z' },
+  { forma: 'check', destino: rutaEn(idioma, '/servicios'), nombre: nav.servicios, d: 'M5 21l10 11L36 7' },
+  { forma: 'zigzag', destino: rutaEn(idioma, '/#contacto'), nombre: nav.contacto, d: 'M5 7h30L5 33h30' },
+];
+
+const t = es
+  ? {
+      titulo: 'Dibuja para ir',
+      bajada: 'Traza uno de estos símbolos en la hoja, de un solo trazo, y te llevo a esa sección.',
+      espera: 'dibuja aquí',
+      noSe: 'No lo reconocí. Intenta de un solo trazo.',
+      vas: 'Parece',
+      borrar: 'Borrar',
+    }
+  : {
+      titulo: 'Draw to go',
+      bajada: 'Trace one of these symbols on the sheet in a single stroke and I’ll take you there.',
+      espera: 'draw here',
+      noSe: "I didn't get that. Try a single stroke.",
+      vas: 'Looks like',
+      borrar: 'Clear',
+    };
+---
+
+<section id="dibujar" class="seccion contenedor dibujar" data-no-se={t.noSe} data-vas={t.vas}>
+  <div class="texto">
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="bajada">{t.bajada}</p>
+
+    <ul class="leyenda">
+      {
+        simbolos.map((s) => (
+          <li>
+            <a href={s.destino} data-forma={s.forma}>
+              <svg viewBox="0 0 40 40" aria-hidden="true">
+                <path d={s.d} />
+              </svg>
+              <span>{s.nombre}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <figure class="hoja cinta" style="--giro-cinta:-2deg">
+    <canvas aria-label={t.bajada}></canvas>
+    <span class="espera nota" aria-hidden="true">{t.espera}</span>
+    <figcaption>
+      <output aria-live="polite"></output>
+      <button type="button" class="borrar">{t.borrar}</button>
+    </figcaption>
+  </figure>
+</section>
+
+<script>
+  import { reconocer, type Punto } from '../scripts/trazos';
+
+  const seccion = document.querySelector<HTMLElement>('#dibujar');
+  const lienzo = seccion?.querySelector('canvas');
+  const ctx = lienzo?.getContext('2d');
+
+  if (seccion && lienzo && ctx) {
+    const salida = seccion.querySelector('output')!;
+    let trazo: Punto[] = [];
+    let dibujando = false;
+
+    const ajustar = () => {
+      const r = lienzo.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      lienzo.width = r.width * dpr;
+      lienzo.height = r.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = getComputedStyle(seccion).getPropertyValue('--texto').trim() || '#1a1d19';
+    };
+
+    const borrar = () => {
+      ctx.clearRect(0, 0, lienzo.width, lienzo.height);
+      seccion.classList.remove('con-trazo');
+      seccion.querySelectorAll('.elegido').forEach((e) => e.classList.remove('elegido'));
+      salida.textContent = '';
+    };
+
+    const punto = (e: PointerEvent): Punto => {
+      const r = lienzo.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    };
+
+    lienzo.addEventListener('pointerdown', (e) => {
+      borrar();
+      ajustar();
+      dibujando = true;
+      lienzo.setPointerCapture(e.pointerId);
+      seccion.classList.add('con-trazo');
+      trazo = [punto(e)];
+      ctx.beginPath();
+      ctx.moveTo(trazo[0].x, trazo[0].y);
+    });
+
+    lienzo.addEventListener('pointermove', (e) => {
+      if (!dibujando) return;
+      const p = punto(e);
+      trazo.push(p);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+
+    const terminar = () => {
+      if (!dibujando) return;
+      dibujando = false;
+      const r = reconocer(trazo);
+      if (!r || r.puntuacion < 0.78) {
+        salida.textContent = seccion.dataset.noSe ?? '';
+        return;
+      }
+      const enlace = seccion.querySelector<HTMLAnchorElement>(`[data-forma="${r.forma}"]`)!;
+      enlace.classList.add('elegido');
+      salida.textContent = `${seccion.dataset.vas}: ${enlace.textContent?.trim()} →`;
+      setTimeout(() => (window.location.href = enlace.href), 700);
+    };
+
+    lienzo.addEventListener('pointerup', terminar);
+    lienzo.addEventListener('pointercancel', terminar);
+    seccion.querySelector('.borrar')!.addEventListener('click', borrar);
+  }
+</script>
+
+<style>
+  .dibujar {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+
+  .leyenda {
+    display: grid;
+    gap: 6px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .leyenda a {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 10px 6px 6px;
+    border-radius: var(--radio);
+    color: var(--texto);
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .leyenda a:hover,
+  .leyenda a.elegido {
+    background: var(--superficie);
+  }
+
+  .leyenda a.elegido svg {
+    stroke: var(--acento);
+  }
+
+  .leyenda svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: var(--texto-suave);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .leyenda span {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+  }
+
+  /* Hoja de cuaderno con renglones */
+  .hoja {
+    position: relative;
+    margin: 0;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 31px, var(--hoja-linea) 31px 32px),
+      var(--hoja);
+    box-shadow: var(--sombra);
+    transform: rotate(-0.6deg);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  .espera {
+    position: absolute;
+    inset: 0 0 48px;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .con-trazo .espera {
+    opacity: 0;
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-top: 1px solid var(--linea);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+  }
+
+  .borrar {
+    border: 0;
+    background: none;
+    color: var(--texto-suave);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  @media (max-width: 860px) {
+    .dibujar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
