@@ -175,8 +175,8 @@ export const lab: {
 
 export const sobreMi: Texto[] = [
   {
-    es: 'Estoy en tercer año de Ingeniería de Software. Me muevo entre el diseño y el código: me importa tanto que la arquitectura tenga sentido como que la interfaz se sienta bien de usar.',
-    en: "I'm in my third year of Software Engineering. I move between design and code: I care as much about architecture that makes sense as about an interface that feels good to use.",
+    es: 'Estoy en cuarto año de Ingeniería de Software. Me muevo entre el diseño y el código: me importa tanto que la arquitectura tenga sentido como que la interfaz se sienta bien de usar.',
+    en: "I'm in my fourth year of Software Engineering. I move between design and code: I care as much about architecture that makes sense as about an interface that feels good to use.",
   },
   {
     es: 'Hoy mantengo en producción el panel que usan tres tiendas de regalos para llevar pedidos, envíos y stock, y la tienda web de una de ellas. En paralelo construyo Huecko, una app para coordinar planes entre amigos.',
