@@ -1,0 +1,117 @@
+---
+import { principios } from '../data/contenido';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].principios;
+
+// Cada nota con su color de sticker y su propio giro, como pegadas a mano
+const tonos = ['hueso', 'oliva', 'tierra', 'vino'] as const;
+const giros = ['-2deg', '1.5deg', '-1deg', '2.5deg'];
+---
+
+<section id="principios" class="seccion contenedor">
+  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <p class="bajada">{t.bajada}</p>
+
+  <ol class="notas">
+    {
+      principios.map((p, i) => (
+        <li
+          class:list={['postit', 'cinta', `postit--${tonos[i % tonos.length]}`]}
+          style={`--giro:${giros[i % giros.length]}; --giro-cinta:${i % 2 ? 4 : -3}deg; --i:${i}`}
+          data-revelar
+        >
+          <span class="numero">{String(i + 1).padStart(2, '0')}</span>
+          <p>{p[idioma]}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .notas {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(28px, 4vw, 44px);
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .postit {
+    position: relative;
+    min-height: 190px;
+    padding: 30px 22px 24px;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    transform: rotate(var(--giro));
+    transition: transform 0.4s var(--curva);
+  }
+
+  .postit:hover {
+    transform: rotate(0deg) translateY(-4px);
+  }
+
+  .postit--hueso {
+    background: var(--hueso);
+    color: #1c1f1c;
+  }
+
+  .postit--oliva {
+    background: var(--acento);
+    color: var(--acento-texto);
+  }
+
+  .postit--tierra {
+    background: var(--tierra);
+    color: #1c1f1c;
+  }
+
+  .postit--vino {
+    background: var(--vino);
+    color: #f6ecee;
+  }
+
+  .numero {
+    font-family: var(--pixel);
+    font-size: 1.5rem;
+    line-height: 1;
+    opacity: 0.7;
+  }
+
+  .postit p {
+    margin-top: 12px;
+    font-family: var(--mano);
+    font-size: 1.3rem;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  @media (max-width: 960px) {
+    .notas {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 520px) {
+    .notas {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .postit {
+      min-height: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .postit {
+      transition: none;
+    }
+  }
+</style>
