@@ -10,9 +10,9 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@fontsource-variable/caveat": "^5.3.0",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource-variable/shantell-sans": "^5.3.0",
     "@fontsource/vt323": "^5.3.0",
     "@iconify-json/ph": "^1.2.2",
     "@iconify-json/simple-icons": "^1.2.98",

@@ -65,11 +65,19 @@ const columnas: { titulo: string; pasos: Paso[] }[] = [
     margin-top: 40px;
   }
 
+  /* Rótulo de columna, en la voz de terminal del resto del sitio */
   .subtitulo {
-    font-family: var(--mano);
-    font-size: 1.9rem;
-    font-weight: 600;
-    color: var(--vino);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+  }
+
+  .subtitulo::before {
+    content: '// ';
+    color: var(--acento);
   }
 
   .subtitulo--aparte {
