@@ -1,0 +1,181 @@
+---
+import { certificados, experiencia, formacion, type Paso } from '../data/contenido';
+import { textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma].trayectoria;
+const columnas: { titulo: string; pasos: Paso[] }[] = [
+  { titulo: t.experiencia, pasos: experiencia },
+  { titulo: t.formacion, pasos: formacion },
+];
+---
+
+<section id="trayectoria" class="seccion contenedor">
+  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+
+  <div class="columnas">
+    {
+      columnas.map((c) => (
+        <div>
+          <h3 class="subtitulo">{c.titulo}</h3>
+          <ol class="linea-tiempo">
+            {c.pasos.map((p, i) => (
+              <li class="paso" data-revelar style={`--i:${i}`}>
+                <span class="fechas">{p.fechas[idioma]}</span>
+                <h4>{p.lugar}</h4>
+                <p class="rol">{p.rol[idioma]}</p>
+                {p.detalle && <p class="detalle">{p.detalle[idioma]}</p>}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+
+  <h3 class="subtitulo subtitulo--aparte">{t.certificados}</h3>
+  <ul class="fichas">
+    {
+      certificados.map((c, i) => (
+        <li class="ficha" data-revelar style={`--i:${i}`}>
+          <span class={`etiqueta etiqueta--${c.tono}`} style={`--giro:${i % 2 ? 1.5 : -2}deg`}>
+            {c.emisor}
+          </span>
+          <span class="anio">{c.fechas}</span>
+          <ul class="cursos">
+            {c.cursos.map((curso) => (
+              <li>{curso[idioma]}</li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .columnas {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: clamp(32px, 6vw, 80px);
+    margin-top: 40px;
+  }
+
+  .subtitulo {
+    font-family: var(--mano);
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--vino);
+  }
+
+  .subtitulo--aparte {
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+
+  .linea-tiempo {
+    margin: 18px 0 0;
+    padding: 0 0 0 22px;
+    list-style: none;
+    border-left: 2px dashed var(--linea);
+  }
+
+  .paso {
+    position: relative;
+    padding-bottom: 30px;
+  }
+
+  /* Punto sobre la línea, como marcado con plumón */
+  .paso::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--acento);
+    box-shadow: 0 0 0 4px var(--fondo);
+  }
+
+  .fechas,
+  .anio {
+    font-family: var(--pixel);
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--acento);
+  }
+
+  h4 {
+    margin-top: 6px;
+    font-size: 1.15rem;
+  }
+
+  .rol {
+    margin-top: 2px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+  }
+
+  .detalle {
+    margin-top: 8px;
+    max-width: 52ch;
+    color: var(--texto-suave);
+  }
+
+  .fichas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Ficha de cartulina con renglones */
+  .ficha {
+    position: relative;
+    padding: 18px 20px 20px;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 27px, var(--hoja-linea) 27px 28px) 0 54px / 100% calc(100% - 54px) no-repeat,
+      var(--hoja);
+    box-shadow: var(--sombra);
+  }
+
+  /* El nombre del emisor puede ser largo: en el celular se parte en dos líneas */
+  .ficha .etiqueta {
+    max-width: calc(100% - 9ch);
+    white-space: normal;
+  }
+
+  .anio {
+    float: right;
+    margin-top: 4px;
+  }
+
+  .cursos {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    line-height: 28px;
+    font-size: 0.95rem;
+  }
+
+  .cursos li::before {
+    content: '✓ ';
+    color: var(--acento);
+  }
+
+  @media (max-width: 860px) {
+    .columnas,
+    .fichas {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
