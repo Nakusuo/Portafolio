@@ -1,6 +1,6 @@
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/geist-mono';
-@import '@fontsource-variable/caveat';
+@import '@fontsource-variable/shantell-sans';
 @import '@fontsource/vt323';
 
 /*
@@ -37,7 +37,7 @@
   --fuente: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
   --mono: 'Geist Mono Variable', ui-monospace, monospace;
   --pixel: 'VT323', ui-monospace, monospace;
-  --mano: 'Caveat Variable', 'Segoe Print', cursive;
+  --mano: 'Shantell Sans Variable', 'Segoe Print', sans-serif;
   --curva: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
@@ -200,7 +200,7 @@ p {
 /* Texto escrito a mano */
 .nota {
   font-family: var(--mano);
-  font-size: 1.45rem;
+  font-size: 1.05rem;
   line-height: 1.15;
   font-weight: 500;
   color: var(--texto-suave);
@@ -223,7 +223,7 @@ p {
   width: max-content;
   max-width: 16ch;
   font-family: var(--mano);
-  font-size: 1.4rem;
+  font-size: 1.05rem;
   font-weight: 500;
   line-height: 1.05;
   color: var(--vino);
@@ -406,7 +406,7 @@ p {
   border: 0;
   background: none;
   color: var(--vino);
-  font: 500 1.3rem/1 var(--mano);
+  font: 500 1rem/1.1 var(--mano);
   cursor: pointer;
 }
 
