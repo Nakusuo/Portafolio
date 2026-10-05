@@ -113,6 +113,10 @@ export const textos = {
     sobreMi: {
       titulo: 'Sobre mí',
     },
+    principios: {
+      titulo: 'Principios',
+      bajada: 'Lo que me repito cuando trabajo.',
+    },
     contacto: {
       titulo: '¿Hablamos?',
       bajada: 'Para prácticas, un proyecto o un comentario sobre algo que viste aquí.',
@@ -226,6 +230,10 @@ export const textos = {
     },
     sobreMi: {
       titulo: 'About',
+    },
+    principios: {
+      titulo: 'Principles',
+      bajada: 'What I keep telling myself while I work.',
     },
     contacto: {
       titulo: "Let's talk",
