@@ -1,0 +1,298 @@
+---
+// Teclado "PORTAFOLIO": cada tecla escribe un fun fact en la pantallita.
+// Se puede tocar o teclear con el teclado de verdad mientras la sección está a la vista.
+import { funFacts } from '../data/contenido';
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const es = idioma === 'es';
+
+const t = es
+  ? {
+      titulo: 'Teclea mi portafolio',
+      bajada: 'Cada tecla guarda un dato sobre mí. Tócalas o escríbelas con tu teclado.',
+      espera: 'presiona una tecla',
+      teclas: 'Teclas con fun facts',
+    }
+  : {
+      titulo: 'Type my portfolio',
+      bajada: 'Every key hides a fact about me. Tap them or type them on your keyboard.',
+      espera: 'press a key',
+      teclas: 'Keys with fun facts',
+    };
+---
+
+<section id="teclado" class="seccion contenedor teclado" data-total={funFacts.length}>
+  <div class="texto">
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <p class="bajada">{t.bajada}</p>
+  </div>
+
+  <div class="aparato">
+    <div class="pantalla">
+      <p class="estado-pantalla" aria-hidden="true">
+        <span>fun_facts.exe</span>
+        <span><span class="vistos">0</span>/{funFacts.length}</span>
+      </p>
+      <p class="salida" aria-live="polite">
+        <span class="letra-actual" aria-hidden="true">&gt;</span>
+        <span class="texto-salida">{t.espera}</span><span class="cursor" aria-hidden="true"></span>
+      </p>
+    </div>
+
+    <div class="teclas" role="group" aria-label={t.teclas}>
+      {
+        funFacts.map((f, i) => (
+          <button type="button" class="tecla" data-indice={i} data-letra={f.letra} data-fact={f.texto[idioma]}>
+            {f.letra}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const seccion = document.querySelector<HTMLElement>('#teclado');
+
+  if (seccion) {
+    const teclas = [...seccion.querySelectorAll<HTMLButtonElement>('.tecla')];
+    const salida = seccion.querySelector<HTMLElement>('.texto-salida')!;
+    const letraActual = seccion.querySelector<HTMLElement>('.letra-actual')!;
+    const vistos = seccion.querySelector<HTMLElement>('.vistos')!;
+    const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)');
+    let reloj = 0;
+    let aLaVista = false;
+    // Para las letras repetidas (la O): cuál toca la próxima vez que se teclee
+    const siguiente = new Map<string, number>();
+
+    const escribir = (texto: string) => {
+      clearTimeout(reloj);
+      if (sinMovimiento.matches) {
+        salida.textContent = texto;
+        return;
+      }
+      let i = 0;
+      const paso = () => {
+        salida.textContent = texto.slice(0, ++i);
+        if (i < texto.length) reloj = window.setTimeout(paso, 22);
+      };
+      paso();
+    };
+
+    const pulsar = (tecla: HTMLButtonElement) => {
+      teclas.forEach((t) => t.classList.remove('activa'));
+      tecla.classList.add('activa', 'vista');
+      vistos.textContent = String(seccion.querySelectorAll('.vista').length);
+      letraActual.textContent = `${tecla.dataset.letra}>`;
+      escribir(tecla.dataset.fact ?? '');
+    };
+
+    teclas.forEach((tecla) => tecla.addEventListener('click', () => pulsar(tecla)));
+
+    new IntersectionObserver(([e]) => (aLaVista = e.isIntersecting), { threshold: 0.4 }).observe(seccion);
+
+    addEventListener('keydown', (e) => {
+      if (!aLaVista || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+      if ((e.target as HTMLElement).closest('input, textarea, [contenteditable], dialog')) return;
+      const letra = e.key.toUpperCase();
+      const mismas = teclas.filter((t) => t.dataset.letra === letra);
+      if (!mismas.length) return;
+      const n = siguiente.get(letra) ?? 0;
+      siguiente.set(letra, (n + 1) % mismas.length);
+      const tecla = mismas[n];
+      tecla.classList.add('hundida');
+      setTimeout(() => tecla.classList.remove('hundida'), 140);
+      pulsar(tecla);
+    });
+  }
+</script>
+
+<style>
+  .teclado {
+    /* La pantalla es siempre oscura, como un LCD, en modo claro y oscuro */
+    --lcd: #10140f;
+    --lcd-texto: #b6d77a;
+    --lcd-suave: rgb(182 215 122 / 0.5);
+    --cuerpo: var(--superficie-2);
+    --tapa: var(--hoja);
+    --tapa-borde: var(--linea);
+    --tapa-canto: rgb(26 29 25 / 0.28);
+
+    display: grid;
+    gap: 32px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  /* En oscuro las teclas se aclaran un poco y el canto se oscurece para que no se vean planas */
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .teclado {
+      --tapa: #3a3e35;
+      --tapa-canto: #0b0d0a;
+    }
+  }
+
+  :global(:root[data-theme='dark']) .teclado {
+    --tapa: #3a3e35;
+    --tapa-canto: #0b0d0a;
+  }
+
+  .texto {
+    max-width: 52ch;
+  }
+
+  .aparato {
+    width: min(100%, 780px);
+    padding: clamp(14px, 3vw, 26px);
+    border: 1px solid var(--linea);
+    border-radius: 14px;
+    background: linear-gradient(to bottom, var(--superficie), var(--cuerpo));
+    box-shadow:
+      var(--sombra),
+      inset 0 1px 0 rgb(255 255 255 / 0.35),
+      inset 0 -4px 0 rgb(26 29 25 / 0.08);
+  }
+
+  .pantalla {
+    min-height: 6.5em;
+    margin-bottom: clamp(14px, 3vw, 24px);
+    padding: 12px 16px 16px;
+    border-radius: 8px;
+    background:
+      repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.03) 0 2px, transparent 2px 4px),
+      var(--lcd);
+    box-shadow:
+      inset 0 2px 10px rgb(0 0 0 / 0.7),
+      0 0 0 4px rgb(26 29 25 / 0.35);
+    color: var(--lcd-texto);
+    font-family: var(--pixel);
+    font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+    line-height: 1.25;
+    text-align: left;
+    text-shadow: 0 0 6px rgb(182 215 122 / 0.45);
+  }
+
+  .estado-pantalla {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--lcd-suave);
+    color: var(--lcd-suave);
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
+
+  .salida {
+    margin: 0;
+  }
+
+  .letra-actual {
+    margin-right: 0.5ch;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -0.15em;
+    background: currentColor;
+    animation: parpadeo 1s steps(1) infinite;
+  }
+
+  @keyframes parpadeo {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .teclas {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: clamp(6px, 1.2vw, 10px);
+  }
+
+  .tecla {
+    position: relative;
+    aspect-ratio: 1;
+    border: 1px solid var(--tapa-borde);
+    border-radius: 6px;
+    background: linear-gradient(to bottom, var(--tapa), var(--superficie));
+    box-shadow:
+      0 5px 0 var(--tapa-canto),
+      0 7px 10px -4px rgb(26 29 25 / 0.35),
+      inset 0 -3px 0 rgb(26 29 25 / 0.06);
+    color: var(--texto);
+    font-family: var(--mono);
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    font-weight: 600;
+    cursor: pointer;
+    transform: translateY(0);
+    transition:
+      transform 0.08s,
+      box-shadow 0.08s;
+  }
+
+  .tecla:hover {
+    background: linear-gradient(to bottom, var(--hoja), var(--superficie-2));
+  }
+
+  .tecla:active,
+  .tecla.hundida {
+    transform: translateY(4px);
+    box-shadow:
+      0 1px 0 var(--tapa-canto),
+      0 2px 4px -2px rgb(26 29 25 / 0.35),
+      inset 0 -1px 0 rgb(26 29 25 / 0.06);
+  }
+
+  .tecla:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 3px;
+  }
+
+  .tecla.activa {
+    color: var(--acento);
+  }
+
+  /* Puntito de "ya la tocaste" */
+  .tecla.vista::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 12%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: var(--acento);
+  }
+
+  @media (max-width: 560px) {
+    /* PORTA arriba, FOLIO abajo */
+    .teclas {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      row-gap: 14px;
+    }
+
+    .pantalla {
+      min-height: 10em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+
+    .tecla {
+      transition: none;
+    }
+  }
+</style>

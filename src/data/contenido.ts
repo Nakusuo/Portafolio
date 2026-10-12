@@ -288,6 +288,80 @@ export const certificados: { emisor: string; fechas: string; tono: 'oliva' | 'vi
   },
 ];
 
+/** Fun facts del teclado de la portada: uno por tecla, en el orden de P-O-R-T-A-F-O-L-I-O. */
+export const funFacts: { letra: string; texto: Texto }[] = [
+  {
+    letra: 'P',
+    texto: {
+      es: 'Funciono a café, pero mi bebida favorita es el jugo de fresa.',
+      en: 'I run on coffee, but my favorite drink is strawberry juice.',
+    },
+  },
+  {
+    letra: 'O',
+    texto: {
+      es: 'Soy de noche: mis mejores dibujos digitales (y mi mejor código) salen cuando todos duermen.',
+      en: "I'm a night owl: my best digital drawings (and my best code) happen while everyone's asleep.",
+    },
+  },
+  {
+    letra: 'R',
+    texto: {
+      es: 'Mi manía actual: decir "67". Por el momento.',
+      en: 'My current tic: saying "67". For now.',
+    },
+  },
+  {
+    letra: 'T',
+    texto: {
+      es: 'Twenty One Pilots suena en loop en mi cuarto. Por eso mi foto de GitHub.',
+      en: "Twenty One Pilots is on loop in my room. That's why my GitHub picture looks like that.",
+    },
+  },
+  {
+    letra: 'A',
+    texto: {
+      es: 'Escucho grunge, rock y punk, y estoy aprendiendo guitarra para tocarlos.',
+      en: "I listen to grunge, rock and punk, and I'm learning guitar to play them.",
+    },
+  },
+  {
+    letra: 'F',
+    texto: {
+      es: 'Mi meta no tan secreta: armar mi setup soñado. Algún día.',
+      en: 'My not-so-secret goal: building my dream setup. Someday.',
+    },
+  },
+  {
+    letra: 'O',
+    texto: {
+      es: 'Lo que más me saca de quicio: tener que estar verificando todo.',
+      en: 'What drives me up the wall: having to verify everything.',
+    },
+  },
+  {
+    letra: 'L',
+    texto: {
+      es: 'Tengo dos gatos, Salem y Lukas. Ellos mandan en la casa.',
+      en: 'I have two cats, Salem and Lukas. They run the house.',
+    },
+  },
+  {
+    letra: 'I',
+    texto: {
+      es: 'Alguna vez fui un dibujito. Si eres de Perú, ya entendiste.',
+      en: 'I was once a "dibujito". Peruvian context, don’t ask.',
+    },
+  },
+  {
+    letra: 'O',
+    texto: {
+      es: 'Mi plato favorito: tallarines verdes con chuleta y crema.',
+      en: 'Favorite dish: Peruvian green spaghetti with pork chop and cream sauce.',
+    },
+  },
+];
+
 /** Las canciones de la cara B (vienen del README de GitHub). */
 export const pistasCaraB: Record<Idioma, string[]> = {
   es: ['commits a las 2am', '"arreglo esto mañana" (no lo arregló)', 'el CSS que sí funcionó a la primera', 'ruido blanco'],
