@@ -1,5 +1,6 @@
 ---
-// Adelanto del stack en la home: lo de uso diario, con enlace al stack completo.
+// Adelanto del stack en la home: una ventanita de escritorio viejo con los íconos de uso diario.
+// Los íconos se pueden arrastrar dentro de la ventana; el botón de repegar los ordena.
 import Icono from './Icono.astro';
 import Repegar from './Repegar.astro';
 import { gruposStack } from '../data/contenido';
@@ -17,19 +18,34 @@ const tecnologias = gruposStack.flatMap((g) => g.tecnologias).filter((tec) => di
 const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
 ---
 
-<section class="seccion contenedor resumen" data-grupo-arrastre>
+<section class="seccion contenedor resumen">
   <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.stackTitulo}</h2>
-  <ul class="stickers">
-    {
-      tecnologias.map((tec, i) => (
-        <li class={`etiqueta etiqueta--${tonos[i % 4]} grande`} data-arrastrable style={`--giro:${((i % 3) - 1) * 2}deg`}>
-          <Icono nombre={tec.icono} set="si" tamano={18} />
-          {tec.nombre}
-        </li>
-      ))
-    }
-  </ul>
-  <Repegar idioma={idioma} />
+
+  <div class="escritorio" data-grupo-arrastre>
+    <div class="barra">
+      <span class="ruta">C:\NAKUSU\stack</span>
+      <span class="controles" aria-hidden="true"><i>_</i><i>□</i><i class="cerrar">×</i></span>
+    </div>
+    <div class="cinta" aria-hidden="true"></div>
+    <p class="encabezado">{idioma === 'es' ? 'Herramientas' : 'Tools'}</p>
+    <ul class="iconos">
+      {
+        tecnologias.map((tec, i) => (
+          <li class="icono" data-arrastrable>
+            <span class={`cuadro cuadro--${tonos[i % 4]}`}>
+              <Icono nombre={tec.icono} set="si" tamano={26} />
+            </span>
+            <span class="nombre">{tec.nombre}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="pie-ventana">
+      <span>{tecnologias.length} {idioma === 'es' ? 'elementos' : 'items'}</span>
+      <Repegar idioma={idioma} />
+    </div>
+  </div>
+
   <a class="boton" href={`${rutaEn(idioma, '/trabajo')}#stack`}>
     {t.verStack}
     <Icono nombre="arrow-right" tamano={18} />
@@ -43,22 +59,162 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     text-align: center;
   }
 
-  .stickers {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 14px 12px;
-    max-width: 820px;
+  .escritorio {
+    width: min(100%, 760px);
     margin: 36px 0 40px;
-    padding: 0;
+    overflow: hidden;
+    border: 1.5px solid var(--tinta);
+    border-radius: 6px;
+    background: var(--hueso);
+    color: #24201d;
+    box-shadow: 6px 6px 0 var(--tinta);
+  }
+
+  .barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px 4px 12px;
+    background: var(--acento);
+    border-bottom: 1.5px solid var(--tinta);
+    color: #fff9f2;
+  }
+
+  .ruta {
+    font: 400 1.25rem/1 var(--pixel);
+    letter-spacing: 0.04em;
+  }
+
+  .controles {
+    display: flex;
+    gap: 4px;
+  }
+
+  .controles i {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 20px;
+    border: 1.5px solid var(--tinta);
+    border-radius: 3px;
+    background: var(--hueso);
+    color: #24201d;
+    font: 400 1rem/1 var(--pixel);
+    font-style: normal;
+  }
+
+  .controles .cerrar {
+    background: var(--vino);
+    color: #fff9f2;
+  }
+
+  /* Franja de color bajo la barra, como la del ejemplo */
+  .cinta {
+    height: 14px;
+    margin: 14px 18px 0;
+    border-radius: 2px;
+    background: var(--tierra);
+    opacity: 0.85;
+  }
+
+  .encabezado {
+    margin-top: 18px;
+    font: 850 1.5rem/1 var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .iconos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 22px 8px;
+    margin: 0;
+    padding: 24px 24px 28px;
     list-style: none;
   }
 
-  .grande {
+  .icono {
     position: relative;
-    padding: 9px 14px;
-    font-size: 0.85rem;
-    text-transform: none;
-    letter-spacing: 0;
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  /* El ícono no gira entero como las etiquetas: solo se levanta el cuadro */
+  .icono:global(.agarrada) {
+    z-index: 5;
+    cursor: grabbing;
+    scale: 1;
+    rotate: 0deg;
+    box-shadow: none;
+  }
+
+  .icono:global(.agarrada) .cuadro {
+    transform: scale(1.08) rotate(-4deg);
+    box-shadow: 5px 6px 0 #24201d;
+  }
+
+  .icono:global(.volviendo) {
+    transition: translate 0.6s var(--curva);
+  }
+
+  .cuadro {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border: 1.5px solid #24201d;
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 #24201d;
+    color: #fff9f2;
+    transition:
+      transform 0.25s var(--curva),
+      box-shadow 0.25s var(--curva);
+  }
+
+  .cuadro--oliva {
+    background: var(--acento);
+  }
+
+  .cuadro--vino {
+    background: var(--vino);
+  }
+
+  .cuadro--tierra {
+    background: var(--tierra);
+  }
+
+  .cuadro--hueso {
+    background: #fff9f2;
+    color: #24201d;
+  }
+
+  .nombre {
+    font: 400 0.72rem/1.2 var(--mono);
+  }
+
+  @media (hover: hover) {
+    .icono:hover .cuadro {
+      transform: translate(-1px, -2px);
+    }
+  }
+
+  .pie-ventana {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 34px;
+    padding: 4px 12px;
+    border-top: 1.5px solid #24201d;
+    background: color-mix(in srgb, var(--hueso) 70%, #24201d);
+    font: 400 1rem/1 var(--pixel);
+    color: #24201d;
+  }
+
+  .pie-ventana :global(.repegar) {
+    color: var(--vino);
   }
 </style>

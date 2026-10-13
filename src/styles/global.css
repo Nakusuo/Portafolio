@@ -1,6 +1,9 @@
-@import '@fontsource-variable/geist';
-@import '@fontsource-variable/geist-mono';
-@import '@fontsource-variable/shantell-sans';
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/big-shoulders-display';
+@import '@fontsource/pinyon-script';
 @import '@fontsource/vt323';
 
 /*
@@ -10,34 +13,41 @@
   Formas: esquinas casi rectas (4px) en todo; nada de píldoras.
 */
 :root {
-  --fondo: #f3f1ea;
-  --papel-linea: rgb(26 29 25 / 0.07);
-  --superficie: #e9e6dc;
-  --superficie-2: #dedacc;
-  --texto: #1a1d19;
-  --texto-suave: #4f534a;
-  --linea: rgb(26 29 25 / 0.16);
-  --tinta: #1c1f1c;
-  --tinta-texto: #f3f1ea;
-  --acento: #4f6136;
-  --acento-texto: #f3f5ee;
-  --vino: #8a3c48;
-  --tierra: #a9856b;
-  --hueso: #cfc8b4;
-  --oliva-claro: #8fa36b;
-  --hoja: #fbfaf6;
-  --resaltador: #d6e58a;
-  --hoja-linea: rgb(79 97 54 / 0.18);
+  --fondo: #ede8dd;
+  --papel-linea: rgb(36 32 29 / 0.07);
+  --superficie: #e3ddcf;
+  --superficie-2: #d9d4c8;
+  --texto: #24201d;
+  --texto-suave: #5a544b;
+  --linea: rgb(36 32 29 / 0.16);
+  --tinta: #24201d;
+  --tinta-texto: #fff9f2;
+  --acento: #565538;
+  --acento-texto: #fff9f2;
+  --vino: #9e2f1e;
+  /* Rojo para texto: el de fondo se pierde sobre papel oscuro, este se ajusta por tema */
+  --rojo: #9e2f1e;
+  --tierra: #8a6a4f;
+  --hueso: #d9d4c8;
+  --oliva-claro: #76845b;
+  --hoja: #fff9f2;
+  --resaltador: #e2d9a8;
+  --hoja-linea: rgb(86 85 56 / 0.18);
   --sombra: 0 10px 24px -14px rgb(42 52 30 / 0.5);
   --sombra-sticker: 0 2px 0 rgb(26 29 25 / 0.18);
 
   --radio: 4px;
   --ancho: 1200px;
   --gutter: clamp(16px, 4vw, 40px);
-  --fuente: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
-  --mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --fuente: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  /* Display industrial condensada para títulos (siempre en mayúsculas) */
+  --display: 'Big Shoulders Display Variable', 'Arial Narrow', sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
   --pixel: 'VT323', ui-monospace, monospace;
-  --mano: 'Shantell Sans Variable', 'Segoe Print', sans-serif;
+  /* Antes letra a mano: ahora serif en cursiva (legible en párrafos) */
+  --mano: 'Instrument Serif', Georgia, serif;
+  /* Script fino, solo para acentos cortos */
+  --script: 'Pinyon Script', 'Segoe Script', cursive;
   --curva: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
@@ -45,20 +55,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --fondo: #151713;
-    --papel-linea: rgb(230 226 212 / 0.07);
-    --superficie: #1f221e;
-    --superficie-2: #292d27;
-    --texto: #e6e2d4;
-    --texto-suave: #a9a797;
-    --linea: rgb(230 226 212 / 0.16);
-    --tinta: #e6e2d4;
-    --tinta-texto: #151713;
-    --acento: #8fa36b;
-    --acento-texto: #121412;
-    --hoja: #1f221e;
-    --resaltador: rgb(143 163 107 / 0.5);
-    --hoja-linea: rgb(143 163 107 / 0.16);
+    --fondo: #171412;
+    --papel-linea: rgb(236 230 216 / 0.07);
+    --superficie: #211d1a;
+    --superficie-2: #2c2723;
+    --texto: #ece6d8;
+    --texto-suave: #aba38f;
+    --linea: rgb(236 230 216 / 0.16);
+    --tinta: #ece6d8;
+    --tinta-texto: #171412;
+    --acento: #9aa672;
+  --rojo: #e2603f;
+    --acento-texto: #171412;
+    --hoja: #211d1a;
+    --resaltador: rgb(154 166 114 / 0.5);
+    --hoja-linea: rgb(154 166 114 / 0.16);
     --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
     --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
     color-scheme: dark;
@@ -66,20 +77,21 @@
 }
 
 :root[data-theme='dark'] {
-  --fondo: #151713;
-  --papel-linea: rgb(230 226 212 / 0.07);
-  --superficie: #1f221e;
-  --superficie-2: #292d27;
-  --texto: #e6e2d4;
-  --texto-suave: #a9a797;
-  --linea: rgb(230 226 212 / 0.16);
-  --tinta: #e6e2d4;
-  --tinta-texto: #151713;
-  --acento: #8fa36b;
-  --acento-texto: #121412;
-  --hoja: #1f221e;
-  --resaltador: rgb(143 163 107 / 0.5);
-  --hoja-linea: rgb(143 163 107 / 0.16);
+  --fondo: #171412;
+  --papel-linea: rgb(236 230 216 / 0.07);
+  --superficie: #211d1a;
+  --superficie-2: #2c2723;
+  --texto: #ece6d8;
+  --texto-suave: #aba38f;
+  --linea: rgb(236 230 216 / 0.16);
+  --tinta: #ece6d8;
+  --tinta-texto: #171412;
+  --acento: #9aa672;
+  --rojo: #e2603f;
+  --acento-texto: #171412;
+  --hoja: #211d1a;
+  --resaltador: rgb(154 166 114 / 0.5);
+  --hoja-linea: rgb(154 166 114 / 0.16);
   --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
   --sombra-sticker: 0 2px 0 rgb(0 0 0 / 0.5);
   color-scheme: dark;
@@ -112,6 +124,7 @@ body {
   font-size: 1.0625rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  font-synthesis-weight: none;
   overflow-x: hidden;
 }
 
@@ -138,9 +151,11 @@ h1,
 h2,
 h3 {
   margin: 0;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  font-weight: 600;
+  font-family: var(--display);
+  line-height: 0.92;
+  letter-spacing: 0;
+  font-weight: 850;
+  text-transform: uppercase;
   text-wrap: balance;
 }
 
@@ -200,6 +215,7 @@ p {
 /* Texto escrito a mano */
 .nota {
   font-family: var(--mano);
+  font-style: italic;
   font-size: 1.05rem;
   line-height: 1.15;
   font-weight: 500;
@@ -222,11 +238,11 @@ p {
   gap: 2px;
   width: max-content;
   max-width: 16ch;
-  font-family: var(--mano);
-  font-size: 1.05rem;
+  font-family: var(--script);
+  font-size: 1.6rem;
   font-weight: 500;
   line-height: 1.05;
-  color: var(--vino);
+  color: var(--rojo);
   transform: rotate(-5deg);
 }
 
@@ -405,8 +421,8 @@ p {
   padding: 4px 8px;
   border: 0;
   background: none;
-  color: var(--vino);
-  font: 500 1rem/1.1 var(--mano);
+  color: var(--rojo);
+  font: italic 400 1.15rem/1.1 var(--mano);
   cursor: pointer;
 }
 

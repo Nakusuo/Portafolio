@@ -76,6 +76,7 @@ const t = textos[idioma].hero;
 <style>
   .hero {
     position: relative;
+    --ancho-foto: clamp(200px, 19vw, 280px);
     padding-block: clamp(40px, 6vw, 72px) 48px;
   }
 
@@ -90,7 +91,8 @@ const t = textos[idioma].hero;
     display: grid;
     justify-items: center;
     text-align: center;
-    max-width: 720px;
+    /* Nunca se mete debajo de las ventanas flotantes: deja su ancho + aire a cada lado */
+    max-width: min(720px, calc(100% - 2 * (var(--ancho-foto) + 16px)));
     margin-inline: auto;
   }
 
@@ -168,10 +170,12 @@ const t = textos[idioma].hero;
 
   .lema {
     margin-top: 34px;
-    font-size: clamp(1.9rem, 4.2vw, 3rem);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 1.08;
+    font-family: var(--display);
+    font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 0.92;
+    text-transform: uppercase;
     max-width: 18ch;
   }
 
@@ -185,7 +189,7 @@ const t = textos[idioma].hero;
   .foto {
     position: absolute;
     top: 46%;
-    width: clamp(200px, 19vw, 280px);
+    width: var(--ancho-foto);
   }
 
   .foto--izq {
@@ -399,6 +403,10 @@ const t = textos[idioma].hero;
   }
 
   @media (max-width: 1100px) {
+    .hero {
+      --ancho-foto: clamp(170px, 17vw, 220px);
+    }
+
     .foto {
       width: clamp(170px, 17vw, 220px);
       top: auto;
@@ -407,6 +415,10 @@ const t = textos[idioma].hero;
   }
 
   @media (max-width: 860px) {
+    .centro {
+      max-width: 720px;
+    }
+
     .nombre-bloque {
       padding: 32px 24px;
     }
