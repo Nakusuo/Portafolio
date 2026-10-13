@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Destacados from './Destacados.astro';
 import Stack from './Stack.astro';
+import Universidad from './Universidad.astro';
 import ListaProyectos from './ListaProyectos.astro';
 import Contacto from './Contacto.astro';
 import { proyectosEn } from '../lib/proyectos';
@@ -14,11 +15,13 @@ interface Props {
 const { idioma } = Astro.props;
 const proyectos = await proyectosEn(idioma);
 const destacados = proyectos.filter((p) => p.data.destacado);
-const resto = proyectos.filter((p) => !p.data.destacado);
+// Lo de la uni tiene su propia sección, así no se pierde en la lista
+const resto = proyectos.filter((p) => !p.data.destacado && !p.data.categorias.includes('universidad'));
 ---
 
 <Base idioma={idioma} ruta="/trabajo" titulo={textos[idioma].nav.trabajo} imagen="proyectos/paltishop.webp">
   <Destacados idioma={idioma} proyectos={destacados} />
+  <Universidad idioma={idioma} proyectos={proyectos} />
   <Stack idioma={idioma} proyectos={proyectos} />
   <ListaProyectos idioma={idioma} proyectos={resto} />
   <Contacto idioma={idioma} />
