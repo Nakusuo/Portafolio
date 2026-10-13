@@ -1,8 +1,8 @@
 ---
 titulo: "Minerva"
-resumen: "Programming Languages course project: frontend, SQL scripts and architecture diagram."
-categorias: [universidad, web]
-stack: [Java]
+resumen: "Minimarket API built with hexagonal architecture: products, stock, sales, payments and JWT roles."
+categorias: [universidad, backend]
+stack: [Java, Spring Boot, MySQL]
 orden: 12
 repos:
   - { nombre: 'Lenguajes_Programacion-Frontend', url: 'https://github.com/Nakusuo/Lenguajes_Programacion-Frontend' }

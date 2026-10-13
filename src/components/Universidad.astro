@@ -1,0 +1,182 @@
+---
+// Proyectos de la universidad, cada uno como una hoja de entrega arrancada del cuaderno.
+// Los destacados enlazan a su caso de estudio; el resto, a sus repos.
+import type { CollectionEntry } from 'astro:content';
+import Icono from './Icono.astro';
+import { slugDe } from '../lib/proyectos';
+import { rutaEn, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: CollectionEntry<'proyectos'>[];
+}
+
+const { idioma, proyectos } = Astro.props;
+const es = idioma === 'es';
+const uni = proyectos.filter((p) => p.data.categorias.includes('universidad')).sort((a, b) => a.data.orden - b.data.orden);
+const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
+---
+
+<section id="universidad" class="seccion contenedor">
+  <div class="con-anotacion">
+    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{es ? 'Hecho en la uni' : 'Made at uni'}</h2>
+    <p class="anotacion" aria-hidden="true">
+      <Icono nombre="arrow-bend-left-down" tamano={26} />
+      {es ? 'donde aprendí haciendo' : 'learning by building'}
+    </p>
+  </div>
+  <p class="bajada">
+    {
+      es
+        ? 'Entregas de Ingeniería de Software que terminé llevando más allá de la nota: con backend real, base de datos y, varias, desplegadas.'
+        : 'Software Engineering coursework I took past the grade: real backends, databases and, for several, a live deploy.'
+    }
+  </p>
+
+  <ol class="hojas">
+    {
+      uni.map((p, i) => (
+        <li class="hoja-entrega" style={`--giro:${giros[i % giros.length]}deg`}>
+          <div class="cabecera">
+            <span class="numero">{es ? 'ENTREGA' : 'PROJECT'} {String(i + 1).padStart(2, '0')}</span>
+            {p.data.destacado && <span class="sello">{es ? 'caso completo' : 'full case'}</span>}
+          </div>
+          <h3>{p.data.titulo}</h3>
+          <p class="resumen">{p.data.resumen}</p>
+          <ul class="pila">
+            {p.data.stack.map((s) => (
+              <li>{s}</li>
+            ))}
+          </ul>
+          <div class="enlaces">
+            {p.data.destacado ? (
+              <a class="enlace" href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)}>
+                {es ? 'Leer caso' : 'Read case'}
+                <Icono nombre="arrow-up-right" tamano={16} />
+              </a>
+            ) : (
+              p.data.repos.map((r) => (
+                <a class="enlace" href={r.url} target="_blank" rel="noopener">
+                  <Icono nombre="github-logo" tamano={16} />
+                  {p.data.repos.length > 1 ? r.nombre : es ? 'Ver código' : 'View code'}
+                </a>
+              ))
+            )}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .hojas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+    gap: 34px 28px;
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Hoja rayada con margen rojo y perforaciones, siempre clara como papel real */
+  .hoja-entrega {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px 22px 20px 46px;
+    background-color: #fff9f2;
+    background-image:
+      linear-gradient(90deg, transparent 32px, rgb(158 47 30 / 0.45) 32px, rgb(158 47 30 / 0.45) 33.5px, transparent 33.5px),
+      repeating-linear-gradient(transparent 0 27px, rgb(86 85 56 / 0.16) 27px 28px);
+    color: #24201d;
+    border: 1.5px solid #24201d;
+    border-radius: 2px;
+    box-shadow: 5px 5px 0 var(--tinta);
+    transform: rotate(var(--giro));
+    transition: transform 0.5s var(--curva);
+  }
+
+  .hoja-entrega::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 26px;
+    bottom: 26px;
+    width: 10px;
+    background: radial-gradient(circle, var(--fondo) 4px, rgb(36 32 29 / 0.5) 4.5px, transparent 5.5px) center top / 10px 56px repeat-y;
+  }
+
+  @media (hover: hover) {
+    .hoja-entrega:hover {
+      transform: rotate(0deg) translateY(-4px);
+    }
+  }
+
+  .cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .numero {
+    font: 400 1.15rem/1 var(--pixel);
+    letter-spacing: 0.06em;
+    color: #565538;
+  }
+
+  .sello {
+    padding: 2px 8px;
+    border: 1.5px solid #9e2f1e;
+    border-radius: 2px;
+    color: #9e2f1e;
+    font: 400 1.25rem/1 var(--script);
+    transform: rotate(-4deg);
+  }
+
+  h3 {
+    font-size: clamp(1.7rem, 2.6vw, 2.1rem);
+  }
+
+  .resumen {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #4a443c;
+  }
+
+  .pila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pila li {
+    padding: 2px 8px;
+    border: 1px solid rgb(36 32 29 / 0.35);
+    border-radius: 2px;
+    font: 400 0.72rem/1.5 var(--mono);
+  }
+
+  .enlaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+
+  .enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+  }
+</style>
