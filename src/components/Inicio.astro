@@ -2,7 +2,7 @@
 // Home: escaparate corto. El detalle vive en /trabajo, /servicios, /lab y /sobre-mi.
 import Base from '../layouts/Base.astro';
 import Hero from './Hero.astro';
-import Destacados from './Destacados.astro';
+import Vitrina from './Vitrina.astro';
 import StackResumen from './StackResumen.astro';
 import Contacto from './Contacto.astro';
 import Arranque from './Arranque.astro';
@@ -23,7 +23,7 @@ const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
 <Base idioma={idioma} imagen="proyectos/paltishop.webp" arranque>
   <Arranque idioma={idioma} />
   <Hero idioma={idioma} />
-  <Destacados idioma={idioma} proyectos={destacados} limite={3} />
+  <Vitrina idioma={idioma} proyectos={destacados} />
   <Teclado idioma={idioma} />
   <Dibujar idioma={idioma} />
   <StackResumen idioma={idioma} />
