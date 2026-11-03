@@ -53,6 +53,12 @@ const presentes = Object.keys(t.categorias).filter((c) =>
                 {p.data.repos.length > 1 ? `${t.proyectos.repo} ${i + 1}` : t.proyectos.repo}
               </a>
             ))}
+            {p.data.privado && !p.data.demo && p.data.repos.length === 0 && (
+              <span class="privado">
+                <Icono nombre="lock-simple" tamano={15} />
+                {textos[idioma].destacados.privado}
+              </span>
+            )}
           </div>
         </li>
       ))
@@ -190,6 +196,15 @@ const presentes = Object.keys(t.categorias).filter((c) =>
 
   .enlaces a:hover {
     color: var(--acento);
+  }
+
+  .privado {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.88rem;
+    color: var(--texto-suave);
+    white-space: nowrap;
   }
 
   .vacio {
