@@ -4,7 +4,7 @@ resumen: A self-checkout kiosk for convenience stores. It recognises products wi
 categorias: [universidad, web, backend]
 stack: [Python, FastAPI, React, TypeScript, Vite, OpenCV, ONNX Runtime, Playwright]
 destacado: true
-orden: 6
+orden: 3
 repos:
   - { nombre: 'autocheckout-vision', url: 'https://github.com/Nakusuo/autocheckout-vision' }
 tono: tierra

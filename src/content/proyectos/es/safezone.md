@@ -5,7 +5,7 @@ rol: Frontend y arquitectura
 categorias: [web, universidad]
 stack: [React, TypeScript, Tailwind, Spring Boot]
 destacado: true
-orden: 4
+orden: 6
 repos:
   - { nombre: 'SafeZone_Frontend', url: 'https://github.com/Nakusuo/SafeZone_Frontend' }
 tono: hueso

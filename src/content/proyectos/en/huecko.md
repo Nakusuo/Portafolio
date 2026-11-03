@@ -5,7 +5,7 @@ rol: Product, frontend and backend
 categorias: [web, backend, personal]
 stack: [React, TypeScript, Vite, Java, Spring Boot, PostgreSQL, MongoDB, Vercel]
 destacado: true
-orden: 3
+orden: 4
 demo: https://huecko.vercel.app
 portada: proyectos/huecko.webp
 repos:
