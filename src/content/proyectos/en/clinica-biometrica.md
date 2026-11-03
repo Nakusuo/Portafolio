@@ -10,6 +10,7 @@ orden: 5
 repos:
   - { nombre: 'Backend-ClinicaBiometrica', url: 'https://github.com/Nakusuo/Backend-ClinicaBiometrica' }
   - { nombre: 'Frontend-ClinicaBiometrica', url: 'https://github.com/Nakusuo/Frontend-ClinicaBiometrica' }
+portada: proyectos/clinica-biometrica.webp
 tono: tierra
 icono: heartbeat
 ---

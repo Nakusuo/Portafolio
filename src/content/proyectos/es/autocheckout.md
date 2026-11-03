@@ -8,6 +8,7 @@ destacado: true
 orden: 3
 repos:
   - { nombre: 'autocheckout-vision', url: 'https://github.com/Nakusuo/autocheckout-vision' }
+portada: proyectos/autocheckout.webp
 tono: tierra
 icono: scan
 ---

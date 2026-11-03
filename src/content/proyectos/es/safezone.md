@@ -9,6 +9,7 @@ destacado: true
 orden: 6
 repos:
   - { nombre: 'SafeZone_Frontend', url: 'https://github.com/Nakusuo/SafeZone_Frontend' }
+portada: proyectos/safezone.webp
 tono: hueso
 icono: shield-check
 ---
