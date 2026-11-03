@@ -1,6 +1,7 @@
 ---
 titulo: Autocheckout
 resumen: Quiosco de auto-cobro para tiendas de conveniencia. Reconoce los productos con la cámara, valida el peso y cobra con un QR.
+impacto: "Meta: una compra en menos de 45 s. La compra completa se prueba de punta a punta con Playwright."
 categorias: [universidad, web, backend]
 stack: [Python, FastAPI, React, TypeScript, Vite, OpenCV, ONNX Runtime, Playwright]
 destacado: true

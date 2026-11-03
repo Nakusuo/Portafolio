@@ -1,6 +1,7 @@
 ---
 titulo: Clínica Biométrica
 resumen: Telemedicina con inicio de sesión por reconocimiento facial, citas, expedientes y videollamadas.
+impacto: "API documentada en Swagger desde el primer commit y empaquetada con Docker."
 rol: Backend y frontend
 categorias: [web, backend, universidad]
 stack: [Python, FastAPI, PostgreSQL, Docker, Angular, TypeScript]

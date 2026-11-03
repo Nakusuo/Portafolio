@@ -1,6 +1,7 @@
 ---
 titulo: SafeZone
 resumen: Plataforma de apoyo a víctimas de violencia, con botón de pánico por GPS y alertas en tiempo real.
+impacto: "4 roles con 4 dashboards y alertas en tiempo real, con 10 s para cancelar un envío."
 rol: Frontend y arquitectura
 categorias: [web, universidad]
 stack: [React, TypeScript, Tailwind, Spring Boot]

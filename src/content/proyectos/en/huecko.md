@@ -1,6 +1,7 @@
 ---
 titulo: Huecko
 resumen: Plan things with friends without 40 WhatsApp messages. It crosses everyone's schedules and suggests when you all overlap.
+impacto: "Public demo at huecko.vercel.app, with version 0.4.0 shipped including an admin panel."
 rol: Product, frontend and backend
 categorias: [web, backend, personal]
 stack: [React, TypeScript, Vite, Java, Spring Boot, PostgreSQL, MongoDB, Vercel]

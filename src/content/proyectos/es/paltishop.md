@@ -1,6 +1,7 @@
 ---
 titulo: paltishop.store
 resumen: Tienda de regalos armados y personalizados, pensada para quien llega desde TikTok o Instagram con el celular.
+impacto: "Tienda real en línea en paltishop.store, pensada primero para el celular."
 rol: Diseño y desarrollo completo
 categorias: [clientes, web]
 stack: [HTML, CSS, JavaScript, PHP, MySQL]

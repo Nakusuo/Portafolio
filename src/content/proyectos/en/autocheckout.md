@@ -1,6 +1,7 @@
 ---
 titulo: Autocheckout
 resumen: A self-checkout kiosk for convenience stores. It recognises products with a camera, checks their weight and takes payment with a QR code.
+impacto: "Goal: a purchase in under 45 s. The full purchase is tested end to end with Playwright."
 categorias: [universidad, web, backend]
 stack: [Python, FastAPI, React, TypeScript, Vite, OpenCV, ONNX Runtime, Playwright]
 destacado: true
