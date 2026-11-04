@@ -17,7 +17,7 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
 
 <div class="arranque" aria-hidden="true" data-arranque>
   <div class="consola">
-    <p class="orden"><span class="prompt">&gt;</span> <span data-orden></span><span class="cursor">_</span></p>
+    <p class="orden"> <span data-orden></span><span class="cursor">_</span></p>
     <ol data-lineas>
       {lineas.map((l) => <li data-texto={l}></li>)}
     </ol>
@@ -93,8 +93,8 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
     align-content: center;
     gap: 28px;
     padding: var(--gutter);
-    background: #151713;
-    color: #e6e2d4;
+    background: var(--term-fondo);
+    color: var(--term-texto);
     font-family: var(--mono);
     clip-path: inset(0 0 0 0);
     transition: clip-path 0.7s cubic-bezier(0.7, 0, 0.2, 1);
@@ -118,11 +118,11 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
   }
 
   .prompt {
-    color: #8fa36b;
+    color: var(--term-acento);
   }
 
   .cursor {
-    color: #8fa36b;
+    color: var(--term-acento);
     animation: parpadeo-arranque 0.9s steps(1) infinite;
   }
 
@@ -136,7 +136,7 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
     margin: 12px 0 0;
     padding: 0;
     list-style: none;
-    color: #a9a797;
+    color: var(--term-suave);
   }
 
   li {
@@ -145,12 +145,12 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
 
   li.ok::after {
     content: '... ok';
-    color: #8fa36b;
+    color: var(--term-acento);
   }
 
   .saltar {
     font-size: 0.75rem;
-    color: #a9a797;
+    color: var(--term-suave);
     opacity: 0.6;
   }
 </style>

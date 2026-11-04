@@ -1,0 +1,399 @@
+---
+// Trabajo destacado de la portada como vitrina con scroll: la sección se queda fija
+// y, al bajar, las ventanas de los proyectos pasan flotando y girando en 3D.
+// A la izquierda, el número grande y los datos del proyecto que está al frente.
+// En celular o con "reducir movimiento" se ve como una lista normal.
+import Icono from './Icono.astro';
+import Portada from './Portada.astro';
+import Ventana from './Ventana.astro';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+import { slugDe, type Proyecto } from '../lib/proyectos';
+
+interface Props {
+  idioma: Idioma;
+  proyectos: Proyecto[];
+  /** Cuántos destacados hay en total (para el enlace a /trabajo). */
+  total?: number;
+}
+
+const { idioma, proyectos, total: todos = proyectos.length } = Astro.props;
+const t = textos[idioma].destacados;
+const es = idioma === 'es';
+
+const origenDe = (p: Proyecto) => {
+  const c = p.data.categorias;
+  if (c.includes('clientes')) return es ? 'Para un cliente' : 'Client work';
+  if (c.includes('personal')) return es ? 'Proyecto propio' : 'Personal project';
+  return es ? 'Universidad' : 'University';
+};
+
+const direccionDe = (p: Proyecto) => {
+  if (p.data.demo) return new URL(p.data.demo).host;
+  if (p.data.privado) return es ? 'código privado' : 'private code';
+  const repo = p.data.repos[0];
+  return repo ? `github.com/Nakusuo/${repo.nombre}` : p.data.titulo;
+};
+
+const numero = (i: number) => String(i + 1).padStart(2, '0');
+const total = numero(proyectos.length - 1);
+---
+
+<section id="trabajo" class="vitrina" style={`--n:${proyectos.length}`} data-vitrina>
+  <div class="contenedor cabeza">
+    <div class="con-anotacion">
+      <h2 class="titulo-seccion">{t.titulo}</h2>
+    </div>
+    <p class="bajada">{t.bajada}</p>
+  </div>
+
+  <div class="escenario">
+    <div class="contenedor rejilla">
+      <ol class="items">
+        {
+          proyectos.map((p, i) => (
+            <li class="item" data-item style={`--i:${i}`}>
+              <div class="info">
+                <p class="numero" aria-hidden="true">
+                  {numero(i)}
+                  <span>/ {total}</span>
+                </p>
+                <p class="origen">{origenDe(p)}</p>
+                <h3 style={`view-transition-name: titulo-${slugDe(p)}`}>{p.data.titulo}</h3>
+                <p class="resumen">{p.data.resumen}</p>
+                {p.data.impacto && (
+                  <p class="impacto"><b>{idioma === 'es' ? 'Resultado' : 'Result'}:</b> {p.data.impacto}</p>
+                )}
+                <dl class="datos">
+                  {p.data.rol && (
+                    <>
+                      <dt>{es ? 'Rol' : 'Role'}</dt>
+                      <dd>{p.data.rol}</dd>
+                    </>
+                  )}
+                  <dt>Stack</dt>
+                  <dd>{p.data.stack.slice(0, 4).join(' · ')}</dd>
+                  {p.data.privado && (
+                    <>
+                      <dt>{es ? 'Código' : 'Code'}</dt>
+                      <dd>
+                        <Icono nombre="lock-simple" tamano={13} /> {t.privado}
+                      </dd>
+                    </>
+                  )}
+                </dl>
+                <a class="leer" href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)}>
+                  {t.leer}: {p.data.titulo}
+                  <Icono nombre="arrow-up-right" tamano={18} />
+                </a>
+              </div>
+
+              <a class="tarjeta" href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)} tabindex="-1" aria-hidden="true">
+                <div class="giro" style={`view-transition-name: ventana-${slugDe(p)}`}>
+                  <Ventana direccion={direccionDe(p)} privado={p.data.privado && !p.data.demo}>
+                    <Portada proyecto={p} prioridad={i < 2} />
+                  </Ventana>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="progreso" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+
+  <div class="contenedor mas">
+    <a class="boton" href={rutaEn(idioma, '/trabajo')}>
+      {textos[idioma].inicio.verTrabajo}
+      {todos > proyectos.length && <span class="mas-n">({todos})</span>}
+      <Icono nombre="arrow-right" tamano={18} />
+    </a>
+  </div>
+</section>
+
+<style>
+  .cabeza {
+    padding-top: clamp(64px, 9vw, 120px);
+  }
+
+  .mas-n {
+    opacity: 0.7;
+  }
+
+  .mas {
+    display: flex;
+    justify-content: center;
+    padding-block: 24px clamp(64px, 9vw, 120px);
+  }
+
+  /* ---------- Lista normal (celular y "reducir movimiento") ---------- */
+  .items {
+    display: grid;
+    gap: 64px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    display: grid;
+    gap: 20px;
+  }
+
+  .tarjeta {
+    order: -1;
+    display: block;
+  }
+
+  .giro {
+    box-shadow: var(--sombra);
+  }
+
+  .numero {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 800;
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+  }
+
+  .numero span {
+    font-size: 0.22em;
+    font-weight: 600;
+    color: var(--texto-suave);
+    letter-spacing: 0;
+  }
+
+  .origen {
+    margin: 18px 0 4px;
+    font-family: var(--mano);
+    font-size: 1.15rem;
+    color: var(--rojo);
+  }
+
+  h3 {
+    margin: 0 0 10px;
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .resumen {
+    margin: 0 0 16px;
+    color: var(--texto-suave);
+  }
+
+  .impacto {
+    margin: 0 0 16px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .datos {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    margin: 0 0 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--linea);
+    font-size: 0.9rem;
+  }
+
+  .datos dt {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    padding-top: 2px;
+  }
+
+  .datos dd {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .leer {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+  }
+
+  .leer:hover {
+    color: var(--rojo);
+  }
+
+  .progreso {
+    display: none;
+  }
+
+  /* ---------- Vitrina con scroll (pantallas anchas y con movimiento) ---------- */
+  @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+    .vitrina {
+      /* Un tramo de scroll por proyecto */
+      --tramo: 60svh;
+    }
+
+    .escenario {
+      position: relative;
+      height: calc(var(--n) * var(--tramo) + 100svh);
+    }
+
+    .rejilla {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      /* Deja el alto de la barra de navegación */
+      padding-top: 72px;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.4fr);
+      align-items: center;
+      column-gap: clamp(24px, 4vw, 64px);
+    }
+
+    .items {
+      display: contents;
+    }
+
+    .item {
+      display: contents;
+    }
+
+    /* Los datos: todos en la columna izquierda, solo se ve el del frente */
+    .info {
+      grid-column: 1;
+      grid-row: 1;
+      opacity: 0;
+      translate: 0 24px;
+      pointer-events: none;
+      transition:
+        opacity 0.4s var(--curva),
+        translate 0.5s var(--curva);
+    }
+
+    .item.activo .info {
+      opacity: 1;
+      translate: 0 0;
+      pointer-events: auto;
+      transition:
+        opacity 0.4s var(--curva) 0.08s,
+        translate 0.5s var(--curva) 0.08s;
+    }
+
+    /* Las ventanas: apiladas en la columna derecha, en un espacio 3D */
+    .tarjeta {
+      grid-column: 2;
+      grid-row: 1;
+      position: relative;
+      z-index: var(--z, 1);
+      width: min(100%, 680px);
+      justify-self: center;
+      perspective: 1600px;
+      pointer-events: none;
+    }
+
+    .item.activo .tarjeta {
+      pointer-events: auto;
+    }
+
+    .giro {
+      /* --d: distancia al frente (negativo = ya pasó, positivo = viene). La pone el script. */
+      --d: calc(var(--i) * 1);
+      --a: max(var(--d), calc(var(--d) * -1));
+      transform-style: preserve-3d;
+      transform:
+        translate3d(calc(var(--d) * 8%), calc(var(--d) * 85%), calc(var(--a) * -320px))
+        rotateX(calc(var(--d) * -22deg))
+        rotateY(calc(-16deg + var(--d) * 10deg))
+        rotateZ(calc(var(--d) * 3deg));
+      opacity: clamp(0, calc(1.5 - var(--a) * 0.9), 1);
+      filter: brightness(calc(1 - var(--a) * 0.18));
+      box-shadow: 0 40px 60px -30px rgb(0 0 0 / 0.55);
+      will-change: transform;
+    }
+
+    .item.activo .giro:hover {
+      filter: brightness(1.04);
+    }
+
+    .progreso {
+      display: block;
+      position: absolute;
+      left: var(--gutter);
+      right: var(--gutter);
+      bottom: 32px;
+      height: 2px;
+      background: var(--linea);
+    }
+
+    .progreso span {
+      display: block;
+      height: 100%;
+      width: calc(var(--p, 0) * 100%);
+      background: var(--acento);
+    }
+  }
+</style>
+
+<script>
+  const vitrina = document.querySelector<HTMLElement>('[data-vitrina]');
+  const escenario = vitrina?.querySelector<HTMLElement>('.escenario');
+  const items = [...(vitrina?.querySelectorAll<HTMLElement>('[data-item]') ?? [])];
+  const conScroll = matchMedia('(min-width: 900px) and (prefers-reduced-motion: no-preference)');
+
+  if (vitrina && escenario && items.length) {
+    let pedido = 0;
+
+    const pintar = () => {
+      pedido = 0;
+      if (!conScroll.matches) return;
+      const caja = escenario.getBoundingClientRect();
+      const recorrido = caja.height - innerHeight;
+      const avance = Math.min(1, Math.max(0, -caja.top / recorrido));
+      // De 0 a n-1: qué proyecto está al frente (con decimales mientras pasa)
+      // Cada proyecto se queda quieto un rato al frente antes de pasar al siguiente
+      const bruto = avance * (items.length - 1);
+      const base = Math.floor(bruto);
+      const f = Math.min(1, Math.max(0, (bruto - base - 0.2) / 0.6));
+      const posicion = Math.min(items.length - 1, base + f * f * (3 - 2 * f));
+      const frente = Math.round(posicion);
+      items.forEach((item, i) => {
+        const d = i - posicion;
+        item.querySelector<HTMLElement>('.giro')?.style.setProperty('--d', d.toFixed(3));
+        // La más cercana al frente siempre se pinta encima
+        item.style.setProperty('--z', String(100 - Math.round(Math.abs(d) * 10)));
+        item.classList.toggle('activo', i === frente);
+      });
+      vitrina.style.setProperty('--p', avance.toFixed(3));
+    };
+
+    const pedir = () => {
+      if (!pedido) pedido = requestAnimationFrame(pintar);
+    };
+
+    addEventListener('scroll', pedir, { passive: true });
+    addEventListener('resize', pedir);
+    conScroll.addEventListener('change', pedir);
+    pintar();
+
+    // Con teclado: al enfocar un "Leer caso" escondido, se baja hasta su proyecto
+    items.forEach((item, i) => {
+      item.querySelector('.leer')?.addEventListener('focus', () => {
+        if (!conScroll.matches || item.classList.contains('activo')) return;
+        const recorrido = escenario.offsetHeight - innerHeight;
+        const destino = escenario.getBoundingClientRect().top + scrollY + (recorrido * i) / Math.max(1, items.length - 1);
+        scrollTo({ top: destino, behavior: 'instant' as ScrollBehavior });
+      });
+    });
+  }
+</script>

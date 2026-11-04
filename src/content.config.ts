@@ -12,6 +12,8 @@ const proyectos = defineCollection({
   schema: z.object({
     titulo: z.string(),
     resumen: z.string(),
+    /** Un logro concreto, para quien lee rápido (reclutadores). */
+    impacto: z.string().optional(),
     rol: z.string().optional(),
     categorias: z.array(z.enum(['clientes', 'web', 'movil', 'backend', 'universidad', 'personal'])),
     stack: z.array(z.string()),

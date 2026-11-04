@@ -1,6 +1,7 @@
 ---
 titulo: Clínica Biométrica
 resumen: Telemedicine with facial-recognition login, appointments, medical records and video calls.
+impacto: "API documented in Swagger from the first commit and packaged with Docker."
 rol: Backend and frontend
 categorias: [web, backend, universidad]
 stack: [Python, FastAPI, PostgreSQL, Docker, Angular, TypeScript]
@@ -9,6 +10,7 @@ orden: 5
 repos:
   - { nombre: 'Backend-ClinicaBiometrica', url: 'https://github.com/Nakusuo/Backend-ClinicaBiometrica' }
   - { nombre: 'Frontend-ClinicaBiometrica', url: 'https://github.com/Nakusuo/Frontend-ClinicaBiometrica' }
+portada: proyectos/clinica-biometrica.webp
 tono: tierra
 icono: heartbeat
 ---

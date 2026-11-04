@@ -1,0 +1,142 @@
+---
+// Índice lateral de la portada: dice en qué parte estás y salta a cualquier otra.
+// Solo en pantallas anchas, donde hay margen a la izquierda del contenido.
+import type { Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const es = idioma === 'es';
+
+const partes = [
+  { id: 'reclutadores', texto: es ? 'Resumen' : 'Summary' },
+  { id: 'trabajo', texto: es ? 'Proyectos' : 'Projects' },
+  { id: 'teclado', texto: es ? 'Sobre mí' : 'About me' },
+  { id: 'stack', texto: 'Stack' },
+  { id: 'contacto', texto: es ? 'Contacto' : 'Contact' },
+];
+---
+
+<nav class="indice" aria-label={es ? 'Partes de esta página' : 'Sections on this page'} data-indice-pagina>
+  <ol>
+    {
+      partes.map((p, i) => (
+        <li>
+          <a href={`#${p.id}`} data-para={p.id}>
+            <b>{String(i + 1).padStart(2, '0')}</b>
+            <span>{p.texto}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .indice {
+    display: none;
+  }
+
+  @media (min-width: 1280px) and (min-height: 560px) {
+    .indice {
+      display: block;
+      position: fixed;
+      left: 2px;
+      top: 50%;
+      z-index: 20;
+      translate: 0 -50%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Aparece cuando ya bajaste de la portada */
+    .indice.visible {
+      opacity: 1;
+    }
+  }
+
+  ol {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-height: 32px;
+    padding: 4px 7px;
+    border-radius: var(--radio);
+    color: var(--texto-suave);
+    text-decoration: none;
+    font: 500 0.72rem/1 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  b {
+    font-weight: 700;
+  }
+
+  /* El nombre solo asoma al pasar o en la parte actual, para no tapar el contenido */
+  span {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width 0.3s var(--curva);
+  }
+
+  a:hover span,
+  a:focus-visible span {
+    max-width: 12ch;
+    margin-left: 8px;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--texto);
+    background: var(--superficie);
+  }
+
+  a[aria-current='true'] {
+    color: var(--tinta-texto);
+    background: var(--tinta);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    span,
+    .indice {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const indice = document.querySelector<HTMLElement>('[data-indice-pagina]');
+  if (indice) {
+    const enlaces = [...indice.querySelectorAll<HTMLAnchorElement>('a[data-para]')];
+    const partes = enlaces
+      .map((a) => document.getElementById(a.dataset.para!))
+      .filter((el): el is HTMLElement => !!el);
+
+    const marcar = () => {
+      // La parte actual es la última cuyo borde de arriba ya pasó la mitad de la pantalla
+      const mitad = innerHeight * 0.45;
+      let actual = '';
+      for (const p of partes) if (p.getBoundingClientRect().top < mitad) actual = p.id;
+      indice.classList.toggle('visible', !!actual);
+      enlaces.forEach((a) => a.setAttribute('aria-current', String(a.dataset.para === actual)));
+    };
+
+    let pedido = 0;
+    addEventListener('scroll', () => {
+      if (!pedido) pedido = requestAnimationFrame(() => ((pedido = 0), marcar()));
+    }, { passive: true });
+    marcar();
+  }
+</script>

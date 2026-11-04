@@ -1,12 +1,14 @@
 ---
 titulo: Central
 resumen: A dashboard that runs three gift shops from one place and syncs with their websites every minute.
+impacto: "Replaced Poscake: it is now the source of truth for 3 stores, with end-to-end tests."
 rol: Design, frontend, backend and deployment
 categorias: [clientes, web, backend]
 stack: [Next.js, React, TypeScript, SQLite, MySQL, Node.js]
 destacado: true
 orden: 1
 privado: true
+portada: proyectos/central.webp
 tono: oliva
 icono: storefront
 ---

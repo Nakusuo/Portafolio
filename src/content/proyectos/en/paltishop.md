@@ -1,6 +1,7 @@
 ---
 titulo: paltishop.store
 resumen: An online store for handmade, personalized gift boxes, built for people arriving from TikTok or Instagram on their phone.
+impacto: "A real store live at paltishop.store, built mobile-first."
 rol: Full design and development
 categorias: [clientes, web]
 stack: [HTML, CSS, JavaScript, PHP, MySQL]

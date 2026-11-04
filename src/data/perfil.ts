@@ -11,6 +11,8 @@ export const perfil = {
   instagramUsuario: '@n4kusu',
   correo: '',
   cv: '',
+  /** Foto tuya dentro de public/ (por ejemplo 'sobre/yo.jpg'). Si está, sale como polaroid en Sobre mí. */
+  foto: '',
 };
 
 /** A dónde lleva el botón de contacto: correo si existe, si no Instagram. */

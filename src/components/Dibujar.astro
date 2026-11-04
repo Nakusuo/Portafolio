@@ -40,7 +40,7 @@ const t = es
 
 <section id="dibujar" class="seccion contenedor dibujar" data-no-se={t.noSe} data-vas={t.vas}>
   <div class="texto">
-    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <h2 class="titulo-seccion">{t.titulo}</h2>
     <p class="bajada">{t.bajada}</p>
 
     <ul class="leyenda">
@@ -90,7 +90,7 @@ const t = es
       ctx.lineWidth = 4;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = getComputedStyle(seccion).getPropertyValue('--texto').trim() || '#1a1d19';
+      ctx.strokeStyle = getComputedStyle(seccion).getPropertyValue('--texto').trim() || 'var(--tinta-fija)';
     };
 
     const borrar = () => {
@@ -205,7 +205,6 @@ const t = es
       repeating-linear-gradient(to bottom, transparent 0 31px, var(--hoja-linea) 31px 32px),
       var(--hoja);
     box-shadow: var(--sombra);
-    transform: rotate(-0.6deg);
   }
 
   canvas {

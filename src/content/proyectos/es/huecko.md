@@ -1,11 +1,12 @@
 ---
 titulo: Huecko
 resumen: Coordinar planes entre amigos sin 40 mensajes de WhatsApp. Cruza horarios y propone cuándo coinciden todos.
+impacto: "Demo pública en huecko.vercel.app y versión 0.4.0 publicada con panel de administración."
 rol: Producto, frontend y backend
 categorias: [web, backend, personal]
 stack: [React, TypeScript, Vite, Java, Spring Boot, PostgreSQL, MongoDB, Vercel]
 destacado: true
-orden: 3
+orden: 4
 demo: https://huecko.vercel.app
 portada: proyectos/huecko.webp
 repos:
