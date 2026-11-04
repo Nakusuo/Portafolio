@@ -150,13 +150,13 @@ const t = es
 <style>
   .teclado {
     /* La pantalla es siempre oscura, como un tubo viejo, en modo claro y oscuro */
-    --lcd: #10140f;
-    --lcd-texto: #b6d77a;
-    --lcd-suave: rgb(182 215 122 / 0.5);
+    --lcd: var(--term-fondo);
+    --lcd-texto: var(--term-acento);
+    --lcd-suave: rgb(227 169 59 / 0.5);
     /* Cuerpo del aparato: plástico color hueso de día, oliva oscuro de noche */
-    --cuerpo: #e4dac6;
-    --cuerpo-luz: #f3ecdf;
-    --cuerpo-canto: #b9ab90;
+    --cuerpo: #e7e0d2;
+    --cuerpo-luz: #fbf7f0;
+    --cuerpo-canto: #c2b59c;
     --cuerpo-sombra: #8f8167;
     --avance: 0;
 
@@ -168,22 +168,35 @@ const t = es
 
   @media (prefers-color-scheme: dark) {
     :global(:root:not([data-theme='light'])) .teclado {
-      --cuerpo: #3b3d31;
-      --cuerpo-luz: #4b4e3f;
-      --cuerpo-canto: #24261d;
-      --cuerpo-sombra: #121310;
+      --cuerpo: #2a241e;
+      --cuerpo-luz: #3a3229;
+      --cuerpo-canto: #18140f;
+      --cuerpo-sombra: #0d0b08;
     }
   }
 
   :global(:root[data-theme='dark']) .teclado {
-    --cuerpo: #3b3d31;
-    --cuerpo-luz: #4b4e3f;
-    --cuerpo-canto: #24261d;
-    --cuerpo-sombra: #121310;
+    --cuerpo: #2a241e;
+    --cuerpo-luz: #3a3229;
+    --cuerpo-canto: #18140f;
+    --cuerpo-sombra: #0d0b08;
   }
 
   .texto {
     max-width: 52ch;
+  }
+
+  @media (min-width: 960px) {
+    .teclado {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: center;
+      justify-items: start;
+      text-align: left;
+    }
+
+    .consola {
+      justify-self: end;
+    }
   }
 
   /* ---------- El aparato, con grosor y un poco inclinado ---------- */
@@ -226,7 +239,7 @@ const t = es
   .marco-pantalla {
     padding: 10px;
     border-radius: 18px;
-    background: #1d1f18;
+    background: #1f1a14;
     box-shadow:
       inset 0 2px 4px rgb(0 0 0 / 0.6),
       0 1px 0 rgb(255 255 255 / 0.25);
@@ -240,16 +253,16 @@ const t = es
     border-radius: 14px / 18px;
     background:
       repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.035) 0 2px, transparent 2px 4px),
-      radial-gradient(120% 120% at 50% 50%, #16200f 0%, var(--lcd) 70%);
+      radial-gradient(120% 120% at 50% 50%, #2a1f0c 0%, var(--lcd) 70%);
     box-shadow:
       inset 0 0 28px rgb(0 0 0 / 0.85),
-      inset 0 0 6px rgb(182 215 122 / 0.15);
+      inset 0 0 6px rgb(227 169 59 / 0.15);
     color: var(--lcd-texto);
     font-family: var(--pixel);
     font-size: clamp(1.2rem, 2.6vw, 1.6rem);
     line-height: 1.25;
     text-align: left;
-    text-shadow: 0 0 6px rgb(182 215 122 / 0.5);
+    text-shadow: 0 0 6px rgb(227 169 59 / 0.5);
   }
 
   /* Reflejo del vidrio */
@@ -310,8 +323,8 @@ const t = es
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #6f8a3a;
-    box-shadow: 0 0 0 2px rgb(0 0 0 / 0.15), 0 0 8px rgb(182 215 122 / 0.6);
+    background: #b07a14;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 0.15), 0 0 8px rgb(227 169 59 / 0.6);
   }
 
   .escribiendo .led {
@@ -320,8 +333,8 @@ const t = es
 
   @keyframes led {
     50% {
-      background: #d9f59a;
-      box-shadow: 0 0 0 2px rgb(0 0 0 / 0.15), 0 0 14px #d9f59a;
+      background: #ffd88a;
+      box-shadow: 0 0 0 2px rgb(0 0 0 / 0.15), 0 0 14px #ffd88a;
     }
   }
 
@@ -352,7 +365,7 @@ const t = es
     height: 34%;
     margin-top: 10%;
     border-radius: 2px;
-    background: #9e2f1e;
+    background: var(--vino);
   }
 
   .modelo {
@@ -375,7 +388,7 @@ const t = es
 
   .tecla {
     --tapa: var(--hueso);
-    --letra: #24201d;
+    --letra: var(--tinta-fija);
     position: relative;
     aspect-ratio: 1.15;
     padding: 0;
@@ -405,11 +418,11 @@ const t = es
     top: -3px;
   }
 
-  .tono-0 { --tapa: #9e2f1e; --letra: #fff9f2; }
-  .tono-1 { --tapa: #d9d4c8; }
-  .tono-2 { --tapa: #76845b; --letra: #fff9f2; }
-  .tono-3 { --tapa: #e2d9a8; }
-  .tono-4 { --tapa: #8a6a4f; --letra: #fff9f2; }
+  .tono-0 { --tapa: var(--vino); --letra: var(--crema-fija); }
+  .tono-1 { --tapa: var(--hueso); }
+  .tono-2 { --tapa: var(--oliva-claro); --letra: var(--crema-fija); }
+  .tono-3 { --tapa: var(--resaltador-fijo); }
+  .tono-4 { --tapa: var(--tierra); --letra: var(--crema-fija); }
 
   .tecla:hover {
     filter: brightness(1.06);

@@ -75,8 +75,8 @@ const campos: [string, string][] = es
     margin: 0;
     transform: rotate(1.5deg);
     border-radius: var(--radio);
-    background: #1c1f1c;
-    color: #e6e2d4;
+    background: var(--tinta-fija);
+    color: var(--term-texto);
     border: 1px solid var(--linea);
     overflow: hidden;
     box-shadow: var(--sombra);
@@ -87,7 +87,7 @@ const campos: [string, string][] = es
     border-bottom: 1px solid rgb(230 226 212 / 0.1);
     font-family: var(--mono);
     font-size: 0.78rem;
-    color: #a7a594;
+    color: var(--term-suave);
   }
 
   pre {
@@ -116,15 +116,15 @@ const campos: [string, string][] = es
   }
 
   .clave {
-    color: #b0606c;
+    color: var(--naranja-vivo);
   }
 
   .prop {
-    color: #8fa36b;
+    color: var(--term-acento);
   }
 
   .valor {
-    color: #c9c2b0;
+    color: var(--hueso);
   }
 
   @media (max-width: 860px) {

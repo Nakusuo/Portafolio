@@ -12,9 +12,11 @@ import { slugDe, type Proyecto } from '../lib/proyectos';
 interface Props {
   idioma: Idioma;
   proyectos: Proyecto[];
+  /** Cuántos destacados hay en total (para el enlace a /trabajo). */
+  total?: number;
 }
 
-const { idioma, proyectos } = Astro.props;
+const { idioma, proyectos, total: todos = proyectos.length } = Astro.props;
 const t = textos[idioma].destacados;
 const es = idioma === 'es';
 
@@ -111,6 +113,7 @@ const total = numero(proyectos.length - 1);
   <div class="contenedor mas">
     <a class="boton" href={rutaEn(idioma, '/trabajo')}>
       {textos[idioma].inicio.verTrabajo}
+      {todos > proyectos.length && <span class="mas-n">({todos})</span>}
       <Icono nombre="arrow-right" tamano={18} />
     </a>
   </div>
@@ -119,6 +122,10 @@ const total = numero(proyectos.length - 1);
 <style>
   .cabeza {
     padding-top: clamp(64px, 9vw, 120px);
+  }
+
+  .mas-n {
+    opacity: 0.7;
   }
 
   .mas {
@@ -255,7 +262,7 @@ const total = numero(proyectos.length - 1);
   @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
     .vitrina {
       /* Un tramo de scroll por proyecto */
-      --tramo: 85svh;
+      --tramo: 60svh;
     }
 
     .escenario {

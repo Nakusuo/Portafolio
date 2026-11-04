@@ -76,11 +76,11 @@ const es = idioma === 'es';
   .cara-b {
     width: min(560px, calc(100vw - 32px));
     padding: 28px 28px 32px;
-    border: 1.5px solid #e6e2d4;
+    border: 1.5px solid var(--term-texto);
     border-radius: 6px;
-    background: #2b2521;
-    color: #e6e2d4;
-    box-shadow: 6px 6px 0 #b0606c;
+    background: var(--term-fondo);
+    color: var(--term-texto);
+    box-shadow: 6px 6px 0 var(--naranja-vivo);
     text-align: center;
   }
 
@@ -98,7 +98,7 @@ const es = idioma === 'es';
   }
 
   .cara-b::backdrop {
-    background: #151713;
+    background: var(--term-fondo);
   }
 
   .cinta-img {
@@ -115,14 +115,14 @@ const es = idioma === 'es';
     font-size: 3rem;
     font-weight: 400;
     letter-spacing: 0.02em;
-    color: #e2603f;
+    color: var(--naranja-claro);
   }
 
   .rotulo {
     font-family: var(--mano);
     font-style: italic;
     font-size: 1rem;
-    color: #c9c2b0;
+    color: var(--hueso);
   }
 
   ol {
@@ -137,18 +137,18 @@ const es = idioma === 'es';
   }
 
   li::marker {
-    color: #e2603f;
+    color: var(--naranja-claro);
   }
 
   .volver {
     padding: 10px 18px;
-    border: 1.5px solid #e6e2d4;
+    border: 1.5px solid var(--term-texto);
     border-radius: 4px;
     background: none;
-    color: #e6e2d4;
+    color: var(--term-texto);
     font: 500 0.95rem var(--fuente);
     cursor: pointer;
-    box-shadow: 3px 3px 0 #b0606c;
+    box-shadow: 3px 3px 0 var(--naranja-vivo);
   }
 
   .volver:hover {

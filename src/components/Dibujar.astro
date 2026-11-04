@@ -90,7 +90,7 @@ const t = es
       ctx.lineWidth = 4;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = getComputedStyle(seccion).getPropertyValue('--texto').trim() || '#1a1d19';
+      ctx.strokeStyle = getComputedStyle(seccion).getPropertyValue('--texto').trim() || 'var(--tinta-fija)';
     };
 
     const borrar = () => {

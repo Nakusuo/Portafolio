@@ -57,7 +57,7 @@ const es = idioma === 'es';
 <style>
   .bitacora :global(.ventana) {
     margin-top: clamp(28px, 4vw, 44px);
-    background: #151713;
+    background: var(--term-fondo);
   }
 
   .log {
@@ -74,7 +74,7 @@ const es = idioma === 'es';
     align-items: baseline;
     gap: 18px;
     padding: 9px 20px;
-    color: #e6e2d4;
+    color: var(--term-texto);
     text-decoration: none;
   }
 
@@ -83,7 +83,7 @@ const es = idioma === 'es';
   }
 
   .sha {
-    color: #c9a26b;
+    color: var(--term-acento);
   }
 
   .mensaje {
@@ -93,11 +93,11 @@ const es = idioma === 'es';
   }
 
   .repo {
-    color: #8fa36b;
+    color: var(--term-acento);
   }
 
   time {
-    color: #a9a797;
+    color: var(--term-suave);
     text-align: right;
     font-variant-numeric: tabular-nums;
   }

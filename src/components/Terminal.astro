@@ -233,11 +233,11 @@ const config = {
     max-height: min(480px, calc(100dvh - 64px));
     margin: 12vh auto auto;
     padding: 0;
-    border: 1.5px solid #e6e2d4;
+    border: 1.5px solid var(--term-texto);
     border-radius: 6px;
-    background: #151713;
-    color: #e6e2d4;
-    box-shadow: 6px 6px 0 #8fa36b;
+    background: var(--term-fondo);
+    color: var(--term-texto);
+    box-shadow: 6px 6px 0 var(--term-acento);
     font-family: var(--mono);
     font-size: 0.92rem;
   }
@@ -271,7 +271,7 @@ const config = {
     gap: 12px;
     padding: 9px 12px;
     border-bottom: 1px solid rgb(230 226 212 / 0.15);
-    color: #a9a797;
+    color: var(--term-suave);
     font-size: 0.78rem;
   }
 
@@ -287,15 +287,15 @@ const config = {
   }
 
   .puntos i:nth-child(1) {
-    background: #b0606c;
+    background: var(--naranja-vivo);
   }
 
   .puntos i:nth-child(2) {
-    background: #a9856b;
+    background: var(--tierra);
   }
 
   .puntos i:nth-child(3) {
-    background: #8fa36b;
+    background: var(--term-acento);
   }
 
   .titulo {
@@ -313,7 +313,7 @@ const config = {
   }
 
   .cerrar:hover {
-    color: #e6e2d4;
+    color: var(--term-texto);
   }
 
   .salida {
@@ -326,15 +326,15 @@ const config = {
   }
 
   .salida :global(.eco) {
-    color: #e6e2d4;
+    color: var(--term-texto);
   }
 
   .salida :global(.tenue) {
-    color: #a9a797;
+    color: var(--term-suave);
   }
 
   .salida :global(.error) {
-    color: #e2603f;
+    color: var(--naranja-claro);
   }
 
   .linea {
@@ -345,7 +345,7 @@ const config = {
   }
 
   .prompt {
-    color: #8fa36b;
+    color: var(--term-acento);
     font-family: var(--pixel);
     font-size: 1.4rem;
     line-height: 1;
@@ -357,12 +357,12 @@ const config = {
     border: 0;
     outline: 0;
     background: none;
-    color: #e6e2d4;
+    color: var(--term-texto);
     font: inherit;
-    caret-color: #8fa36b;
+    caret-color: var(--term-acento);
   }
 
   input::placeholder {
-    color: #8a887a;
+    color: var(--term-suave);
   }
 </style>

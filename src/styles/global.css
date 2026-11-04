@@ -13,26 +13,40 @@
   Formas: esquinas casi rectas (4px) en todo; nada de píldoras.
 */
 :root {
-  --fondo: #ede8dd;
+  --fondo: #f1ece2;
   --papel-linea: rgb(36 32 29 / 0.07);
-  --superficie: #e3ddcf;
-  --superficie-2: #d9d4c8;
-  --texto: #24201d;
-  --texto-suave: #5a544b;
+  --superficie: #e7e0d2;
+  --superficie-2: #dcd3c2;
+  --texto: #1f1b17;
+  --texto-suave: #5c544a;
   --linea: rgb(36 32 29 / 0.16);
-  --tinta: #24201d;
-  --tinta-texto: #fff9f2;
-  --acento: #565538;
-  --acento-texto: #fff9f2;
-  --vino: #9e2f1e;
+  --tinta: #1f1b17;
+  --tinta-texto: #fbf7f0;
+  --acento: #5a6634;
+  --acento-texto: #fbf7f0;
+  --vino: #a84317;
   /* Rojo para texto: el de fondo se pierde sobre papel oscuro, este se ajusta por tema */
-  --rojo: #9e2f1e;
+  --rojo: #a84317;
   --tierra: #8a6a4f;
-  --hueso: #d9d4c8;
-  --oliva-claro: #76845b;
-  --hoja: #fff9f2;
-  --resaltador: #e2d9a8;
+  --hueso: #dcd3c2;
+  --oliva-claro: #7a8550;
+  --hoja: #fbf7f0;
+  --resaltador: #f0cf86;
   --hoja-linea: rgb(86 85 56 / 0.18);
+  /* Fijos: no cambian con el tema (pantallas, stickers, texto sobre color) */
+  --tinta-fija: #1f1b17;
+  --crema-fija: #fbf7f0;
+  --ambar: #cc8800;
+  --naranja-vivo: #d2622e;
+  --naranja-claro: #ec7a45;
+  --oliva: #5a6634;
+  --oliva-oscuro: #4e5a2c;
+  --resaltador-fijo: #f0cf86;
+  /* Terminales (intro, bitácora, consola): fósforo ámbar sobre negro cálido */
+  --term-fondo: #17130f;
+  --term-texto: #efe8da;
+  --term-acento: #e3a93b;
+  --term-suave: #ada393;
   --sombra: 0 10px 24px -14px rgb(42 52 30 / 0.5);
   --sombra-sticker: 0 2px 0 rgb(26 29 25 / 0.18);
 
@@ -55,19 +69,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --fondo: #171412;
+    --fondo: #16130f;
     --papel-linea: rgb(236 230 216 / 0.07);
-    --superficie: #211d1a;
-    --superficie-2: #2c2723;
-    --texto: #ece6d8;
-    --texto-suave: #aba38f;
+    --superficie: #201b16;
+    --superficie-2: #2a241e;
+    --texto: #efe8da;
+    --texto-suave: #ada393;
     --linea: rgb(236 230 216 / 0.16);
-    --tinta: #ece6d8;
-    --tinta-texto: #171412;
-    --acento: #9aa672;
-  --rojo: #e2603f;
-    --acento-texto: #171412;
-    --hoja: #211d1a;
+    --tinta: #efe8da;
+    --tinta-texto: #16130f;
+    --acento: #aab574;
+  --rojo: #ec7a45;
+    --acento-texto: #16130f;
+    --hoja: #201b16;
     --resaltador: rgb(154 166 114 / 0.5);
     --hoja-linea: rgb(154 166 114 / 0.16);
     --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
@@ -77,19 +91,19 @@
 }
 
 :root[data-theme='dark'] {
-  --fondo: #171412;
+  --fondo: #16130f;
   --papel-linea: rgb(236 230 216 / 0.07);
-  --superficie: #211d1a;
-  --superficie-2: #2c2723;
-  --texto: #ece6d8;
-  --texto-suave: #aba38f;
+  --superficie: #201b16;
+  --superficie-2: #2a241e;
+  --texto: #efe8da;
+  --texto-suave: #ada393;
   --linea: rgb(236 230 216 / 0.16);
-  --tinta: #ece6d8;
-  --tinta-texto: #171412;
-  --acento: #9aa672;
-  --rojo: #e2603f;
-  --acento-texto: #171412;
-  --hoja: #211d1a;
+  --tinta: #efe8da;
+  --tinta-texto: #16130f;
+  --acento: #aab574;
+  --rojo: #ec7a45;
+  --acento-texto: #16130f;
+  --hoja: #201b16;
   --resaltador: rgb(154 166 114 / 0.5);
   --hoja-linea: rgb(154 166 114 / 0.16);
   --sombra: 0 10px 24px -14px rgb(0 0 0 / 0.8);
@@ -190,6 +204,24 @@ p {
 /* Dos secciones seguidas no suman su aire */
 .seccion + .seccion {
   padding-top: clamp(24px, 4vw, 56px);
+}
+
+/* Dos secciones lado a lado (stack + en qué ando): una sola pantalla en escritorio */
+.pareja {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+  align-items: start;
+  column-gap: clamp(24px, 4vw, 56px);
+  width: 100%;
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.pareja > .seccion {
+  max-width: none;
+  padding-inline: 0;
+  padding-block: clamp(32px, 6vw, 72px);
 }
 
 /* Título de sección con el prompt del README: "> stack" */
@@ -341,17 +373,17 @@ p {
 
 .etiqueta--vino {
   background: var(--vino);
-  color: #f6ecee;
+  color: var(--crema-fija);
 }
 
 .etiqueta--tierra {
   background: var(--tierra);
-  color: #1c1f1c;
+  color: var(--tinta-fija);
 }
 
 .etiqueta--hueso {
   background: var(--hueso);
-  color: #1c1f1c;
+  color: var(--tinta-fija);
 }
 
 .chip {
