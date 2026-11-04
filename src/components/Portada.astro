@@ -2,12 +2,8 @@
 // Portada de un proyecto: la captura si existe; si no, una portada tipográfica
 // con el nombre en la fuente pixel, el icono de su dominio y el stack.
 import Icono from './Icono.astro';
-import PortadaArte from './PortadaArte.astro';
 import { url } from '../i18n/ui';
-import { slugDe, type Proyecto } from '../lib/proyectos';
-
-// Proyectos sin captura que tienen portada ilustrada (PortadaArte.astro)
-const conArte = ['central'];
+import type { Proyecto } from '../lib/proyectos';
 
 interface Props {
   proyecto: Proyecto;
@@ -16,13 +12,10 @@ interface Props {
 
 const { proyecto, prioridad = false } = Astro.props;
 const { titulo, portada, tono, stack, icono } = proyecto.data;
-const arte = !portada && conArte.includes(slugDe(proyecto));
 ---
 
 {
-  arte ? (
-    <PortadaArte proyecto={proyecto} />
-  ) : portada ? (
+  portada ? (
     <div class="portada">
       <img
         src={url(`/${portada}`)}

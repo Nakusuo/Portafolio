@@ -8,6 +8,7 @@ stack: [Next.js, React, TypeScript, SQLite, MySQL, Node.js]
 destacado: true
 orden: 1
 privado: true
+portada: proyectos/central.webp
 tono: oliva
 icono: storefront
 ---
