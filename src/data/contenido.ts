@@ -238,7 +238,7 @@ export const formacion: Paso[] = [
   },
   {
     lugar: 'Británico',
-    rol: { es: 'Inglés, Advanced Phase', en: 'English, Advanced Phase' },
+    rol: { es: 'Inglés, nivel intermedio (Advanced Phase)', en: 'English, intermediate level (Advanced Phase)' },
     fechas: { es: '2023', en: '2023' },
   },
 ];
