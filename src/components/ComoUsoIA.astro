@@ -20,7 +20,7 @@ const herramientas = [
 ---
 
 <section id="ia" class="seccion contenedor">
-  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <h2 class="titulo-seccion">{t.titulo}</h2>
   <p class="bajada">{t.bajada}</p>
 
   <ol class="notas">
@@ -72,7 +72,6 @@ const herramientas = [
     padding: 34px 26px 28px;
     border-radius: 2px;
     box-shadow: var(--sombra);
-    transform: rotate(var(--giro));
   }
 
   .papelito:nth-child(2) {
@@ -90,12 +89,12 @@ const herramientas = [
 
   .hueso {
     background: var(--hueso);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
   }
 
   .tierra {
     background: var(--tierra);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
   }
 
   .oliva {

@@ -19,7 +19,7 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
 ---
 
 <section class="seccion contenedor resumen">
-  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.stackTitulo}</h2>
+  <h2 class="titulo-seccion">{t.stackTitulo}</h2>
 
   <div class="escritorio" data-grupo-arrastre>
     <div class="barra">
@@ -66,7 +66,7 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     border: 1.5px solid var(--tinta);
     border-radius: 6px;
     background: var(--hueso);
-    color: #24201d;
+    color: var(--tinta-fija);
     box-shadow: 6px 6px 0 var(--tinta);
   }
 
@@ -77,7 +77,7 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     padding: 4px 6px 4px 12px;
     background: var(--acento);
     border-bottom: 1.5px solid var(--tinta);
-    color: #fff9f2;
+    color: var(--crema-fija);
   }
 
   .ruta {
@@ -98,14 +98,14 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     border: 1.5px solid var(--tinta);
     border-radius: 3px;
     background: var(--hueso);
-    color: #24201d;
+    color: var(--tinta-fija);
     font: 400 1rem/1 var(--pixel);
     font-style: normal;
   }
 
   .controles .cerrar {
     background: var(--vino);
-    color: #fff9f2;
+    color: var(--crema-fija);
   }
 
   /* Franja de color bajo la barra, como la del ejemplo */
@@ -148,13 +148,12 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     z-index: 5;
     cursor: grabbing;
     scale: 1;
-    rotate: 0deg;
     box-shadow: none;
   }
 
   .icono:global(.agarrada) .cuadro {
-    transform: scale(1.08) rotate(-4deg);
-    box-shadow: 5px 6px 0 #24201d;
+    transform: scale(1.08);
+    box-shadow: 5px 6px 0 var(--tinta-fija);
   }
 
   .icono:global(.volviendo) {
@@ -166,10 +165,10 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     place-items: center;
     width: 54px;
     height: 54px;
-    border: 1.5px solid #24201d;
+    border: 1.5px solid var(--tinta-fija);
     border-radius: 8px;
-    box-shadow: 3px 3px 0 #24201d;
-    color: #fff9f2;
+    box-shadow: 3px 3px 0 var(--tinta-fija);
+    color: var(--crema-fija);
     transition:
       transform 0.25s var(--curva),
       box-shadow 0.25s var(--curva);
@@ -188,8 +187,8 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
   }
 
   .cuadro--hueso {
-    background: #fff9f2;
-    color: #24201d;
+    background: var(--crema-fija);
+    color: var(--tinta-fija);
   }
 
   .nombre {
@@ -208,10 +207,10 @@ const tonos = ['oliva', 'vino', 'tierra', 'hueso'];
     justify-content: space-between;
     min-height: 34px;
     padding: 4px 12px;
-    border-top: 1.5px solid #24201d;
-    background: color-mix(in srgb, var(--hueso) 70%, #24201d);
+    border-top: 1.5px solid var(--tinta-fija);
+    background: color-mix(in srgb, var(--hueso) 70%, var(--tinta-fija));
     font: 400 1rem/1 var(--pixel);
-    color: #24201d;
+    color: var(--tinta-fija);
   }
 
   .pie-ventana :global(.repegar) {

@@ -2,12 +2,13 @@
 // Home: escaparate corto. El detalle vive en /trabajo, /servicios, /lab y /sobre-mi.
 import Base from '../layouts/Base.astro';
 import Hero from './Hero.astro';
-import Destacados from './Destacados.astro';
+import Vitrina from './Vitrina.astro';
+import Reclutadores from './Reclutadores.astro';
 import StackResumen from './StackResumen.astro';
 import Contacto from './Contacto.astro';
 import Arranque from './Arranque.astro';
 import Bitacora from './Bitacora.astro';
-import Dibujar from './Dibujar.astro';
+import Indice from './Indice.astro';
 import Teclado from './Teclado.astro';
 import { proyectosEn } from '../lib/proyectos';
 import type { Idioma } from '../i18n/ui';
@@ -23,10 +24,15 @@ const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
 <Base idioma={idioma} imagen="proyectos/paltishop.webp" arranque>
   <Arranque idioma={idioma} />
   <Hero idioma={idioma} />
-  <Destacados idioma={idioma} proyectos={destacados} limite={3} />
+  <Reclutadores idioma={idioma} />
+  <!-- Los 4 más fuertes; el resto está en /trabajo -->
+  <Vitrina idioma={idioma} proyectos={destacados.slice(0, 4)} total={destacados.length} />
   <Teclado idioma={idioma} />
-  <Dibujar idioma={idioma} />
-  <StackResumen idioma={idioma} />
-  <Bitacora idioma={idioma} />
+  <!-- Lo técnico en una sola pantalla: stack y en qué ando, lado a lado -->
+  <div id="stack" class="pareja">
+    <StackResumen idioma={idioma} />
+    <Bitacora idioma={idioma} />
+  </div>
   <Contacto idioma={idioma} />
+  <Indice idioma={idioma} />
 </Base>

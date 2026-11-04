@@ -1,12 +1,14 @@
 ---
 titulo: Central
 resumen: Panel que administra tres tiendas de regalos desde un solo lugar y se sincroniza con sus webs cada minuto.
+impacto: "Reemplazó a Poscake: hoy es la fuente de verdad de 3 tiendas, con pruebas de punta a punta."
 rol: Diseño, frontend, backend y despliegue
 categorias: [clientes, web, backend]
 stack: [Next.js, React, TypeScript, SQLite, MySQL, Node.js]
 destacado: true
 orden: 1
 privado: true
+portada: proyectos/central.webp
 tono: oliva
 icono: storefront
 ---

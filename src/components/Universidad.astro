@@ -19,11 +19,7 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
 
 <section id="universidad" class="seccion contenedor">
   <div class="con-anotacion">
-    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{es ? 'Hecho en la uni' : 'Made at uni'}</h2>
-    <p class="anotacion" aria-hidden="true">
-      <Icono nombre="arrow-bend-left-down" tamano={26} />
-      {es ? 'donde aprendí haciendo' : 'learning by building'}
-    </p>
+    <h2 class="titulo-seccion">{es ? 'Hecho en la uni' : 'Made at uni'}</h2>
   </div>
   <p class="bajada">
     {
@@ -62,6 +58,12 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
                 </a>
               ))
             )}
+            {!p.data.destacado && p.data.privado && p.data.repos.length === 0 && (
+              <span class="privado">
+                <Icono nombre="lock-simple" tamano={16} />
+                {es ? 'Código privado' : 'Private code'}
+              </span>
+            )}
           </div>
         </li>
       ))
@@ -86,15 +88,14 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
     flex-direction: column;
     gap: 12px;
     padding: 22px 22px 20px 46px;
-    background-color: #fff9f2;
+    background-color: var(--crema-fija);
     background-image:
       linear-gradient(90deg, transparent 32px, rgb(158 47 30 / 0.45) 32px, rgb(158 47 30 / 0.45) 33.5px, transparent 33.5px),
       repeating-linear-gradient(transparent 0 27px, rgb(86 85 56 / 0.16) 27px 28px);
-    color: #24201d;
-    border: 1.5px solid #24201d;
+    color: var(--tinta-fija);
+    border: 1.5px solid var(--tinta-fija);
     border-radius: 2px;
     box-shadow: 5px 5px 0 var(--tinta);
-    transform: rotate(var(--giro));
     transition: transform 0.5s var(--curva);
   }
 
@@ -110,7 +111,7 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
 
   @media (hover: hover) {
     .hoja-entrega:hover {
-      transform: rotate(0deg) translateY(-4px);
+      transform: translateY(-4px);
     }
   }
 
@@ -124,16 +125,15 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
   .numero {
     font: 400 1.15rem/1 var(--pixel);
     letter-spacing: 0.06em;
-    color: #565538;
+    color: var(--oliva);
   }
 
   .sello {
     padding: 2px 8px;
-    border: 1.5px solid #9e2f1e;
+    border: 1.5px solid var(--vino);
     border-radius: 2px;
-    color: #9e2f1e;
+    color: var(--vino);
     font: 400 1.25rem/1 var(--script);
-    transform: rotate(-4deg);
   }
 
   h3 {
@@ -143,7 +143,7 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
   .resumen {
     font-size: 0.95rem;
     line-height: 1.55;
-    color: #4a443c;
+    color: #5c544a;
   }
 
   .pila {
@@ -168,6 +168,14 @@ const giros = [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6, -1.4];
     gap: 6px 16px;
     margin-top: auto;
     padding-top: 6px;
+  }
+
+  .privado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    opacity: 0.75;
   }
 
   .enlace {

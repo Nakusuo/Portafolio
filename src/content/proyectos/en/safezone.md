@@ -1,13 +1,15 @@
 ---
 titulo: SafeZone
 resumen: A support platform for victims of violence, with a GPS panic button and real-time alerts.
+impacto: "4 roles with 4 dashboards and real-time alerts, with 10 s to cancel a send."
 rol: Frontend and architecture
 categorias: [web, universidad]
 stack: [React, TypeScript, Tailwind, Spring Boot]
 destacado: true
-orden: 4
+orden: 6
 repos:
   - { nombre: 'SafeZone_Frontend', url: 'https://github.com/Nakusuo/SafeZone_Frontend' }
+portada: proyectos/safezone.webp
 tono: hueso
 icono: shield-check
 ---

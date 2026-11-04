@@ -4,6 +4,5 @@ resumen: "Sistema web para registrar y seguir trámites: backend, frontend, SQL 
 categorias: [universidad, web, backend]
 stack: [Java, Docker]
 orden: 10
-repos:
-  - { nombre: 'ProyectoMesaDePartes', url: 'https://github.com/Nakusuo/ProyectoMesaDePartes' }
+privado: true
 ---

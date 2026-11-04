@@ -1,0 +1,222 @@
+---
+// Resumen: lo que un reclutador necesita ver primero, en una sola ficha.
+// Todo sale de datos que ya están en el sitio (contenido.ts, perfil.ts y los proyectos).
+import Icono from './Icono.astro';
+import { experiencia, formacion } from '../data/contenido';
+import { enlaceContacto, perfil } from '../data/perfil';
+import { proyectosEn } from '../lib/proyectos';
+import { url, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const es = idioma === 'es';
+const proyectos = await proyectosEn(idioma);
+const publicados = proyectos.filter((p) => p.data.demo).length;
+const uni = formacion[0];
+const ingles = formacion.find((f) => f.lugar === 'Británico');
+const [actual, anterior] = experiencia;
+const minuscula = (t = '') => t.charAt(0).toLowerCase() + t.slice(1);
+
+const filas = [
+  { k: es ? 'Busco' : 'Looking for', v: es ? 'Prácticas y proyectos' : 'Internships and projects' },
+  { k: es ? 'Hago' : 'I do', v: es ? 'Frontend, backend y diseño de interfaces' : 'Frontend, backend and interface design' },
+  { k: es ? 'Estudio' : 'Studying', v: `${uni.rol[idioma].replace(' · ', ', ')}, UTP` },
+  ingles && { k: es ? 'Inglés' : 'English', v: `${ingles.rol[idioma].split('·')[1]?.trim()}, ${ingles.lugar}` },
+  { k: es ? 'Ahora' : 'Now', v: `${actual.lugar.split('·')[0].trim()}: ${minuscula(actual.detalle?.[idioma])}` },
+  anterior && { k: es ? 'Antes' : 'Before', v: `${anterior.lugar}, ${anterior.fechas[idioma]}` },
+  {
+    k: es ? 'Resultados' : 'Results',
+    v: es
+      ? `Un panel en producción para 3 tiendas, ${publicados} webs publicadas y ${proyectos.length} proyectos en este portafolio.`
+      : `A production dashboard for 3 stores, ${publicados} live sites and ${proyectos.length} projects in this portfolio.`,
+  },
+].filter(Boolean) as { k: string; v: string }[];
+
+
+const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python', 'FastAPI', 'PostgreSQL', 'Docker', 'Git'];
+---
+
+<section id="reclutadores" class="seccion contenedor reclutadores">
+  <article class="ficha" data-revelar>
+    <header class="cabeza">
+      <h2>{es ? 'Resumen' : 'Summary'}</h2>
+    </header>
+
+    <div class="cuerpo">
+      <dl class="filas">
+        {
+          filas.map((f) => (
+            <div>
+              <dt>{f.k}</dt>
+              <dd>{f.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="lado">
+        <ul class="stack" aria-label="Stack">
+          {stack.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+    </div>
+
+    <footer class="acciones">
+      <a class="boton boton--lleno" href="#trabajo">
+        {es ? 'Ver proyectos' : 'See projects'}
+        <Icono nombre="arrow-down" tamano={18} />
+      </a>
+      {
+        perfil.cv && (
+          <a class="boton" href={url(`/${perfil.cv}`)} download>
+            <Icono nombre="file-arrow-down" tamano={18} />
+            CV
+          </a>
+        )
+      }
+      <a class="enlace" href={perfil.github} target="_blank" rel="noopener">
+        <Icono nombre="github-logo" tamano={18} /> GitHub
+      </a>
+      <a class="enlace" href={enlaceContacto} target="_blank" rel="noopener">
+        <Icono nombre={perfil.correo ? 'envelope-simple' : 'instagram-logo'} tamano={18} />
+        {es ? 'Escríbeme' : 'Message me'}
+      </a>
+    </footer>
+  </article>
+</section>
+
+<style>
+  .reclutadores {
+    padding-block: clamp(24px, 4vw, 48px);
+  }
+
+  .ficha {
+    position: relative;
+    padding: clamp(22px, 4vw, 40px);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background: var(--hoja);
+    border-color: var(--texto);
+  }
+
+
+  .cabeza {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 24px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+
+  h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  .cuerpo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 48px);
+  }
+
+  .filas {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .filas div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 12px;
+    padding-block: 6px;
+    border-bottom: 1px dashed var(--linea);
+  }
+
+  .filas dt {
+    padding-top: 3px;
+    font: 500 0.75rem/1.4 var(--mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+  }
+
+  .filas dd {
+    margin: 0;
+    font-weight: 500;
+  }
+
+
+
+
+
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack li {
+    padding: 3px 8px;
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    background: var(--superficie);
+    font: 500 0.75rem/1.4 var(--mono);
+  }
+
+  .acciones {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--linea);
+  }
+
+  .enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .enlace:hover {
+    color: var(--rojo);
+  }
+
+  @media (max-width: 760px) {
+    .cuerpo {
+      grid-template-columns: 1fr;
+    }
+
+    .filas div {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .ficha {
+    }
+  }
+
+  @media print {
+    .ficha {
+      box-shadow: none;
+    }
+  }
+</style>

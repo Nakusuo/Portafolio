@@ -18,7 +18,7 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
 ---
 
 <section id="servicios" class="seccion contenedor">
-  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.servicios.titulo}</h2>
+  <h2 class="titulo-seccion">{t.servicios.titulo}</h2>
   <p class="bajada">{t.servicios.bajada}</p>
 
   <div class="mesa">
@@ -70,7 +70,6 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
     background-size: 100% var(--renglon);
     border-radius: 2px;
     box-shadow: var(--sombra);
-    transform: rotate(-0.6deg);
   }
 
   /* Línea de margen, como en un cuaderno real */
@@ -119,7 +118,7 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
 
   @media (hover: hover) {
   .prueba:hover {
-      transform: rotate(0deg) translateX(3px);
+      transform: translateX(3px);
     }
   }
 
@@ -134,15 +133,13 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
     top: 100px;
     padding: 30px 26px 32px;
     background: var(--hueso);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
     border-radius: 2px;
     box-shadow: var(--sombra);
-    transform: rotate(2deg);
   }
 
   .postit h3 {
     font-family: var(--mano);
-    font-style: italic;
     font-size: 1.55rem;
     font-weight: 600;
     letter-spacing: 0;
@@ -154,7 +151,6 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
     margin: 16px 0 0;
     padding-left: 1.1em;
     font-family: var(--mano);
-    font-style: italic;
     font-size: 1.05rem;
     line-height: 1.2;
   }
@@ -175,7 +171,6 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
 
     .postit {
       position: static;
-      transform: rotate(1deg);
     }
   }
 </style>

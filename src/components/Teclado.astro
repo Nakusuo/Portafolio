@@ -28,30 +28,43 @@ const t = es
 
 <section id="teclado" class="seccion contenedor teclado" data-total={funFacts.length}>
   <div class="texto">
-    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <h2 class="titulo-seccion">{t.titulo}</h2>
     <p class="bajada">{t.bajada}</p>
   </div>
 
-  <div class="aparato">
-    <div class="pantalla">
-      <p class="estado-pantalla" aria-hidden="true">
-        <span>fun_facts.exe</span>
-        <span><span class="vistos">0</span>/{funFacts.length}</span>
-      </p>
-      <p class="salida" aria-live="polite">
-        <span class="letra-actual" aria-hidden="true">&gt;</span>
-        <span class="texto-salida">{t.espera}</span><span class="cursor" aria-hidden="true"></span>
-      </p>
-    </div>
+  <div class="consola" data-consola>
+    <div class="aparato">
+      <div class="frente">
+        <div class="marco-pantalla">
+          <div class="pantalla">
+            <p class="estado-pantalla" aria-hidden="true">
+              <span>fun_facts.exe</span>
+              <span><span class="vistos">0</span>/{funFacts.length}</span>
+            </p>
+            <p class="salida" aria-live="polite">
+              <span class="letra-actual" aria-hidden="true">&gt;</span>
+              <span class="texto-salida">{t.espera}</span><span class="cursor" aria-hidden="true"></span>
+            </p>
+          </div>
+        </div>
 
-    <div class="teclas" role="group" aria-label={t.teclas}>
-      {
-        funFacts.map((f, i) => (
-          <button type="button" class="tecla" data-indice={i} data-letra={f.letra} data-fact={f.texto[idioma]}>
-            {f.letra}
-          </button>
-        ))
-      }
+        <div class="panel" aria-hidden="true">
+          <span class="led"></span>
+          <span class="rejilla"></span>
+          <span class="perilla"><span></span></span>
+          <span class="modelo">FF-10</span>
+        </div>
+      </div>
+
+      <div class="teclas" role="group" aria-label={t.teclas}>
+        {
+          funFacts.map((f, i) => (
+            <button type="button" class:list={['tecla', `tono-${i % 5}`]} data-indice={i} data-letra={f.letra} data-fact={f.texto[idioma]}>
+              <span>{f.letra}</span>
+            </button>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>
@@ -87,12 +100,32 @@ const t = es
     const pulsar = (tecla: HTMLButtonElement) => {
       teclas.forEach((t) => t.classList.remove('activa'));
       tecla.classList.add('activa', 'vista');
-      vistos.textContent = String(seccion.querySelectorAll('.vista').length);
+      const n = seccion.querySelectorAll('.vista').length;
+      vistos.textContent = String(n);
+      // La perilla gira según cuántos datos ya descubriste; el LED parpadea
+      seccion.style.setProperty('--avance', String(n / teclas.length));
+      seccion.classList.remove('escribiendo');
+      void seccion.offsetWidth;
+      seccion.classList.add('escribiendo');
       letraActual.textContent = `${tecla.dataset.letra}>`;
       escribir(tecla.dataset.fact ?? '');
     };
 
     teclas.forEach((tecla) => tecla.addEventListener('click', () => pulsar(tecla)));
+
+    // El aparato se inclina un poco hacia el ratón
+    const consola = seccion.querySelector<HTMLElement>('[data-consola]');
+    if (consola && !sinMovimiento.matches && matchMedia('(hover: hover)').matches) {
+      consola.addEventListener('pointermove', (e) => {
+        const caja = consola.getBoundingClientRect();
+        consola.style.setProperty('--mx', (((e.clientX - caja.left) / caja.width) * 2 - 1).toFixed(3));
+        consola.style.setProperty('--my', (((e.clientY - caja.top) / caja.height) * 2 - 1).toFixed(3));
+      });
+      consola.addEventListener('pointerleave', () => {
+        consola.style.setProperty('--mx', '0');
+        consola.style.setProperty('--my', '0');
+      });
+    }
 
     new IntersectionObserver(([e]) => (aLaVista = e.isIntersecting), { threshold: 0.4 }).observe(seccion);
 
@@ -114,67 +147,129 @@ const t = es
 
 <style>
   .teclado {
-    /* La pantalla es siempre oscura, como un LCD, en modo claro y oscuro */
-    --lcd: #10140f;
-    --lcd-texto: #b6d77a;
-    --lcd-suave: rgb(182 215 122 / 0.5);
-    --cuerpo: var(--superficie-2);
-    --tapa: var(--hoja);
-    --tapa-borde: var(--linea);
-    --tapa-canto: rgb(26 29 25 / 0.28);
+    /* La pantalla es siempre oscura, como un tubo viejo, en modo claro y oscuro */
+    --lcd: var(--term-fondo);
+    --lcd-texto: var(--term-acento);
+    --lcd-suave: rgb(227 169 59 / 0.5);
+    /* Cuerpo del aparato: plástico color hueso de día, oliva oscuro de noche */
+    --cuerpo: #e7e0d2;
+    --cuerpo-luz: #fbf7f0;
+    --cuerpo-canto: #c2b59c;
+    --cuerpo-sombra: #8f8167;
+    --avance: 0;
 
     display: grid;
-    gap: 32px;
+    gap: 40px;
     justify-items: center;
     text-align: center;
   }
 
-  /* En oscuro las teclas se aclaran un poco y el canto se oscurece para que no se vean planas */
   @media (prefers-color-scheme: dark) {
     :global(:root:not([data-theme='light'])) .teclado {
-      --tapa: #3a3e35;
-      --tapa-canto: #0b0d0a;
+      --cuerpo: #2a241e;
+      --cuerpo-luz: #3a3229;
+      --cuerpo-canto: #18140f;
+      --cuerpo-sombra: #0d0b08;
     }
   }
 
   :global(:root[data-theme='dark']) .teclado {
-    --tapa: #3a3e35;
-    --tapa-canto: #0b0d0a;
+    --cuerpo: #2a241e;
+    --cuerpo-luz: #3a3229;
+    --cuerpo-canto: #18140f;
+    --cuerpo-sombra: #0d0b08;
   }
 
   .texto {
     max-width: 52ch;
   }
 
+  @media (min-width: 960px) {
+    .teclado {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: center;
+      justify-items: start;
+      text-align: left;
+    }
+
+    .consola {
+      justify-self: end;
+    }
+  }
+
+  /* ---------- El aparato, con grosor y un poco inclinado ---------- */
+  .consola {
+    --mx: 0;
+    --my: 0;
+    width: min(100%, 720px);
+    perspective: 1400px;
+    padding-bottom: 28px;
+  }
+
   .aparato {
-    width: min(100%, 780px);
-    padding: clamp(14px, 3vw, 26px);
-    border: 1px solid var(--linea);
-    border-radius: 14px;
-    background: linear-gradient(to bottom, var(--superficie), var(--cuerpo));
+    position: relative;
+    padding: clamp(16px, 3vw, 28px);
+    border-radius: 22px 22px 26px 26px;
+    background:
+      radial-gradient(120% 80% at 20% 0%, var(--cuerpo-luz), transparent 60%),
+      var(--cuerpo);
+    /* El canto de abajo da el grosor; la sombra larga lo apoya en la mesa */
     box-shadow:
-      var(--sombra),
-      inset 0 1px 0 rgb(255 255 255 / 0.35),
-      inset 0 -4px 0 rgb(26 29 25 / 0.08);
+      inset 0 2px 0 rgb(255 255 255 / 0.35),
+      inset 0 -3px 0 rgb(0 0 0 / 0.08),
+      0 6px 0 var(--cuerpo-canto),
+      0 12px 0 var(--cuerpo-canto),
+      0 18px 0 var(--cuerpo-sombra),
+      0 50px 50px -20px rgb(0 0 0 / 0.45);
+    transform: rotateX(calc(12deg + var(--my) * -4deg)) rotateY(calc(var(--mx) * 6deg));
+    transform-origin: 50% 80%;
+    transition: transform 0.6s var(--curva);
+  }
+
+  .frente {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(12px, 2.4vw, 22px);
+    margin-bottom: clamp(16px, 3vw, 26px);
+  }
+
+  /* ---------- Pantalla tipo tubo ---------- */
+  .marco-pantalla {
+    padding: 10px;
+    border-radius: 18px;
+    background: #1f1a14;
+    box-shadow:
+      inset 0 2px 4px rgb(0 0 0 / 0.6),
+      0 1px 0 rgb(255 255 255 / 0.25);
   }
 
   .pantalla {
-    min-height: 6.5em;
-    margin-bottom: clamp(14px, 3vw, 24px);
-    padding: 12px 16px 16px;
-    border-radius: 8px;
+    position: relative;
+    min-height: 7.5em;
+    padding: 14px 18px 18px;
+    overflow: hidden;
+    border-radius: 14px / 18px;
     background:
-      repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.03) 0 2px, transparent 2px 4px),
-      var(--lcd);
+      repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.035) 0 2px, transparent 2px 4px),
+      radial-gradient(120% 120% at 50% 50%, #2a1f0c 0%, var(--lcd) 70%);
     box-shadow:
-      inset 0 2px 10px rgb(0 0 0 / 0.7),
-      0 0 0 4px rgb(26 29 25 / 0.35);
+      inset 0 0 28px rgb(0 0 0 / 0.85),
+      inset 0 0 6px rgb(227 169 59 / 0.15);
     color: var(--lcd-texto);
     font-family: var(--pixel);
-    font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
     line-height: 1.25;
     text-align: left;
-    text-shadow: 0 0 6px rgb(182 215 122 / 0.45);
+    text-shadow: 0 0 6px rgb(227 169 59 / 0.5);
+  }
+
+  /* Reflejo del vidrio */
+  .pantalla::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgb(255 255 255 / 0.1), transparent 35%);
+    pointer-events: none;
   }
 
   .estado-pantalla {
@@ -212,53 +307,146 @@ const t = es
     }
   }
 
+  /* ---------- Panel lateral: LED, altavoz, perilla ---------- */
+  .panel {
+    display: grid;
+    justify-items: center;
+    align-content: space-between;
+    gap: 12px;
+    width: clamp(56px, 9vw, 84px);
+    padding-block: 4px;
+  }
+
+  .led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #b07a14;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 0.15), 0 0 8px rgb(227 169 59 / 0.6);
+  }
+
+  .escribiendo .led {
+    animation: led 0.5s steps(2) 2;
+  }
+
+  @keyframes led {
+    50% {
+      background: #ffd88a;
+      box-shadow: 0 0 0 2px rgb(0 0 0 / 0.15), 0 0 14px #ffd88a;
+    }
+  }
+
+  .rejilla {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    background: radial-gradient(circle, rgb(0 0 0 / 0.45) 1.6px, transparent 2.2px) 0 0 / 9px 9px;
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.15);
+  }
+
+  .perilla {
+    display: grid;
+    place-items: start center;
+    width: clamp(40px, 6vw, 54px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f4efe4, #b7ab93 70%);
+    box-shadow:
+      0 3px 0 var(--cuerpo-sombra),
+      0 6px 8px -2px rgb(0 0 0 / 0.4);
+    rotate: calc(-135deg + var(--avance) * 270deg);
+    transition: rotate 0.5s var(--curva);
+  }
+
+  .perilla span {
+    width: 3px;
+    height: 34%;
+    margin-top: 10%;
+    border-radius: 2px;
+    background: var(--vino);
+  }
+
+  .modelo {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--texto-suave);
+  }
+
+  /* ---------- Teclas de colores, PORTA arriba y FOLIO abajo ---------- */
   .teclas {
     display: grid;
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-    gap: clamp(6px, 1.2vw, 10px);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(8px, 1.6vw, 14px);
+    padding: clamp(10px, 2vw, 16px);
+    border-radius: 14px;
+    background: rgb(0 0 0 / 0.12);
+    box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.25);
   }
 
   .tecla {
+    --tapa: var(--hueso);
+    --letra: var(--tinta-fija);
     position: relative;
-    aspect-ratio: 1;
-    border: 1px solid var(--tapa-borde);
-    border-radius: 6px;
-    background: linear-gradient(to bottom, var(--tapa), var(--superficie));
+    aspect-ratio: 1.15;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background:
+      linear-gradient(to bottom, rgb(255 255 255 / 0.28), transparent 45%),
+      var(--tapa);
     box-shadow:
-      0 5px 0 var(--tapa-canto),
-      0 7px 10px -4px rgb(26 29 25 / 0.35),
-      inset 0 -3px 0 rgb(26 29 25 / 0.06);
-    color: var(--texto);
-    font-family: var(--mono);
-    font-size: clamp(1rem, 2.4vw, 1.4rem);
-    font-weight: 600;
+      inset 0 -6px 0 color-mix(in srgb, var(--tapa), #000 18%),
+      0 6px 0 color-mix(in srgb, var(--tapa), #000 40%),
+      0 10px 12px -4px rgb(0 0 0 / 0.45);
+    color: var(--letra);
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 3.4vw, 2rem);
+    font-weight: 800;
     cursor: pointer;
-    transform: translateY(0);
+    translate: 0 0;
     transition:
-      transform 0.08s,
-      box-shadow 0.08s;
+      translate 0.08s,
+      box-shadow 0.08s,
+      filter 0.2s;
   }
 
+  .tecla span {
+    position: relative;
+    top: -3px;
+  }
+
+  .tono-0 { --tapa: var(--vino); --letra: var(--crema-fija); }
+  .tono-1 { --tapa: var(--hueso); }
+  .tono-2 { --tapa: var(--oliva-claro); --letra: var(--crema-fija); }
+  .tono-3 { --tapa: var(--resaltador-fijo); }
+  .tono-4 { --tapa: var(--tierra); --letra: var(--crema-fija); }
+
   .tecla:hover {
-    background: linear-gradient(to bottom, var(--hoja), var(--superficie-2));
+    filter: brightness(1.06);
   }
 
   .tecla:active,
   .tecla.hundida {
-    transform: translateY(4px);
+    translate: 0 5px;
     box-shadow:
-      0 1px 0 var(--tapa-canto),
-      0 2px 4px -2px rgb(26 29 25 / 0.35),
-      inset 0 -1px 0 rgb(26 29 25 / 0.06);
+      inset 0 -3px 0 color-mix(in srgb, var(--tapa), #000 18%),
+      0 1px 0 color-mix(in srgb, var(--tapa), #000 40%),
+      0 3px 5px -2px rgb(0 0 0 / 0.45);
   }
 
   .tecla:focus-visible {
     outline: 2px solid var(--acento);
-    outline-offset: 3px;
+    outline-offset: 4px;
   }
 
+  /* La tecla de la última respuesta queda un poco hundida */
   .tecla.activa {
-    color: var(--acento);
+    translate: 0 3px;
+    box-shadow:
+      inset 0 -4px 0 color-mix(in srgb, var(--tapa), #000 18%),
+      0 3px 0 color-mix(in srgb, var(--tapa), #000 40%),
+      0 5px 8px -3px rgb(0 0 0 / 0.45);
   }
 
   /* Puntito de "ya la tocaste" */
@@ -266,19 +454,31 @@ const t = es
     content: '';
     position: absolute;
     left: 50%;
-    bottom: 12%;
-    width: 5px;
-    height: 5px;
-    margin-left: -2.5px;
+    bottom: 16%;
+    width: 6px;
+    height: 6px;
+    margin-left: -3px;
     border-radius: 50%;
-    background: var(--acento);
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  .placa {
+    margin: clamp(14px, 2.4vw, 20px) 0 0;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
   }
 
   @media (max-width: 560px) {
-    /* PORTA arriba, FOLIO abajo */
-    .teclas {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      row-gap: 14px;
+    .frente {
+      grid-template-columns: 1fr;
+    }
+
+    .panel {
+      display: none;
     }
 
     .pantalla {
@@ -287,11 +487,14 @@ const t = es
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cursor {
+    .cursor,
+    .escribiendo .led {
       animation: none;
     }
 
-    .tecla {
+    .aparato,
+    .tecla,
+    .perilla {
       transition: none;
     }
   }

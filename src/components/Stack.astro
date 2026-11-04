@@ -20,7 +20,7 @@ const usadoEn = (tecnologia: string) =>
 
 <section id="stack" class="seccion contenedor stack" data-grupo-arrastre>
   <div class="lateral">
-    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+    <h2 class="titulo-seccion">{t.titulo}</h2>
     <p class="bajada">{t.bajada}</p>
     <Repegar idioma={idioma} />
     {
@@ -115,13 +115,12 @@ const usadoEn = (tecnologia: string) =>
     padding: 12px 14px;
     border-radius: 3px;
     box-shadow: var(--sombra-sticker);
-    transform: rotate(var(--giro));
     transition: transform 0.4s var(--curva);
   }
 
   @media (hover: hover) {
   .sticker:hover {
-      transform: rotate(0deg) scale(1.04);
+      transform: scale(1.04);
     }
   }
 
@@ -136,17 +135,17 @@ const usadoEn = (tecnologia: string) =>
 
   .sticker--1 {
     background: var(--vino);
-    color: #f6ecee;
+    color: var(--crema-fija);
   }
 
   .sticker--2 {
     background: var(--tierra);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
   }
 
   .sticker--3 {
     background: var(--hueso);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
   }
 
   .nombre {
@@ -156,7 +155,6 @@ const usadoEn = (tecnologia: string) =>
   .usos {
     grid-column: 2;
     font-family: var(--mano);
-    font-style: italic;
     font-size: 0.85rem;
     line-height: 1.15;
     opacity: 0.85;

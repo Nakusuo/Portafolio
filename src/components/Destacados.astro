@@ -45,11 +45,7 @@ const direccionDe = (p: Proyecto) => {
 
 <section id="trabajo" class="seccion contenedor">
   <div class="con-anotacion">
-    <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
-    <p class="anotacion">
-      <Icono nombre="arrow-bend-down-left" tamano={26} />
-      {nota}
-    </p>
+    <h2 class="titulo-seccion">{t.titulo}</h2>
   </div>
   <p class="bajada">{t.bajada}</p>
 
@@ -63,6 +59,9 @@ const direccionDe = (p: Proyecto) => {
               {p.data.rol && <span class="rol">{p.data.rol}</span>}
               <h3 style={`view-transition-name: titulo-${slugDe(p)}`}>{p.data.titulo}</h3>
               <p class="resumen">{p.data.resumen}</p>
+              {p.data.impacto && (
+                <p class="impacto"><b>{idioma === 'es' ? 'Resultado' : 'Result'}:</b> {p.data.impacto}</p>
+              )}
               <ul class="chips">
                 {p.data.privado && (
                   <li>
@@ -103,6 +102,12 @@ const direccionDe = (p: Proyecto) => {
 </section>
 
 <style>
+  .impacto {
+    margin: 0 0 16px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
   .fichas {
     display: grid;
     gap: 56px;
@@ -222,7 +227,7 @@ const direccionDe = (p: Proyecto) => {
 
   .hueso {
     background: var(--hueso);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
   }
 
   .oliva {
@@ -232,12 +237,12 @@ const direccionDe = (p: Proyecto) => {
 
   .tierra {
     background: var(--tierra);
-    color: #1c1f1c;
+    color: var(--tinta-fija);
   }
 
   .vino {
     background: var(--vino);
-    color: #f6ecee;
+    color: var(--crema-fija);
   }
 
   @media (max-width: 860px) {

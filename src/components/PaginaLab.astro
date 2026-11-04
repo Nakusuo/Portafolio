@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Lab from './Lab.astro';
+import Dibujar from './Dibujar.astro';
 import Contacto from './Contacto.astro';
 import { textos, type Idioma } from '../i18n/ui';
 
@@ -13,5 +14,6 @@ const { idioma } = Astro.props;
 
 <Base idioma={idioma} ruta="/lab" titulo={textos[idioma].nav.lab} descripcion={textos[idioma].lab.bajada}>
   <Lab idioma={idioma} />
+  <Dibujar idioma={idioma} />
   <Contacto idioma={idioma} />
 </Base>

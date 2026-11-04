@@ -14,10 +14,6 @@ const t = textos[idioma].hero;
 
 <section class="hero contenedor" data-grupo-arrastre>
   <div class="centro">
-    <p class="nota mi-nombre">
-      {t.miNombre}
-      <Icono nombre="arrow-bend-right-down" tamano={22} class="flecha-nombre" />
-    </p>
 
     <div class="nombre-bloque">
       <span class="etiqueta etiqueta--hueso e1" data-arrastrable style="--giro:-4deg">{t.etiquetas[0]}</span>
@@ -226,7 +222,6 @@ const t = textos[idioma].hero;
   }
 
   .rutas li {
-    transform: rotate(var(--giro));
   }
 
   .rutas a {
@@ -384,14 +379,13 @@ const t = textos[idioma].hero;
   @keyframes pegar-etiqueta {
     from {
       opacity: 0;
-      transform: rotate(calc(var(--giro) * 4)) scale(1.5);
+      transform: scale(1.5);
     }
     60% {
       opacity: 1;
     }
     to {
       opacity: 1;
-      transform: rotate(var(--giro)) scale(1);
     }
   }
 
@@ -475,6 +469,42 @@ const t = textos[idioma].hero;
       width: 100%;
       padding-inline: 16px;
       text-align: center;
+    }
+  }
+
+  /* En escritorio todo el hero (con los atajos) cabe en la primera pantalla */
+  @media (min-width: 861px) {
+    .hero {
+      min-height: calc(100svh - 72px);
+      padding-block: clamp(16px, 3vh, 40px) 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .nombre-bloque {
+      padding-block: 24px;
+    }
+
+    .nombre {
+      font-size: clamp(4rem, min(12vw, 15vh), 8rem);
+    }
+
+    .lema {
+      margin-top: clamp(12px, 2.4vh, 28px);
+      font-size: clamp(2.2rem, min(4.6vw, 7vh), 4.4rem);
+    }
+
+    .bajada-hero {
+      margin: 12px 0 20px;
+    }
+
+    .rutas {
+      margin-top: clamp(20px, 4vh, 48px);
+    }
+
+    .rutas a {
+      padding-block: 12px;
     }
   }
 </style>
