@@ -71,7 +71,7 @@ const total = numero(proyectos.length - 1);
                     </>
                   )}
                   <dt>Stack</dt>
-                  <dd>{p.data.stack.slice(0, 4).join(' · ')}</dd>
+                  <dd>{p.data.stack.slice(0, 4).join(', ')}</dd>
                   {p.data.privado && (
                     <>
                       <dt>{es ? 'Código' : 'Code'}</dt>

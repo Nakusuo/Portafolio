@@ -22,16 +22,15 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
   <p class="bajada">{t.servicios.bajada}</p>
 
   <div class="mesa">
-    <!-- Hoja rayada de cuaderno: las líneas van cada 32px y el texto se apoya en ellas -->
-    <ol class="hoja cinta" data-revelar>
+    <ol class="lista" data-revelar>
       {
         servicios.map((s, i) => (
           <li>
-            <Icono nombre={iconos[i]} tamano={26} class="margen" />
+            <Icono nombre={iconos[i]} tamano={26} class="icono" />
             <h3>{s.titulo[idioma]}</h3>
             <p>{s.detalle[idioma]}</p>
             {s.prueba && tituloDe(s.prueba) && (
-              <a class="etiqueta etiqueta--oliva prueba" href={rutaEn(idioma, `/proyectos/${s.prueba}`)} style={`--giro:${i % 2 ? 1.5 : -1.5}deg`}>
+              <a class="prueba" href={rutaEn(idioma, `/proyectos/${s.prueba}`)}>
                 {ejemplo} {tituloDe(s.prueba)}
                 <Icono nombre="arrow-right" tamano={15} />
               </a>
@@ -41,7 +40,7 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
       }
     </ol>
 
-    <aside class="postit" data-revelar style="--i:2">
+    <aside class="como-trabajo" data-revelar style="--i:2">
       <h3>{idioma === 'es' ? 'Cómo trabajo' : 'How I work'}</h3>
       <ul>
         {comoTrabajo.map((c) => <li>{c[idioma]}</li>)}
@@ -59,105 +58,100 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
     margin-top: clamp(48px, 6vw, 72px);
   }
 
-  .hoja {
-    --renglon: 32px;
-    position: relative;
+  .lista {
     margin: 0;
-    padding: var(--renglon) clamp(20px, 4vw, 48px) var(--renglon) clamp(64px, 8vw, 96px);
+    padding: 0;
     list-style: none;
-    background-color: var(--hoja);
-    background-image: linear-gradient(transparent calc(var(--renglon) - 1px), var(--hoja-linea) calc(var(--renglon) - 1px));
-    background-size: 100% var(--renglon);
-    border-radius: 2px;
-    box-shadow: var(--sombra);
   }
 
-  /* Línea de margen, como en un cuaderno real */
-  .hoja::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: clamp(48px, 6vw, 72px);
-    width: 1.5px;
-    background: color-mix(in srgb, var(--vino) 55%, transparent);
+  .lista li {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr);
+    column-gap: 18px;
+    padding: 26px 0;
+    border-top: 1px solid var(--linea);
   }
 
-  .hoja li {
-    position: relative;
-    line-height: var(--renglon);
+  .lista li:first-child {
+    border-top: 1.5px solid var(--tinta);
   }
 
-  .hoja li + li {
-    margin-top: var(--renglon);
+  .lista :global(.icono) {
+    grid-row: 1 / span 3;
+    color: var(--acento);
+    margin-top: 4px;
   }
 
-  .hoja :global(.margen) {
-    position: absolute;
-    top: 3px;
-    left: calc(-1 * clamp(56px, 7vw, 82px));
-    color: var(--rojo);
-  }
-
-  .hoja h3 {
+  .lista h3 {
+    grid-column: 2;
     font-size: 1.45rem;
-    line-height: var(--renglon);
     letter-spacing: -0.025em;
   }
 
-  .hoja p {
+  .lista p {
+    grid-column: 2;
     max-width: 52ch;
+    margin-top: 8px;
     color: var(--texto-suave);
   }
 
   .prueba {
-    margin-top: 6px;
+    grid-column: 2;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.93rem;
+    font-weight: 500;
     text-decoration: none;
-    transition: transform 0.4s var(--curva);
+    transition: color 0.2s;
   }
 
-  @media (hover: hover) {
   .prueba:hover {
-      transform: translateX(3px);
-    }
+    color: var(--acento);
   }
 
   @media (pointer: coarse) {
     .prueba {
-      padding-block: 9px;
+      min-height: 44px;
     }
   }
 
-  .postit {
+  .como-trabajo {
     position: sticky;
     top: 100px;
-    padding: 30px 26px 32px;
-    background: var(--hueso);
-    color: var(--tinta-fija);
-    border-radius: 2px;
-    box-shadow: var(--sombra);
+    padding-top: 18px;
+    border-top: 1.5px solid var(--tinta);
   }
 
-  .postit h3 {
-    font-family: var(--mano);
-    font-size: 1.55rem;
-    font-weight: 600;
-    letter-spacing: 0;
+  .como-trabajo h3 {
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
   }
 
-  .postit ul {
+  .como-trabajo ul {
     display: grid;
     gap: 14px;
     margin: 16px 0 0;
-    padding-left: 1.1em;
-    font-family: var(--mano);
-    font-size: 1.05rem;
-    line-height: 1.2;
+    padding: 0;
+    list-style: none;
+    color: var(--texto-suave);
   }
 
-  .postit li::marker {
-    content: '- ';
-    color: var(--vino);
+  .como-trabajo li {
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .como-trabajo li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 7px;
+    height: 1.5px;
+    background: var(--acento);
   }
 
   @media (max-width: 860px) {
@@ -165,11 +159,7 @@ const iconos = ['storefront', 'squares-four', 'app-window', 'pen-nib'];
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .hoja {
-      transform: none;
-    }
-
-    .postit {
+    .como-trabajo {
       position: static;
     }
   }

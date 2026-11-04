@@ -1,0 +1,175 @@
+---
+import Base from '../layouts/Base.astro';
+import Icono from './Icono.astro';
+import Portada from './Portada.astro';
+import Contacto from './Contacto.astro';
+import { proyectosEn, slugDe } from '../lib/proyectos';
+import { rutaEn, textos, type Idioma } from '../i18n/ui';
+
+interface Props {
+  idioma: Idioma;
+}
+
+const { idioma } = Astro.props;
+const t = textos[idioma];
+const proyectos = (await proyectosEn(idioma)).filter((p) => p.data.categorias.includes('fanbases'));
+const iconos = ['play-circle', 'table', 'cloud-arrow-up'];
+---
+
+<Base idioma={idioma} ruta="/fanbases" titulo={t.nav.fanbases} descripcion={t.fanbases.bajada}>
+  <section id="fanbases" class="seccion contenedor">
+    <h2 class="titulo-seccion">{t.fanbases.titulo}</h2>
+    <p class="bajada">{t.fanbases.bajada}</p>
+
+    <ul class="ofrezco">
+      {
+        t.fanbases.ofrezco.map((o, i) => (
+          <li>
+            <Icono nombre={iconos[i]} tamano={26} />
+            <h3>{o.titulo}</h3>
+            <p>{o.detalle}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="seccion contenedor">
+    <h2 class="subtitulo">{t.fanbases.proyectos}</h2>
+    <ul class="proyectos">
+      {
+        proyectos.map((p) => (
+          <li class="proyecto">
+            <Portada proyecto={p} />
+            <h3>
+              <a class="titulo-caso" href={rutaEn(idioma, `/proyectos/${slugDe(p)}`)}>{p.data.titulo}</a>
+            </h3>
+            <p>{p.data.resumen}</p>
+            <p class="pila">{p.data.stack.join(' / ')}</p>
+            <div class="enlaces">
+              {p.data.demo && (
+                <a class="tactil" href={p.data.demo} target="_blank" rel="noopener">
+                  {t.proyectos.demo}
+                  <Icono nombre="arrow-up-right" tamano={15} />
+                </a>
+              )}
+              {p.data.repos.map((r) => (
+                <a class="tactil" href={r.url} target="_blank" rel="noopener" aria-label={`${t.proyectos.repo} ${r.nombre}`}>
+                  <Icono nombre="github-logo" tamano={16} />
+                  {t.proyectos.repo}
+                </a>
+              ))}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    {proyectos.length === 0 && <p class="vacio">{t.fanbases.vacio}</p>}
+  </section>
+
+  <Contacto idioma={idioma} />
+</Base>
+
+<style>
+  .ofrezco {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 36px);
+    margin: clamp(40px, 5vw, 56px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ofrezco li {
+    padding-top: 18px;
+    border-top: 1.5px solid var(--tinta);
+  }
+
+  .ofrezco :global(svg) {
+    color: var(--acento);
+  }
+
+  .ofrezco h3,
+  .proyectos h3 {
+    margin-top: 14px;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .ofrezco p,
+  .proyectos p {
+    margin-top: 8px;
+    color: var(--texto-suave);
+  }
+
+  .titulo-caso {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(var(--acento), var(--acento));
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--curva), color 0.2s;
+  }
+
+  .titulo-caso:hover {
+    color: var(--acento);
+    background-size: 100% 2px;
+  }
+
+  .subtitulo {
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+  }
+
+  .proyectos {
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .proyectos li {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .proyecto :global(.portada) {
+    margin-bottom: 18px;
+  }
+
+  .pila {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+  }
+
+  .enlaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .enlaces a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .enlaces a:hover {
+    color: var(--acento);
+  }
+
+  .vacio {
+    padding: 32px 0;
+    color: var(--texto-suave);
+  }
+
+  @media (max-width: 860px) {
+    .ofrezco {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

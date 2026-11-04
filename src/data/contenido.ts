@@ -202,7 +202,7 @@ export interface Paso {
 /** Experiencia, del más reciente al más antiguo (sale del CV). */
 export const experiencia: Paso[] = [
   {
-    lugar: 'Central · panel de tres tiendas',
+    lugar: 'Central, panel de tres tiendas',
     rol: { es: 'Desarrollo y mantenimiento', en: 'Development and maintenance' },
     fechas: { es: 'Hoy', en: 'Now' },
     detalle: {
@@ -211,7 +211,7 @@ export const experiencia: Paso[] = [
     },
   },
   {
-    lugar: 'Policía Nacional del Perú · UNITIC',
+    lugar: 'Policía Nacional del Perú, UNITIC',
     rol: { es: 'Auxiliar administrativo, Unidad de Tecnología', en: 'Administrative assistant, IT Unit' },
     fechas: { es: 'nov. 2024 – mar. 2026', en: 'Nov 2024 – Mar 2026' },
     detalle: {
@@ -233,12 +233,12 @@ export const experiencia: Paso[] = [
 export const formacion: Paso[] = [
   {
     lugar: 'Universidad Tecnológica del Perú (UTP)',
-    rol: { es: 'Ingeniería de Software · 8.º ciclo', en: 'Software Engineering · 8th term' },
+    rol: { es: 'Ingeniería de Software, 8.º ciclo', en: 'Software Engineering, 8th term' },
     fechas: { es: '2023 – hoy', en: '2023 – now' },
   },
   {
     lugar: 'Británico',
-    rol: { es: 'Inglés · Advanced Phase', en: 'English · Advanced Phase' },
+    rol: { es: 'Inglés, Advanced Phase', en: 'English, Advanced Phase' },
     fechas: { es: '2023', en: '2023' },
   },
 ];
@@ -246,7 +246,7 @@ export const formacion: Paso[] = [
 /** Certificados agrupados por quien los emite. */
 export const certificados: { emisor: string; fechas: string; tono: 'oliva' | 'vino' | 'tierra' | 'hueso'; cursos: Texto[] }[] = [
   {
-    emisor: 'Cisco Networking Academy · UTP',
+    emisor: 'Cisco Networking Academy, UTP',
     fechas: '2025',
     tono: 'vino',
     cursos: [
@@ -258,7 +258,7 @@ export const certificados: { emisor: string; fechas: string; tono: 'oliva' | 'vi
     ],
   },
   {
-    emisor: 'UTP · Ingeniería de Software',
+    emisor: 'UTP, Ingeniería de Software',
     fechas: '2025 – 2026',
     tono: 'oliva',
     cursos: [
@@ -269,13 +269,13 @@ export const certificados: { emisor: string; fechas: string; tono: 'oliva' | 'vi
     ],
   },
   {
-    emisor: 'UNI · Oficina de TI',
+    emisor: 'UNI, Oficina de TI',
     fechas: '2024',
     tono: 'tierra',
-    cursos: [{ es: 'Programación en Python básico · nota 18/20', en: 'Basic Python Programming · grade 18/20' }],
+    cursos: [{ es: 'Programación en Python básico, nota 18/20', en: 'Basic Python Programming, grade 18/20' }],
   },
   {
-    emisor: 'Lima Educa · Perú Digital',
+    emisor: 'Lima Educa, Perú Digital',
     fechas: '2024',
     tono: 'hueso',
     cursos: [

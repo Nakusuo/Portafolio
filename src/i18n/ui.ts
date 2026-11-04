@@ -17,13 +17,14 @@ export function rutaEn(idioma: Idioma, ruta = '/'): string {
 export const textos = {
   es: {
     meta: {
-      titulo: 'Nakusu · Desarrollo y diseño',
+      titulo: 'Nakusu: desarrollo y diseño',
       descripcion:
         'Portafolio de Nakusu: estudiante de Ingeniería de Software que hace frontend, backend y diseño. Proyectos con clientes reales, casos de estudio y stack.',
     },
     nav: {
       trabajo: 'Trabajo',
       servicios: 'Servicios',
+      fanbases: 'Fanbases',
       lab: 'Lab',
       sobreMi: 'Sobre mí',
       contacto: 'Escríbeme',
@@ -33,7 +34,7 @@ export const textos = {
     },
     hero: {
       miNombre: 'mi nombre es',
-      etiquetas: ['hago cosas', 'Ing. de Software · 4.º año', 'frontend + backend', 'también diseño'],
+      etiquetas: ['hago cosas', 'Ing. de Software, 4.º año', 'frontend + backend', 'también diseño'],
       estado: 'Abierto a prácticas y proyectos',
       titulo: 'Diseño interfaces y construyo lo que hay detrás.',
       bajada:
@@ -73,12 +74,33 @@ export const textos = {
       backend: 'Backend',
       universidad: 'Universidad',
       personal: 'Personal',
+      fanbases: 'Fanbases',
     },
     stack: {
       titulo: 'Lo que domino',
       bajada: 'Debajo de cada tecnología están los proyectos donde la usé.',
       usadoEn: 'Usado en',
       cv: 'Descargar CV',
+    },
+    fanbases: {
+      titulo: 'Fanbases',
+      bajada: 'Una fanbase es un grupo de fans de un artista. Hago sitios para ellas: catálogos, páginas de miembros y herramientas que la comunidad usa a diario.',
+      ofrezco: [
+        {
+          titulo: 'Sitio tipo streaming',
+          detalle: 'Portada con videos, filas por categoría, fichas de cada miembro y buscador, con diseño de celular y de computadora.',
+        },
+        {
+          titulo: 'Contenido sin programar',
+          detalle: 'Lo que cambia (miembros, enlaces, videos, redes) se edita desde una hoja de cálculo. Quien administra no necesita tocar código.',
+        },
+        {
+          titulo: 'Gratis y sin mantenimiento',
+          detalle: 'Se publica como sitio estático en GitHub Pages o Vercel, sin servidor de pago ni cuentas para los visitantes.',
+        },
+      ],
+      proyectos: 'Proyectos para fanbases',
+      vacio: 'Todavía no hay proyectos aquí.',
     },
     servicios: {
       titulo: 'Lo que puedo hacer por ti',
@@ -129,6 +151,7 @@ export const textos = {
     },
     caso: {
       volver: 'Volver al trabajo',
+      volverFanbases: 'Volver a fanbases',
       rol: 'Rol',
       stack: 'Stack',
       enlaces: 'Enlaces',
@@ -143,13 +166,14 @@ export const textos = {
   },
   en: {
     meta: {
-      titulo: 'Nakusu · Development and design',
+      titulo: 'Nakusu: development and design',
       descripcion:
         'Portfolio of Nakusu: software engineering student working across frontend, backend and design. Real client projects, case studies and stack.',
     },
     nav: {
       trabajo: 'Work',
       servicios: 'Services',
+      fanbases: 'Fanbases',
       lab: 'Lab',
       sobreMi: 'About',
       contacto: 'Get in touch',
@@ -159,7 +183,7 @@ export const textos = {
     },
     hero: {
       miNombre: 'my name is',
-      etiquetas: ['I make things', 'Software Eng. · 4th year', 'frontend + backend', 'design too'],
+      etiquetas: ['I make things', 'Software Eng., 4th year', 'frontend + backend', 'design too'],
       estado: 'Open to internships and projects',
       titulo: 'I design interfaces and build what runs behind them.',
       bajada:
@@ -199,12 +223,33 @@ export const textos = {
       backend: 'Backend',
       universidad: 'University',
       personal: 'Personal',
+      fanbases: 'Fanbases',
     },
     stack: {
       titulo: 'What I work with',
       bajada: 'Under each technology are the projects where I used it.',
       usadoEn: 'Used in',
       cv: 'Download CV',
+    },
+    fanbases: {
+      titulo: 'Fanbases',
+      bajada: 'A fanbase is a group of fans of an artist. I build sites for them: catalogs, member pages and tools the community uses daily.',
+      ofrezco: [
+        {
+          titulo: 'Streaming-style site',
+          detalle: 'Home page with videos, category rows, member profiles and search, designed for phone and desktop.',
+        },
+        {
+          titulo: 'Content without coding',
+          detalle: 'What changes (members, links, videos, social accounts) is edited from a spreadsheet. The admin never touches code.',
+        },
+        {
+          titulo: 'Free and low maintenance',
+          detalle: 'Published as a static site on GitHub Pages or Vercel, with no paid server and no accounts for visitors.',
+        },
+      ],
+      proyectos: 'Projects for fanbases',
+      vacio: 'No projects here yet.',
     },
     servicios: {
       titulo: 'What I can build for you',
@@ -253,6 +298,7 @@ export const textos = {
     },
     caso: {
       volver: 'Back to work',
+      volverFanbases: 'Back to fanbases',
       rol: 'Role',
       stack: 'Stack',
       enlaces: 'Links',

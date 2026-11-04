@@ -5,7 +5,7 @@ import { proyectosEn, slugDe } from '../../lib/proyectos';
 export async function getStaticPaths() {
   const proyectos = await proyectosEn('es');
   return proyectos
-    .filter((p) => p.data.destacado)
+    .filter((p) => p.data.destacado || p.data.categorias.includes('fanbases'))
     .map((proyecto) => ({ params: { slug: slugDe(proyecto) }, props: { proyecto } }));
 }
 

@@ -19,7 +19,7 @@ interface Props {
 
 const { idioma, ruta = '/', titulo, descripcion, imagen, arranque = false } = Astro.props;
 const t = textos[idioma];
-const tituloFinal = titulo ? `${titulo} · Nakusu` : t.meta.titulo;
+const tituloFinal = titulo ? `${titulo} | Nakusu` : t.meta.titulo;
 const descripcionFinal = descripcion ?? t.meta.descripcion;
 const canonica = new URL(Astro.url.pathname, Astro.site);
 const imagenOg = imagen ? new URL(url(`/${imagen}`), Astro.site).href : undefined;

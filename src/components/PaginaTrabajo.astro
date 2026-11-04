@@ -15,8 +15,9 @@ interface Props {
 const { idioma } = Astro.props;
 const proyectos = await proyectosEn(idioma);
 const destacados = proyectos.filter((p) => p.data.destacado);
-// Lo de la uni tiene su propia sección, así no se pierde en la lista
-const resto = proyectos.filter((p) => !p.data.destacado && !p.data.categorias.includes('universidad'));
+// Lo de la uni y lo de fanbases tienen su propia sección
+const resto = proyectos.filter((p) => !p.data.destacado && !p.data.categorias.includes('universidad') && !p.data.categorias.includes('fanbases'));
+// Los de fanbases tienen su propia página: /fanbases
 ---
 
 <Base idioma={idioma} ruta="/trabajo" titulo={textos[idioma].nav.trabajo} imagen="proyectos/paltishop.webp">
