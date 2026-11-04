@@ -15,8 +15,8 @@ const [entrada, ...resto] = sobreMi;
 
 // Stickers pegados encima del código: versiones cortas de los fun facts del teclado
 const pegatinas = es
-  ? ['jugo de fresa > café', 'Salem y Lukas mandan', 'grunge · rock · punk', 'soy de noche', 'aprendiendo guitarra']
-  : ['strawberry juice > coffee', 'Salem & Lukas rule', 'grunge · rock · punk', 'night owl', 'learning guitar'];
+  ? ['jugo de fresa > café', 'Salem y Lukas mandan', 'grunge, rock, punk', 'soy de noche', 'aprendiendo guitarra']
+  : ['strawberry juice > coffee', 'Salem & Lukas rule', 'grunge, rock, punk', 'night owl', 'learning guitar'];
 const tonos = ['vino', 'hueso', 'oliva', 'tierra', 'hueso'];
 const giros = [-6, 4, -3, 7, -5];
 // Por si cambian los fun facts: solo se muestran tantos stickers como datos haya
@@ -25,7 +25,7 @@ const visibles = pegatinas.slice(0, Math.min(pegatinas.length, funFacts.length))
 // El mismo objeto del README de GitHub
 const campos: [string, string][] = es
   ? [
-      ['rol', '"Estudiante de Ingeniería de Software · 4.º año"'],
+      ['rol', '"Estudiante de Ingeniería de Software, 4.º año"'],
       ['ahora', '["Central", "Huecko", "SafeZone"]'],
       ['frontend', '["React", "TypeScript", "Tailwind", "Vite"]'],
       ['backend', '["Spring Boot", "FastAPI", "PostgreSQL"]'],
@@ -33,7 +33,7 @@ const campos: [string, string][] = es
       ['filosofia', '"si se ve bien y además funciona, mejor"'],
     ]
   : [
-      ['role', '"Software Engineering student · 4th year"'],
+      ['role', '"Software Engineering student, 4th year"'],
       ['now', '["Central", "Huecko", "SafeZone"]'],
       ['frontend', '["React", "TypeScript", "Tailwind", "Vite"]'],
       ['backend', '["Spring Boot", "FastAPI", "PostgreSQL"]'],

@@ -17,17 +17,24 @@ const t = textos[idioma].caso;
 const { titulo, resumen, rol, stack, repos, demo, privado, portada } = proyecto.data;
 const { Content } = await render(proyecto);
 
-const destacados = (await proyectosEn(idioma)).filter((p) => p.data.destacado);
-const posicion = destacados.findIndex((p) => p.id === proyecto.id);
-const siguiente = destacados[(posicion + 1) % destacados.length];
+// Cada caso vuelve a su sección y pasa al siguiente de la misma
+const esFanbase = proyecto.data.categorias.includes('fanbases');
+const todos = await proyectosEn(idioma);
+const grupo = esFanbase
+  ? todos.filter((p) => p.data.categorias.includes('fanbases'))
+  : todos.filter((p) => p.data.destacado);
+const posicion = grupo.findIndex((p) => p.id === proyecto.id);
+const siguiente = grupo[(posicion + 1) % grupo.length];
+const volverA = esFanbase ? rutaEn(idioma, '/fanbases') : `${rutaEn(idioma, '/')}#trabajo`;
+const volverTexto = esFanbase ? t.volverFanbases : t.volver;
 const slug = slugDe(proyecto);
 ---
 
 <Base idioma={idioma} ruta={`/proyectos/${slug}`} titulo={titulo} descripcion={resumen} imagen={portada}>
   <article class="contenedor caso">
-    <a class="volver tactil" href={`${rutaEn(idioma, '/')}#trabajo`}>
+    <a class="volver tactil" href={volverA}>
       <Icono nombre="arrow-left" tamano={16} />
-      {t.volver}
+      {volverTexto}
     </a>
 
     <header class="cabecera">

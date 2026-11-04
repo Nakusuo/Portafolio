@@ -15,7 +15,7 @@ const proyectos = defineCollection({
     /** Un logro concreto, para quien lee rápido (reclutadores). */
     impacto: z.string().optional(),
     rol: z.string().optional(),
-    categorias: z.array(z.enum(['clientes', 'web', 'movil', 'backend', 'universidad', 'personal'])),
+    categorias: z.array(z.enum(['clientes', 'web', 'movil', 'backend', 'universidad', 'personal', 'fanbases'])),
     stack: z.array(z.string()),
     destacado: z.boolean().default(false),
     orden: z.number().default(99),

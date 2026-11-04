@@ -23,9 +23,9 @@ const minuscula = (t = '') => t.charAt(0).toLowerCase() + t.slice(1);
 const filas = [
   { k: es ? 'Busco' : 'Looking for', v: es ? 'Prácticas y proyectos' : 'Internships and projects' },
   { k: es ? 'Hago' : 'I do', v: es ? 'Frontend, backend y diseño de interfaces' : 'Frontend, backend and interface design' },
-  { k: es ? 'Estudio' : 'Studying', v: `${uni.rol[idioma].replace(' · ', ', ')}, UTP` },
-  ingles && { k: es ? 'Inglés' : 'English', v: `${ingles.rol[idioma].split('·')[1]?.trim()}, ${ingles.lugar}` },
-  { k: es ? 'Ahora' : 'Now', v: `${actual.lugar.split('·')[0].trim()}: ${minuscula(actual.detalle?.[idioma])}` },
+  { k: es ? 'Estudio' : 'Studying', v: `${uni.rol[idioma]}, UTP` },
+  ingles && { k: es ? 'Inglés' : 'English', v: `${ingles.rol[idioma].split(', ')[1]?.trim()}, ${ingles.lugar}` },
+  { k: es ? 'Ahora' : 'Now', v: `${actual.lugar.split(', ')[0].trim()}: ${minuscula(actual.detalle?.[idioma])}` },
   anterior && { k: es ? 'Antes' : 'Before', v: `${anterior.lugar}, ${anterior.fechas[idioma]}` },
   {
     k: es ? 'Resultados' : 'Results',

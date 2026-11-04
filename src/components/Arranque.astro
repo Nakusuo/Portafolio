@@ -48,8 +48,8 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
       capa.addEventListener('transitionend', () => capa.remove(), { once: true });
     };
 
-    // Tope: aunque el equipo vaya lento, la terminal nunca tapa la página más de 2,5 s
-    setTimeout(terminar, 2500);
+    // Tope: aunque el equipo vaya lento, la terminal nunca tapa la página más de 1,5 s
+    setTimeout(terminar, 1500);
     addEventListener('keydown', terminar, { once: true });
     capa.addEventListener('pointerdown', terminar, { once: true });
 
