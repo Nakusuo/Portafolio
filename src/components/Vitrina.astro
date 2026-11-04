@@ -41,11 +41,7 @@ const total = numero(proyectos.length - 1);
 <section id="trabajo" class="vitrina" style={`--n:${proyectos.length}`} data-vitrina>
   <div class="contenedor cabeza">
     <div class="con-anotacion">
-      <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
-      <p class="anotacion">
-        <Icono nombre="arrow-bend-down-left" tamano={26} />
-        {es ? 'baja despacio' : 'scroll slowly'}
-      </p>
+      <h2 class="titulo-seccion">{t.titulo}</h2>
     </div>
     <p class="bajada">{t.bajada}</p>
   </div>
@@ -65,10 +61,7 @@ const total = numero(proyectos.length - 1);
                 <h3 style={`view-transition-name: titulo-${slugDe(p)}`}>{p.data.titulo}</h3>
                 <p class="resumen">{p.data.resumen}</p>
                 {p.data.impacto && (
-                  <p class="impacto">
-                    <Icono nombre="trend-up" tamano={18} />
-                    {p.data.impacto}
-                  </p>
+                  <p class="impacto"><b>{idioma === 'es' ? 'Resultado' : 'Result'}:</b> {p.data.impacto}</p>
                 )}
                 <dl class="datos">
                   {p.data.rol && (
@@ -176,7 +169,6 @@ const total = numero(proyectos.length - 1);
   .origen {
     margin: 18px 0 4px;
     font-family: var(--mano);
-    font-style: italic;
     font-size: 1.15rem;
     color: var(--rojo);
   }
@@ -196,22 +188,9 @@ const total = numero(proyectos.length - 1);
   }
 
   .impacto {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
     margin: 0 0 16px;
-    padding: 8px 12px;
-    border-left: 3px solid var(--acento);
-    background: var(--superficie);
-    font-weight: 600;
     font-size: 0.95rem;
-    line-height: 1.4;
-  }
-
-  .impacto :global(svg) {
-    flex-shrink: 0;
-    margin-top: 1px;
-    color: var(--acento);
+    line-height: 1.45;
   }
 
   .datos {

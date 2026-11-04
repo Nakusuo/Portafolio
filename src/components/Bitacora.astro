@@ -22,13 +22,9 @@ const es = idioma === 'es';
     <section class="seccion contenedor bitacora">
       <div class="con-anotacion">
         <h2 class="titulo-seccion">
-          <span class="prompt">&gt;</span>
+          
           {es ? 'En qué ando' : "What I'm working on"}
         </h2>
-        <p class="anotacion">
-          <Icono nombre="arrow-bend-down-left" tamano={26} />
-          {es ? 'se actualiza a diario' : 'updated daily'}
-        </p>
       </div>
 
       <Ventana direccion={`git log --${es ? 'ultimos' : 'latest'} ${commits.length}`}>

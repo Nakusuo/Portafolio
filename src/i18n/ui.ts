@@ -41,7 +41,7 @@ export const textos = {
       verTrabajo: 'Ver trabajo',
       pregunta: '¿Qué te trae por aquí?',
       rutas: [
-        { etiqueta: 'Busco talento', destino: '/#reclutadores', detalle: 'Mi resumen en 30 segundos' },
+        { etiqueta: 'Busco talento', destino: '/#reclutadores', detalle: 'Resumen, proyectos y contacto' },
         { etiqueta: 'Necesito un proyecto', destino: '/servicios', detalle: 'Qué hago y cómo trabajo' },
         { etiqueta: 'Solo curioseo', destino: '/lab', detalle: 'Diseño, 3D y experimentos' },
       ],
@@ -167,7 +167,7 @@ export const textos = {
       verTrabajo: 'See work',
       pregunta: 'What brings you here?',
       rutas: [
-        { etiqueta: "I'm hiring", destino: '/#reclutadores', detalle: 'My summary in 30 seconds' },
+        { etiqueta: "I'm hiring", destino: '/#reclutadores', detalle: 'Summary, projects and contact' },
         { etiqueta: 'I need a project', destino: '/servicios', detalle: 'What I do and how I work' },
         { etiqueta: 'Just browsing', destino: '/lab', detalle: 'Design, 3D and experiments' },
       ],

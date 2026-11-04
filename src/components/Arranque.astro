@@ -17,7 +17,7 @@ const saltar = idioma === 'es' ? 'toca o pulsa una tecla para saltar' : 'tap or 
 
 <div class="arranque" aria-hidden="true" data-arranque>
   <div class="consola">
-    <p class="orden"><span class="prompt">&gt;</span> <span data-orden></span><span class="cursor">_</span></p>
+    <p class="orden"> <span data-orden></span><span class="cursor">_</span></p>
     <ol data-lineas>
       {lineas.map((l) => <li data-texto={l}></li>)}
     </ol>

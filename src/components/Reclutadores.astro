@@ -1,5 +1,5 @@
 ---
-// "En 30 segundos": lo que un reclutador necesita ver primero, en una sola ficha.
+// Resumen: lo que un reclutador necesita ver primero, en una sola ficha.
 // Todo sale de datos que ya están en el sitio (contenido.ts, perfil.ts y los proyectos).
 import Icono from './Icono.astro';
 import { experiencia, formacion } from '../data/contenido';
@@ -23,27 +23,26 @@ const minuscula = (t = '') => t.charAt(0).toLowerCase() + t.slice(1);
 const filas = [
   { k: es ? 'Busco' : 'Looking for', v: es ? 'Prácticas y proyectos' : 'Internships and projects' },
   { k: es ? 'Hago' : 'I do', v: es ? 'Frontend, backend y diseño de interfaces' : 'Frontend, backend and interface design' },
-  { k: es ? 'Estudio' : 'Studying', v: `${uni.rol[idioma]} · UTP` },
-  ingles && { k: es ? 'Inglés' : 'English', v: `${ingles.rol[idioma].split('·')[1]?.trim()} · ${ingles.lugar}` },
+  { k: es ? 'Estudio' : 'Studying', v: `${uni.rol[idioma].replace(' · ', ', ')}, UTP` },
+  ingles && { k: es ? 'Inglés' : 'English', v: `${ingles.rol[idioma].split('·')[1]?.trim()}, ${ingles.lugar}` },
   { k: es ? 'Ahora' : 'Now', v: `${actual.lugar.split('·')[0].trim()}: ${minuscula(actual.detalle?.[idioma])}` },
-  anterior && { k: es ? 'Antes' : 'Before', v: `${anterior.lugar} · ${anterior.fechas[idioma]}` },
+  anterior && { k: es ? 'Antes' : 'Before', v: `${anterior.lugar}, ${anterior.fechas[idioma]}` },
+  {
+    k: es ? 'Resultados' : 'Results',
+    v: es
+      ? `Un panel en producción para 3 tiendas, ${publicados} webs publicadas y ${proyectos.length} proyectos en este portafolio.`
+      : `A production dashboard for 3 stores, ${publicados} live sites and ${proyectos.length} projects in this portfolio.`,
+  },
 ].filter(Boolean) as { k: string; v: string }[];
 
-const cifras = [
-  { n: '3', t: es ? 'tiendas usan mi panel en producción' : 'stores run on my dashboard in production' },
-  { n: String(publicados), t: es ? 'webs publicadas con demo' : 'live sites with a demo' },
-  { n: String(proyectos.length), t: es ? 'proyectos en este portafolio' : 'projects in this portfolio' },
-];
 
 const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python', 'FastAPI', 'PostgreSQL', 'Docker', 'Git'];
 ---
 
 <section id="reclutadores" class="seccion contenedor reclutadores">
   <article class="ficha" data-revelar>
-    <span class="cinta" aria-hidden="true"></span>
     <header class="cabeza">
-      <p class="sello">{es ? 'para reclutadores' : 'for recruiters'}</p>
-      <h2>{es ? 'En 30 segundos' : 'In 30 seconds'}</h2>
+      <h2>{es ? 'Resumen' : 'Summary'}</h2>
     </header>
 
     <div class="cuerpo">
@@ -59,16 +58,6 @@ const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python'
       </dl>
 
       <div class="lado">
-        <ul class="cifras">
-          {
-            cifras.map((c) => (
-              <li>
-                <b>{c.n}</b>
-                <span>{c.t}</span>
-              </li>
-            ))
-          }
-        </ul>
         <ul class="stack" aria-label="Stack">
           {stack.map((s) => <li>{s}</li>)}
         </ul>
@@ -104,31 +93,15 @@ const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python'
     padding-block: clamp(24px, 4vw, 48px);
   }
 
-  /* Una ficha de papel pegada con cinta, como el resto del cuaderno */
   .ficha {
     position: relative;
     padding: clamp(22px, 4vw, 40px);
     border: 1px solid var(--linea);
     border-radius: var(--radio);
-    background:
-      repeating-linear-gradient(to bottom, transparent 0 31px, var(--hoja-linea) 31px 32px),
-      var(--hoja);
-    box-shadow: var(--sombra);
-    rotate: -0.4deg;
+    background: var(--hoja);
+    border-color: var(--texto);
   }
 
-  .cinta {
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    width: 120px;
-    height: 28px;
-    translate: -50% 0;
-    rotate: 2deg;
-    background: var(--resaltador);
-    opacity: 0.85;
-    box-shadow: var(--sombra-sticker);
-  }
 
   .cabeza {
     display: flex;
@@ -139,18 +112,6 @@ const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python'
     margin-bottom: 20px;
   }
 
-  .sello {
-    order: 2;
-    margin: 0;
-    padding: 4px 10px;
-    border: 2px solid var(--rojo);
-    border-radius: 3px;
-    color: var(--rojo);
-    font: 600 0.78rem/1.2 var(--mono);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    rotate: 3deg;
-  }
 
   h2 {
     margin: 0;
@@ -194,35 +155,9 @@ const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python'
     font-weight: 500;
   }
 
-  .cifras {
-    display: grid;
-    gap: 14px;
-    margin: 0 0 20px;
-    padding: 0;
-    list-style: none;
-  }
 
-  .cifras li {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
 
-  .cifras b {
-    min-width: 2ch;
-    font-family: var(--display);
-    font-size: clamp(2.6rem, 5vw, 3.4rem);
-    font-weight: 800;
-    line-height: 0.9;
-    color: var(--acento);
-  }
 
-  .cifras span {
-    font-family: var(--mano);
-    font-style: italic;
-    font-size: 1.15rem;
-    line-height: 1.2;
-  }
 
   .stack {
     display: flex;
@@ -276,13 +211,11 @@ const stack = ['TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'Python'
     }
 
     .ficha {
-      rotate: 0deg;
     }
   }
 
   @media print {
     .ficha {
-      rotate: 0deg;
       box-shadow: none;
     }
   }

@@ -15,7 +15,7 @@ const giros = ['-2deg', '1.5deg', '-1deg', '2.5deg'];
 ---
 
 <section id="principios" class="seccion contenedor">
-  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <h2 class="titulo-seccion">{t.titulo}</h2>
   <p class="bajada">{t.bajada}</p>
 
   <ol class="notas">
@@ -50,12 +50,11 @@ const giros = ['-2deg', '1.5deg', '-1deg', '2.5deg'];
     padding: 30px 22px 24px;
     border-radius: var(--radio);
     box-shadow: var(--sombra);
-    transform: rotate(var(--giro));
     transition: transform 0.4s var(--curva);
   }
 
   .postit:hover {
-    transform: rotate(0deg) translateY(-4px);
+    transform: translateY(-4px);
   }
 
   .postit--hueso {
@@ -88,7 +87,6 @@ const giros = ['-2deg', '1.5deg', '-1deg', '2.5deg'];
   .postit p {
     margin-top: 12px;
     font-family: var(--mano);
-    font-style: italic;
     font-size: 1.3rem;
     font-weight: 500;
     line-height: 1.15;

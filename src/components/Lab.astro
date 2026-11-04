@@ -14,7 +14,7 @@ const pendiente = idioma === 'es' ? 'piezas por subir' : 'pieces coming soon';
 ---
 
 <section id="lab" class="seccion contenedor">
-  <h2 class="titulo-seccion"><span class="prompt">&gt;</span>{t.titulo}</h2>
+  <h2 class="titulo-seccion">{t.titulo}</h2>
   <p class="bajada">{t.bajada}</p>
 
   <ul class="tablero">
@@ -81,7 +81,6 @@ const pendiente = idioma === 'es' ? 'piezas por subir' : 'pieces coming soon';
     position: relative;
     border-radius: 2px;
     box-shadow: var(--sombra);
-    transform: rotate(var(--giro-pieza, 0deg));
     transition: transform 0.6s var(--curva);
   }
 

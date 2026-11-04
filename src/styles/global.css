@@ -1,9 +1,6 @@
 @import '@fontsource-variable/manrope';
 @import '@fontsource-variable/jetbrains-mono';
-@import '@fontsource/instrument-serif/400.css';
-@import '@fontsource/instrument-serif/400-italic.css';
 @import '@fontsource-variable/big-shoulders-display';
-@import '@fontsource/pinyon-script';
 @import '@fontsource/vt323';
 
 /*
@@ -59,9 +56,9 @@
   --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
   --pixel: 'VT323', ui-monospace, monospace;
   /* Antes letra a mano: ahora serif en cursiva (legible en párrafos) */
-  --mano: 'Instrument Serif', Georgia, serif;
+  --mano: var(--fuente);
   /* Script fino, solo para acentos cortos */
-  --script: 'Pinyon Script', 'Segoe Script', cursive;
+  --script: var(--fuente);
   --curva: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: light;
@@ -247,7 +244,6 @@ p {
 /* Texto escrito a mano */
 .nota {
   font-family: var(--mano);
-  font-style: italic;
   font-size: 1.05rem;
   line-height: 1.15;
   font-weight: 500;
@@ -275,7 +271,6 @@ p {
   font-weight: 500;
   line-height: 1.05;
   color: var(--rojo);
-  transform: rotate(-5deg);
 }
 
 .anotacion svg {
@@ -289,7 +284,6 @@ p {
     position: static;
     margin-top: 8px;
     max-width: none;
-    transform: rotate(-2deg);
   }
 
   .anotacion svg {
@@ -363,7 +357,6 @@ p {
   letter-spacing: 0;
   white-space: nowrap;
   box-shadow: var(--sombra-sticker);
-  transform: rotate(var(--giro, -1.5deg));
 }
 
 .etiqueta--oliva {
@@ -401,6 +394,7 @@ p {
 
 /* Cinta adhesiva: se pone en un elemento con position: relative */
 .cinta::before {
+  display: none;
   content: '';
   position: absolute;
   top: -12px;
@@ -410,7 +404,7 @@ p {
   background: rgb(207 200 180 / 0.72);
   border-left: 2px dashed rgb(255 255 255 / 0.45);
   border-right: 2px dashed rgb(255 255 255 / 0.45);
-  transform: translateX(-50%) rotate(var(--giro-cinta, -3deg));
+  transform: translateX(-50%);
   box-shadow: 0 1px 2px rgb(26 29 25 / 0.15);
   pointer-events: none;
   z-index: 2;
@@ -435,7 +429,6 @@ p {
   z-index: 30;
   cursor: grabbing;
   scale: 1.08;
-  rotate: 3deg;
   box-shadow: 0 14px 28px -10px rgb(26 29 25 / 0.45);
 }
 
